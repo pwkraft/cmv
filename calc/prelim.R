@@ -32,24 +32,41 @@ tmp <- countMFT(data_pair$pos_text, dict) - countMFT(data_pair$neg_text, dict)
 
 plot_df <- tmp %>% 
   gather() %>%
+  mutate(key = factor(key, levels = c("MoralityGeneral", "MFTcombined"
+                                      , "Authority", "Ingroup", "Purity"
+                                      , "Fairness", "Harm"))) %>%
   group_by(key) %>%
   summarise(mean = mean(value), sd = sd(value), n = n()) %>%
   mutate(se = sd/sqrt(n), cilo = mean - se, cihi = mean + se)
 
 ggplot(plot_df, aes(x=key, y=mean, ymin=cilo, ymax=cihi)) +
-  geom_point() + geom_errorbar() + geom_hline(yintercept = 0)
+  geom_point() + geom_errorbar(width=0) + geom_hline(yintercept = 0) + theme_bw()
 
 ## select political topics
-cases <- sort(union(grep("polit", data_pair$op_text), grep("polit", data_pair$op_title)))
-cases <- sort(union(grep("liberal", data_pair$op_text), grep("liberal", data_pair$op_title)))
-cases <- sort(union(grep("conservative", data_pair$op_text), grep("conservative", data_pair$op_title)))
+sort(union(grep("politic", data_pair$op_text), grep("politic", data_pair$op_title)))
 
-plot_df <- tmp[cases,] %>% 
-  gather() %>%
-  group_by(key) %>%
-  summarise(mean = mean(value), sd = sd(value), n = n()) %>%
-  mutate(se = sd/sqrt(n), cilo = mean - se, cihi = mean + se)
+checkTerm <- function(x){
+  cases <- map(x, grep, data_pair$op_text) %>% unlist() %>% unique() %>% sort()
+  
+  plot_df <- tmp[cases,] %>% 
+    gather() %>%
+    mutate(key = factor(key, levels = c("MoralityGeneral", "MFTcombined"
+                                        , "Authority", "Ingroup", "Purity"
+                                        , "Fairness", "Harm"))) %>%
+    group_by(key) %>%
+    summarise(mean = mean(value), sd = sd(value), n = n()) %>%
+    mutate(se = sd/sqrt(n), cilo = mean - se, cihi = mean + se)
+  
+  ggplot(plot_df, aes(x=key, y=mean, ymin=cilo, ymax=cihi)) + ggtitle(x) +
+    geom_point() + geom_errorbar(width=0) + geom_hline(yintercept = 0) + theme_bw()
+}
 
-ggplot(plot_df, aes(x=key, y=mean, ymin=cilo, ymax=cihi)) +
-  geom_point() + geom_errorbar() + geom_hline(yintercept = 0)
+checkTerm("politic")
+checkTerm("liberal")
+checkTerm("democrat")
+checkTerm("conservative")
+checkTerm("republican")
+checkTerm("climate")
+checkTerm("global warming")
+
 
