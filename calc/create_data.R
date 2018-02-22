@@ -2,15 +2,11 @@ library(rjson)
 library(dplyr)
 library(purrr)
 
-## function for op data
-convertJSON <- function(x){
-  out <- data.frame(matrix(NA, nrow=length(x), ncol=5))
-  colnames(out) <- names(x[[1]])
-  for(i in 1:length(x)){
-    out[i,] <- x[[i]]
-  }  
-  out
-}
+
+
+############################################
+### Paired data (only look at training set!)
+############################################
 
 ## load paired data
 test <- readLines("~/Dropbox/Uni/Data/CMV/pair_task/train_pair_data.jsonlist") %>%
@@ -76,19 +72,28 @@ table(out)
 ## creat dfm: each row is a single op + pos/neg responses (each combined into single string)
 extractPair <- function(x){tibble(
   op_author = x$op_author, 
-  op_title = x$op_title, 
-  op_text = x$op_text,
+  op_title = tolower(x$op_title), 
+  op_text = tolower(x$op_text),
   pos_author = x$positive$author,
   neg_author = x$negative$author,
   pos_text = map(x$positive$comments, "body") %>% 
-    unlist %>% paste(collapse = "[newpost] "),
+    unlist %>% paste(collapse = "[newpost] ") %>% tolower(),
   neg_text = map(x$negative$comments, "body") %>% 
-    unlist %>% paste(collapse = "[newpost] ")
+    unlist %>% paste(collapse = "[newpost] ") %>% tolower()
 )}
 data_pair <- test %>% map_dfr(extractPair)
 
-save(data_pair, file="out/data_pair.Rdata")
 
 
 
+########################################
+### OP data (only look at training set!)
+########################################
 
+data_op <- NULL
+
+#############
+### Save Data
+#############
+
+save(data_pair, data_op, file="out/cmv_data.Rdata")
