@@ -2,6 +2,8 @@ library(rjson)
 library(dplyr)
 library(purrr)
 
+rm(list=ls())
+
 
 
 ############################################
@@ -9,61 +11,61 @@ library(purrr)
 ############################################
 
 ## load paired data
-test <- readLines("~/Dropbox/Uni/Data/CMV/pair_task/train_pair_data.jsonlist") %>%
-  lapply(rjson::fromJSON)
+raw_pair <- readLines("~/Dropbox/Uni/Data/CMV/pair_task/train_pair_data.jsonlist") %>%
+  map(rjson::fromJSON)
 
 ## examine data
-ls(test[[1]])
+ls(raw_pair[[1]])
 
 ## op information
-test[[1]]$op_author
-test[[1]]$op_title
-test[[1]]$op_text
-test[[1]]$op_name
+raw_pair[[1]]$op_author
+raw_pair[[1]]$op_title
+raw_pair[[1]]$op_text
+raw_pair[[1]]$op_name
 
 ## information about response that changed view (positive)
-ls(test[[1]]$positive)
-test[[1]]$positive$author
-test[[1]]$positive$ancestor
-ls(test[[1]]$positive$comments[[1]])
-test[[1]]$positive$comments[[1]]$body
-test[[1]]$positive$comments[[1]]$author
+ls(raw_pair[[1]]$positive)
+raw_pair[[1]]$positive$author
+raw_pair[[1]]$positive$ancestor
+ls(raw_pair[[1]]$positive$comments[[1]])
+raw_pair[[1]]$positive$comments[[1]]$body
+raw_pair[[1]]$positive$comments[[1]]$author
 
 ## information about response that did not change view (negative)
-ls(test[[1]]$negative)
-test[[1]]$negative$author
-test[[1]]$negative$ancestor
-ls(test[[1]]$negative$comments[[1]])
-test[[1]]$negative$comments[[1]]$author
-test[[1]]$negative$comments[[1]]$body
+ls(raw_pair[[1]]$negative)
+raw_pair[[1]]$negative$author
+raw_pair[[1]]$negative$ancestor
+ls(raw_pair[[1]]$negative$comments[[1]])
+raw_pair[[1]]$negative$comments[[1]]$author
+raw_pair[[1]]$negative$comments[[1]]$body
 
 ## instances contain different numbers of replies
-out <- matrix(NA, ncol=2, nrow=length(test))
-for(i in 1:length(test)){
-  out[i,] <- c(length(test[[i]]$positive$comments)
-               , length(test[[i]]$negative$comments))
+out <- matrix(NA, ncol=2, nrow=length(raw_pair))
+for(i in 1:length(raw_pair)){
+  out[i,] <- c(length(raw_pair[[i]]$positive$comments)
+               , length(raw_pair[[i]]$negative$comments))
   
 }
 table(out[,1],out[,2])
 which(out[,1]==4)[1]
-test[[10]]$positive$comments
+raw_pair[[10]]$positive$comments
 
 ## all replies in one instance are by the same author -> combine all!
-out <- rep(NA, length(test))
-for(i in 1:length(test)){
-  authors <- test[[i]]$positive$author
-  for(j in 1:length(test[[i]]$positive$comments)){
-    authors <- c(authors, test[[i]]$positive$comments[[j]]$author)
+out <- rep(NA, length(raw_pair))
+for(i in 1:length(raw_pair)){
+  authors <- raw_pair[[i]]$positive$author
+  for(j in 1:length(raw_pair[[i]]$positive$comments)){
+    authors <- c(authors, raw_pair[[i]]$positive$comments[[j]]$author)
   }
   out[i] <- length(unique(authors))
 }
 table(out)
 
-out <- rep(NA, length(test))
-for(i in 1:length(test)){
-  authors <- test[[i]]$negative$author
-  for(j in 1:length(test[[i]]$negative$comments)){
-    authors <- c(authors, test[[i]]$negative$comments[[j]]$author)
+out <- rep(NA, length(raw_pair))
+for(i in 1:length(raw_pair)){
+  authors <- raw_pair[[i]]$negative$author
+  for(j in 1:length(raw_pair[[i]]$negative$comments)){
+    authors <- c(authors, raw_pair[[i]]$negative$comments[[j]]$author)
   }
   out[i] <- length(unique(authors))
 }
@@ -81,8 +83,7 @@ extractPair <- function(x){tibble(
   neg_text = map(x$negative$comments, "body") %>% 
     unlist %>% paste(collapse = "[newpost] ") %>% tolower()
 )}
-data_pair <- test %>% map_dfr(extractPair)
-
+data_pair <- raw_pair %>% map_dfr(extractPair)
 
 
 
@@ -90,10 +91,25 @@ data_pair <- test %>% map_dfr(extractPair)
 ### OP data (only look at training set!)
 ########################################
 
-data_op <- NULL
+## load paired data
+raw_op <- readLines("~/Dropbox/Uni/Data/CMV/op_task/train_op_data.jsonlist") %>%
+  map(rjson::fromJSON)
+
+## inspect op data
+raw_op %>% map_int(length) %>% table()
+
+extractOP <- function(x){tibble(
+  name = x$name,
+  title = tolower(x$title), 
+  text = tolower(gsub("[^[:graph:]]", " ",x$selftext)),
+  Delta = x$delta_label
+)}
+data_op <- raw_op %>% map_dfr(extractOP)
+
+
 
 #############
 ### Save Data
-#############
 
 save(data_pair, data_op, file="out/cmv_data.Rdata")
+

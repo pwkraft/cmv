@@ -1,4 +1,4 @@
 # Change My View
-## How Do Moral Appeal Induce Attitude Change
+## How Do Moral Appeals Induce Attitude Change
 
 *WORKING PAPER: comments welcome!*

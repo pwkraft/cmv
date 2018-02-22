@@ -10,6 +10,7 @@ load("out/cmv_data.Rdata")
 
 ## TODO: clean original posts (links etc)!
 ## TODO: adjust confidence intervals to correct for multiple comparisons
+## TODO: add more comments in functions!
 
 ## load dictionary
 dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
@@ -29,9 +30,15 @@ countMFT <- function(x, dic){
   data
 }
 
-tmp <- countMFT(data_pair$pos_text, dict) - countMFT(data_pair$neg_text, dict)
 
-plot_df <- tmp %>% 
+
+#####################
+### Examine pair data
+#####################
+
+mft_pair <- countMFT(data_pair$pos_text, dict) - countMFT(data_pair$neg_text, dict)
+
+plot_df <- mft_pair %>% 
   gather() %>%
   mutate(key = factor(key, levels = c("MoralityGeneral", "MFTcombined"
                                       , "Authority", "Ingroup", "Purity"
@@ -50,7 +57,7 @@ checkTerm <- function(x, return_data = FALSE){
   cases <- c(map(x, grep, data_pair$op_text), map(x, grep, data_pair$op_title)) %>% 
                unlist() %>% unique() %>% sort()
   
-  plot_df <- tmp[cases,] %>% 
+  plot_df <- mft_pair[cases,] %>% 
     gather() %>%
     mutate(key = factor(key, levels = rev(c("Authority", "Ingroup", "Purity", "Fairness", "Harm"
                                             , "MFTcombined", "MoralityGeneral"))
@@ -69,7 +76,7 @@ checkTerm <- function(x, return_data = FALSE){
     theme_classic() + theme(panel.border = element_rect(fill=NA)) +
     geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
     labs(title = paste0("Search Query (",length(cases)," hits):"), subtitle = paste(x, collapse="; ")
-         , x = "", y = "Moral Foundation") +
+         , x = NULL, y = "Moral Foundation") +
     scale_x_continuous(limits=xlim, breaks=.9*xlim, labels = c("Less Persuasive", "More Persuasive")) +
     theme(axis.ticks.x=element_blank())
 }
@@ -98,9 +105,33 @@ checkTerm(mftTerms(c("HarmVice","HarmVirtue")))
 checkTerm(mftTerms("Harm"))
 checkTerm(mftTerms("FairnessVirtue"))
 checkTerm(mftTerms("FairnessVice"))
+checkTerm(mftTerms("Purity"))
 
 checkTerm(mftTerms("Vice"))
 checkTerm(mftTerms("Virtue"))
 
 
 
+###################
+### Examine OP data
+###################
+
+mft_op <- data_op[,c("title","text")] %>% 
+  apply(1, paste, collapse=" ") %>%
+  countMFT(dict) %>% bind_cols(data_op) %>% as_tibble()
+
+plot_df <- mft_op %>%
+  select(-name:-text, -MFTcombined) %>%
+  gather(key=foundation, value=proportion,-Delta) %>%
+  mutate(foundation = factor(foundation, levels = rev(c("Authority", "Ingroup", "Purity"
+                                                        , "Fairness", "Harm", "MoralityGeneral"))
+                             , labels = rev(c("Authority", "Ingroup", "Purity"
+                                              , "Fairness", "Harm", "General\nMorality")))) %>%
+  group_by(foundation,Delta) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - se, cihi = mean + se)
+
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Delta)) + 
+  theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+  geom_point() + geom_errorbarh(height=0) + 
+  ggtitle("Moral Foundations and Persuadability")
