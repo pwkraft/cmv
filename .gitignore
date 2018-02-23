@@ -6,6 +6,8 @@
 /info/
 /calc/in/
 /calc/out/
+/calc/prelim_files/
+/calc/prelim_cache/
 *.csv
 *.dta
 *.log

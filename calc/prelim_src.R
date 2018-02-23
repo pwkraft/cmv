@@ -131,7 +131,9 @@ plot_df <- mft_op %>%
   summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
   mutate(se = sd/sqrt(n), cilo = mean - se, cihi = mean + se)
 
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Delta)) + 
-  theme_classic() + theme(panel.border = element_rect(fill=NA)) +
-  geom_point() + geom_errorbarh(height=0) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Delta, shape=Delta)) + 
+  theme_classic() + theme(panel.border = element_rect(fill=NA)) + 
+  geom_point(position = position_nudge(y=-.1+.2*plot_df$Delta)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=-.1+.2*plot_df$Delta)) + 
+  ylab("Moral Foundation") + xlab("Proportion of Dictionary Terms") +
   ggtitle("Moral Foundations and Persuadability")
