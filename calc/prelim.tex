@@ -49,7 +49,7 @@
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
-\title{ChangeMyView: Can Moral Appeals Facilitate Persuasion?\thanks{\textbf{Current draft version}: February 25, 2018 --- PLEASE DO NOT CITE
+\title{ChangeMyView: Can Moral Appeals Facilitate Persuasion and Agreement?\thanks{\textbf{Current draft version}: February 26, 2018 --- PLEASE DO NOT CITE
 OR REDISTRIBUTE WITHOUT PERMISSION.}  }
 
 
@@ -106,7 +106,7 @@ OR REDISTRIBUTE WITHOUT PERMISSION.}  }
             bookmarks=true,
             pdfauthor={Patrick W. Kraft (Stony Brook University)},
              pdfkeywords = {Moral Foundations, Attitude Change, Persuasion, Political Agreement},  
-            pdftitle={ChangeMyView: Can Moral Appeals Facilitate Persuasion?},
+            pdftitle={ChangeMyView: Can Moral Appeals Facilitate Persuasion and Agreement?},
             colorlinks=true,
             citecolor=blue,
             urlcolor=blue,
@@ -160,15 +160,17 @@ OR REDISTRIBUTE WITHOUT PERMISSION.}  }
 
     \vskip 8.5pt % \small 
 
-\noindent The American electorate is becoming increasingly polarized. Research in
-moral psychology suggests that growing disagreements between liberals
-and conservatives can be attributed to the fact that they emphasize
-different basic moral dimensions. Indeed, scholars suggest that
-agreement between ideologues would be easier if both sides spoke the
-same \emph{moral language}. However, no study to date tested this
-fundamental assumption. Drawing on data from the online discussion board
-\emph{Reddit}, this paper examines how varying moral appeals affect
-persuasion and the potential for consensus building in politics
+\noindent The American electorate is becoming increasingly polarized. According to
+research in moral psychology, these growing disagreements between
+liberals and conservatives can be attributed to fundamental differences
+in the moral frameworks that shape individual ideology. Indeed, scholars
+suggest that ideologues would be more likely to come to agreements if
+both sides spoke the same ``moral language.'' While this implicit
+assumption certainly has intuitive appeal, it remains largely untested
+empirically. Drawing on a unique dataset from the online discussion
+board \emph{Reddit}, this paper examines how moral appeals can affect
+individual persuasion and the likelihood of agreement and consensus
+building through deliberation.
 
 
 \vskip 8.5pt \noindent \emph{Keywords}: Moral Foundations, Attitude Change, Persuasion, Political Agreement \par
@@ -185,11 +187,30 @@ persuasion and the potential for consensus building in politics
 
 \noindent \doublespacing \section{Introduction}\label{introduction}
 
-Over the recent years, there has been a resurgence in partisan
-polarization in the United States. Politically engaged citizens hold
-more diverging policy views, are more ideologically extreme, and show
-increased affective polarization between partisans
+Recent years have witnessed a resurgence in partisan polarization in the
+United States. Politically engaged citizens hold more diverging policy
+views, are more ideologically extreme, and exhibit stronger negative
+affect towards out-partisans than in the past
 \citep{hetherington2001resurgent, abramowitz2008polarization, iyengar2012affect, mason2014disrespectfully, huddy2015expressive, iyengar2015fear}.
+A growing literature in moral psychology---Moral Foundations
+Theory---attributes this divide (at least partially) to fundamental
+differences in moral frameworks that guide liberals and conservatives
+\citep{haidt2012righteous}. According to this view, liberals focus on
+\emph{individualizing} moral foundations, which unclude care/harm and
+fairness/cheating. Conservatives, on the other hand, also emphasize the
+remaining \emph{binding} foundations of loyalty/betrayal,
+authority/subversion, and sanctity/degradation
+\citep{haidt2007morality, graham2009liberals, haidt2012righteous}.
+Differential emphasis on these moral dimensions is systematically
+related to attitudes towards a wide variety of divisive political issues
+\citep[e.g.][]{koleva2012tracing, kertzer2014moral, low2015moral},
+personality traits like individual social dominance orientation (SDO)
+and right-wing authoritarianism (RWA) \citep{federico2013mapping}, as
+well as voting behavior \citep{franks2015using}. Overall, this body of
+research suggests that liberals and conservatives endorse different
+moral foundations and that these differences are related to political
+attitudes, evaluations, and behavior.
+
 Political discussions among individuals holding diverging views can
 mitigate the polarizing effects of partisan motivated reasoning
 \citep[see also][]{mendelberg2002deliberative, eveland2011beyond}. In
@@ -201,30 +222,20 @@ shapes attitude change towards a common consensus
 \citep{vinokur1978depolarization, barabas2004deliberation}.
 
 \citet{druckman2003framing} directly investigated how discussions can
-moderate elite framing effects. More specifically, the study focused on
-emphasis framing effects, which occur if the information received by an
-individual emphasizes a subset of relevant considerations, which in turn
-leads individuals to focus on these considerations when forming their
-attitude \citep[c.f.][]{druckman2001implications}. In their experiment,
-participants were asked to read an article about campaign finance reform
-which either focused on the issue of free speech, or special interests.
-Subsequently, participants were asked to discuss the issue in small
-groups. \citet{druckman2003framing} randomly assigned participants to
-groups where all individuals were exposed to the same framing of the
-issue (homogeneous condition), or different ones (heterogeneous
-condition). Their results showed that discussions in homogeneous groups
-had a polarizing effect, whereas discussions in heterogeneous groups had
-a depolarizing effect \citep[see also][]{druckman2004political}. As
-such, deliberation in diverse groups can decrease the effect of
-polarizing elite communication. Similar research was conducted by
-\citet{klar2014partisanship}\}, who manipulated group compositions in
-terms of the participants' party affiliations rather than comparing
-heterogeneous and homogeneous framing conditions. Her results showed
-that homogeneous group discussions resulted in more intense partisan
-motivated reasoning: individuals reported stronger preferences for the
-policies of their in-party and perceived them to be more effective
-compared to policies of their out-party. On the other hand, preferences
-were less extreme if the social setting was ideologically heterogeneous.
+moderate elite framing effects and showed that discussions in
+homogeneous groups had a polarizing effect, whereas discussions in
+heterogeneous groups had a depolarizing effect \citep[see
+also][]{druckman2004political}. As such, deliberation in diverse groups
+can decrease the effect of polarizing elite communication. Similar
+research was conducted by \citet{klar2014partisanship}\}, who
+manipulated group compositions in terms of the participants' party
+affiliations rather than comparing heterogeneous and homogeneous framing
+conditions. Her results showed that homogeneous group discussions
+resulted in more intense partisan motivated reasoning: individuals
+reported stronger preferences for the policies of their in-party and
+perceived them to be more effective compared to policies of their
+out-party. On the other hand, preferences were less extreme if the
+social setting was ideologically heterogeneous.
 
 Morality could be viewed as such a potential moderator of deliberation
 effects. Whether individuals perceive issues in terms of their
@@ -291,6 +302,15 @@ towards others who raise potentially conflicting moral considerations in
 social interactions? Overall then, all three literatures can benefit
 from an integration of the different perspectives, which is the focus of
 the next section.
+
+``Across all four studies, liberal morality was primarily concerned with
+harm and fairness, whereas conservative moral concerns were distributed
+more evenly across all five foundations. These findings help explain why
+liberals and conservatives disagree on so many moral issues and often
+find it hard to understand how an ethical person could hold the beliefs
+of the other side: Liberals and conservatives base their moral values,
+judgments, and arguments on different configurations of the five
+foundations'' \citep[1040]{graham2009liberals}.
 
 \section{Description of Dataset}\label{description-of-dataset}
 
