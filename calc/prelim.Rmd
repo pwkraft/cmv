@@ -1,25 +1,27 @@
 ---
 output: 
   pdf_document:
-    #citation_package: natbib
+    citation_package: natbib
     keep_tex: true
     fig_caption: true
     latex_engine: pdflatex
     template: ~/Dropbox/Uni/Misc/template.tex
-title: "ChangeMyView: How Moral Appeals Induce Persuasion"
-#thanks: "Replication files are available on the author's Github account (http://github.com/pwkraft). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; **Corresponding author**: patrick.kraft@stonybrook.edu."
+title: "ChangeMyView"
+subtitle: "Can Moral Appeals Facilitate Persuasion?"
+thanks: "**Current draft version**: `r format(Sys.time(), '%B %d, %Y')` --- PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION. "
+#; **Corresponding author**: patrick.kraft@stonybrook.edu.; Replication files are available on the author's Github account (http://github.com/pwkraft)."
 author:
 - name: Patrick W. Kraft
   affiliation: Stony Brook University
-abstract: "Overview of initial results"
-keywords: "Moral Foundations, Persuasion, Attitude Change"
+abstract: "The American electorate is becoming increasingly polarized. Research in moral psychology suggests that growing disagreements between liberals and conservatives can be attributed to the fact that they emphasize different basic moral dimensions. Indeed, scholars suggest that agreement between ideologues would be easier if both sides spoke the same _moral language_. However, no study to date tested this fundamental assumption. Drawing on data from the online discussion board _Reddit_, this paper examines how varying moral appeals affect persuasion and the potential for consensus building in politics"
+keywords: "Moral Foundations, Attitude Change, Persuasion, Political Agreement"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 geometry: margin=1in
 fontfamily: mathpazo
 fontsize: 11pt
-# spacing: double
-# bibliography: ~/Dropbox/master.bib
-# biblio-style: apsr
+spacing: double
+bibliography: /home/patrick/Dropbox/Uni/Lit/Literature
+biblio-style: /home/patrick/Dropbox/Uni/Lit/apsr2006
 endnote: no
 ---
 
@@ -28,6 +30,21 @@ knitr::opts_chunk$set(echo = FALSE, cache = TRUE,fig.height=3, fig.width=6)
 ```
 
 # Introduction
+
+Over the recent years, there has been a resurgence in partisan polarization in the United States. Politically engaged citizens hold more diverging policy views, are more ideologically extreme, and show increased affective polarization between partisans [@hetherington2001resurgent; @abramowitz2008polarization; @iyengar2012affect; @mason2014disrespectfully; @huddy2015expressive; @iyengar2015fear]. Political discussions among individuals holding diverging views can mitigate the polarizing effects of partisan motivated reasoning [see also @mendelberg2002deliberative; @eveland2011beyond]. In general, diverse social networks have been shown to reduce attitude extremity [@levitan2009social] and enhance the understanding of opposing viewpoints [@mutz2002cross]. Deliberation in particular increases political sophistication [@gastil1999increasing] and shapes attitude change towards a common consensus [@vinokur1978depolarization; @barabas2004deliberation].
+
+@druckman2003framing directly investigated how discussions can moderate elite framing effects. More specifically, the study focused on emphasis framing effects, which occur if the information received by an individual emphasizes a subset of relevant considerations, which in turn leads individuals to focus on these considerations when forming their attitude [c.f. @druckman2001implications]. In their experiment, participants were asked to read an article about campaign finance reform which either focused on the issue of free speech, or special interests. Subsequently, participants were asked to discuss the issue in small groups. @druckman2003framing randomly assigned participants to groups where all individuals were exposed to the same framing of the issue (homogeneous condition), or different ones (heterogeneous condition). Their results showed that discussions in homogeneous groups had a polarizing effect, whereas discussions in heterogeneous groups had a depolarizing effect [see also @druckman2004political]. As such, deliberation in diverse groups can decrease the effect of polarizing elite communication. Similar research was conducted by @klar2014partisanship}, who manipulated group compositions in terms of the participants' party affiliations rather than comparing heterogeneous and homogeneous framing conditions. Her results showed that homogeneous group discussions resulted in more intense partisan motivated reasoning: individuals reported stronger preferences for the policies of their in-party and perceived them to be more effective compared to policies of their out-party. On the other hand, preferences were less extreme if the social setting was ideologically heterogeneous.
+
+Morality could be viewed as such a potential moderator of deliberation effects. Whether individuals perceive issues in terms of their fundamental moral principles can be expected to influence the nature and tone of political discussions and therefore to moderate the downstream effects of deliberation in homogeneous and heterogeneous groups. Consider two scenarios where individuals with opposing attitudes discuss their views on abortion as compared to the appropriate tax rate. While both scenarios could result in fierce debates, we can presume that a group of pro-life and pro-choice advocates will have a harder time to find a common ground than a group of tax critics and proponents. One might argue that this difference is simply due to the nature of the issues themselves. However, how could we then explain potential differences in willingness to compromise between groups discussing the same issue? @skitka2005moral provided a possible answer to this question by introducing the concept of _moral conviction_} (or _moral mandates_) as unique features of attitude strength. In their view, moral conviction should be regarded as independent from other dimensions of attitude strength such as extremity, importance, or accessibility.
+
+Moral convictions are characterized as attitudes that are perceived as ``absolutes, or universal standards of truth that others should also share'' [@skitka2010psychology, 269]. As such, they combine the following attributes [@skitka2010psychology]: they are viewed by individuals as applying to everyone (universality), they do not require an immediate underlying rationale but are rather seen as facts about the world (objectivity), they can be independent of authority and group norms (autonomy), they elicit strong emotional reactions, and they have an inherent motivational quality (motivation/justification). 
+
+Building on this work, @ryan2014reconsidering argued that moral convictions are not restricted to issues that are traditionally perceived as ``moral'', such as abortion or same-sex marriage, but can also include other issues such as economic policies.
+
+The degree of moral conviction may therefore vary between individuals as well as across issues. @ryan2014reconsidering further showed that the propensity to moralize -- i.e. the tendency to view an issue as a question of ``right and wrong'' -- is related to political participation, extreme political attitudes, arousal of negative emotions, and hostility. In a subsequent study, @ryan2016no suggested that moralization as a distinct characteristic of attitude intensity reorients behavior from maximizing gains to the general adherence to rules. Across multiple studies, the author showed that this tendency translates into stronger opposition to compromises about political issues and decreased support for compromising politicians. These patterns should also translate into attitudes towards -- and interactions with -- others who hold opposing views. Indeed, moral conviction has been shown to be related to stronger preferences for social distance from (and hostility towards) attitudinally dissimilar others and lower cooperativeness in groups holding heterogeneous views [@skitka2005moral].
+
+The literature on moral conviction, however, is only beginning to elaborate on the political implications as the theories were mainly applied in psychology and did not explicitly consider the political context. As such, little is known about when and how individuals form moral convictions for specific political attitudes. For example, what is the role rhetoric in raising moral mandates and how does moralization affect subsequent attitude formation and belief updating? Another important question that is largely unexplored is how people react towards others who raise potentially conflicting moral considerations in social interactions? Overall then, all three literatures can benefit from an integration of the different perspectives, which is the focus of the next section.
+
 
 # Description of Dataset
 ```{r}
