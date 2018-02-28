@@ -30,14 +30,11 @@ knitr::opts_chunk$set(echo = FALSE, message=FALSE, cache = TRUE, fig.height=3.5,
 ```
 
 <!-- Notes:
-
 - growing literature on role of morality in politics
 - two different perspectives that developed somewhat independently: moral foundations theory and moral conviction
 - both lead to different predictions regarding the role of morality to help reach compromise: mft suggests that focusing on the same moral foundation should lead to agreement among liberals and conservatives, whereas the moral conviction literature suggests that people are less willing to compromise if their attitudes are moralized.
 - this paper tests both perspectives using the moral foundations dictionary and only finds support for the moral conviction argument.
-
 -->
-
 
 <!-- # Introduction -->
 
@@ -80,7 +77,9 @@ countMFT <- function(x, dic){
 }
 ```
 
-In this Reddit community, authors begin a discussion by describing their 
+\texttt{ChangeMyView} is a Reddit community where participants begin a discussion by describing their attitude on a chosen issue in an original post. Other participants are invited to challenge the original author's arguments and opinions in order to change his or her mind about the issue. For example, an original post could start "cmv: iran has the right to develop nuclear weapons."
+
+@tan2016winning analyzed the discussion dynamics on ChangeMyView by focusing on...
 
 
 # Moral Foundations and Persuadability
