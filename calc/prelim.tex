@@ -49,7 +49,7 @@
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
-\title{ChangeMyView: Can Moral Appeals Facilitate Compromise?\thanks{\textbf{Version}: February 27, 2018 --- PLEASE DO NOT CITE OR
+\title{ChangeMyView: Can Moral Appeals Facilitate Compromise?\thanks{\textbf{Version}: February 28, 2018 --- PLEASE DO NOT CITE OR
 REDISTRIBUTE WITHOUT PERMISSION.}  }
 
 
@@ -272,22 +272,117 @@ underlying foundations, the moral conviction literature suggests that
 any type of moral appeal should make it harder to overcome disagreement.
 The present paper tests both competing predictions by analyzing online
 discussions on the Reddit community \texttt{/r/ChangeMyView}. The
-following section discusses the dataset in more detail.
+following section discusses the data set in more detail.
 
 \section{Description of Dataset}\label{description-of-dataset}
 
-\texttt{ChangeMyView} is a Reddit community where participants begin a
-discussion by describing their attitude on a chosen issue in an original
-post. Other participants are invited to challenge the original author's
-arguments and opinions in order to change his or her mind about the
-issue. For example, an original post could start ``cmv: iran has the
-right to develop nuclear weapons.''
+\texttt{ChangeMyView} (CMV) is a Reddit community where participants
+begin a discussion by describing their opinion on a chosen issue in an
+original statement. Other participants are invited to challenge the
+original poster's (OP) arguments in order to change their view. The OP
+then responds to the arguments brought forward and explicitly identifies
+entries that changed his or her view by awarding a ``Delta''
+(\(\Delta\)). For example, one original post that was added in 2014 (?
+check date again!) discusses the issue of marriage equality:
 
-\citet{tan2016winning} analyzed the discussion dynamics on ChangeMyView
-by focusing on\ldots{}
+\begin{quote}
+``\emph{CMV: I believe that the gay marriage discussion isn't as
+important as the media portrays it to be.}
+\end{quote}
+
+\begin{quote}
+The real problem is the concept of marriage itself. In my view, LGBT
+couples are already married, regardless of the legislation that is
+imposed on them. Marriage isn't a set of civil rights that confirms your
+connection to your partner, it's the choice you make to be in private,
+daily, lifelong commitment to another being.
+\end{quote}
+
+\begin{quote}
+Tradition dictates that in order to be `properly' married you have to
+exchange vows, get a ring, and have a massive celebration (the set of
+traditions change based upon the culture.) but marriage isn't that, it
+is simple commitment to another person. The main issue that gay marriage
+has is that not all couples are given the same civil liberties, but this
+does not mean that their marriages are void. marriage isn't decided by
+bystanders, it's decided by the people who live inside the union. It is
+for this very reason that a gay couple getting married doesn't affect
+your own marriage.
+\end{quote}
+
+\begin{quote}
+I've held this opinion for a while but have never had the opportunity to
+see if it stood up to criticism. CMV.
+\end{quote}
+
+Below is a sample response that lead the original author award a
+\(\Delta\):
+
+\begin{quote}
+``That would be true if it was just some odd tradition. but it isn't
+just the ceremony, but also a tax.
+\end{quote}
+
+\begin{quote}
+Right now there is a gay tax. Gay couples have to pay higher taxes than
+straight couples because the government gives a tax break for married
+couples. The reason for this is that married couples tend to be more
+efficient and better for the government. The government wants to
+encourage marriage, so as with all things they encourage they subsidize
+it.
+\end{quote}
+
+\begin{quote}
+Gay people provide the exact same benefits to marriage, if not more!
+Adoption being the largest one.
+\end{quote}
+
+\begin{quote}
+{[}\ldots{}{]}
+\end{quote}
+
+\begin{quote}
+This tax comes through in multiple ways. The yearly tax and through
+inheritance. The government doesn't tax inheritance as much for
+marriage, but if they are simply partners then they get taxed when their
+``partner'' dies.
+\end{quote}
+
+\begin{quote}
+The state also doesn't allow for gay couples see their loved ones in
+hospitals or prison because they aren't married.
+\end{quote}
+
+\begin{quote}
+If this was just in the church I wouldn't care. But this is much more
+than that."
+\end{quote}
+
+The participation rules of the community foster civil exchange of
+arguments, even for decisive issues and OP's are encouraged to award
+\(\Delta\)s genuinely. As such, it provides a perfect opportunity to
+examine the role of moral appeals in persuasion and agreement.
+
+\citet{tan2016winning} analyzed the discussion dynamics on
+\texttt{ChangeMyView} by focusing on language features that predict
+persuasiveness of discussion contributions as well as the malleability
+of original posts. The authors extract argument pairs that respond to an
+original post with only one being successful in changing the OPs view
+while being relatively similar in terms of their word choice.
+
+{[}Elaborate on argument pair selection etc.{]}
+
+The analyses reported below use the same data and case selection that
+was published by \citet{tan2016winning} as well as the Moral Foundations
+Dictionary proposed by \citet{graham2009liberals}.
 
 \section{Moral Foundations and
 Persuadability}\label{moral-foundations-and-persuadability}
+
+This figure shows that OPs who use fewer moral words in their opening
+statements are more likely to provide a \(\Delta\) in the subsequent
+discussion. This basic result is consistent with the moral conviction
+literature.
 
 \begin{figure}
 \centering
@@ -300,6 +395,10 @@ persuaded to change his or her view as a result of the discussion.}
 
 \section{Is Moral Consistency
 Convincing?}\label{is-moral-consistency-convincing}
+
+Next, I examine the persuasiveness of moral arguments made within
+discussion contributions as a response to original posts that rely on
+any of the moral foundations.
 
 \begin{figure}
 \centering

@@ -44,7 +44,7 @@ An important implicit assumption that has been made repeatedly in this literatur
 
 There are reasons to believe that compromise is still difficult---and potentially even further impeded---if individuals argue on the basis of the same set of moral foundations. @skitka2005moral, for example, provide a different theoretical perspective than MFT by conceptualizing moralization as a unique feature of attitude strength. According to this view, moral convictions are perceived as "absolutes, or universal standards of truth that others should also share" [@skitka2010psychology, 269]. As such, they combine the following attributes: they are viewed by individuals as applying to everyone (universality), they do not require an immediate underlying rationale but are rather seen as facts about the world (objectivity), they can be independent of authority and group norms (autonomy), they elicit strong emotional reactions, and they have an inherent motivational quality (motivation/justification) [@skitka2010psychology]. Building on this work, @ryan2014reconsidering argued that moral convictions are not restricted to issues that are traditionally perceived as "moral," such as abortion or same-sex marriage, but can also include other issues such as economic policies. The degree of moral conviction may therefore vary between individuals as well as across issues. @ryan2014reconsidering further showed that the propensity to moralize---i.e. the tendency to view an issue as a question of "right and wrong"---is related to political participation, extreme political attitudes, arousal of negative emotions, and hostility. In a subsequent study, @ryan2016no suggested that moralization as a distinct characteristic of attitude intensity reorients behavior from maximizing gains to the general adherence to rules. Across multiple studies, the author showed that this tendency translates into stronger opposition to compromise about political issues and decreased support for compromising politicians. These patterns should also translate into attitudes towards---and interactions with---others who hold opposing views. Indeed, moral conviction has been shown to be related to stronger preferences for social distance from (and hostility towards) attitudinally dissimilar others and lower cooperativeness in groups holding heterogeneous views [@skitka2005moral].
 
-Ultimately, both perspectives in moral psychology lead to diverging expectations regarding the effect of moral appeals on persuasion and the likelihood of compromise: While moral foundations theory contends that agreement should be facilitated if two discussants focus on the same underlying foundations, the moral conviction literature suggests that any type of moral appeal should make it harder to overcome disagreement. The present paper tests both competing predictions by analyzing online discussions on the Reddit community \texttt{/r/ChangeMyView}. The following section discusses the dataset in more detail.
+Ultimately, both perspectives in moral psychology lead to diverging expectations regarding the effect of moral appeals on persuasion and the likelihood of compromise: While moral foundations theory contends that agreement should be facilitated if two discussants focus on the same underlying foundations, the moral conviction literature suggests that any type of moral appeal should make it harder to overcome disagreement. The present paper tests both competing predictions by analyzing online discussions on the Reddit community \texttt{/r/ChangeMyView}. The following section discusses the data set in more detail.
 
 # Description of Dataset
 ```{r load data}
@@ -77,12 +77,44 @@ countMFT <- function(x, dic){
 }
 ```
 
-\texttt{ChangeMyView} is a Reddit community where participants begin a discussion by describing their attitude on a chosen issue in an original post. Other participants are invited to challenge the original author's arguments and opinions in order to change his or her mind about the issue. For example, an original post could start "cmv: iran has the right to develop nuclear weapons."
+\texttt{ChangeMyView} (CMV) is a Reddit community where participants begin a discussion by describing their opinion on a chosen issue in an original statement. Other participants are invited to challenge the original poster's (OP) arguments in order to change their view. The OP then responds to the arguments brought forward and explicitly identifies entries that changed his or her view by awarding a "Delta" ($\Delta$). For example, one original post that was added in 2014 (? check date again!) discusses the issue of marriage equality:
 
-@tan2016winning analyzed the discussion dynamics on ChangeMyView by focusing on...
+>"_CMV: I believe that the gay marriage discussion isn't as important as the media portrays it to be._
+
+>The real problem is the concept of marriage itself. In my view, LGBT couples are already married, regardless of the legislation that is imposed on them. Marriage isn't a set of civil rights that confirms your connection to your partner, it's the choice you make to be in private, daily, lifelong commitment to another being.
+
+>Tradition dictates that in order to be 'properly' married you have to exchange vows, get a ring, and have a massive celebration (the set of traditions change based upon the culture.) but marriage isn't that, it is simple commitment to another person. The main issue that gay marriage has is that not all couples are given the same civil liberties, but this does not mean that their marriages are void. marriage isn't decided by bystanders, it's decided by the people who live inside the union. It is for this very reason that a gay couple getting married doesn't affect your own marriage.
+
+>I've held this opinion for a while but have never had the opportunity to see if it stood up to criticism. CMV.
+
+Below is a sample response that lead the original author award a $\Delta$:
+
+>"That would be true if it was just some odd tradition. but it isn't just the ceremony, but also a tax.
+
+>Right now there is a gay tax. Gay couples have to pay higher taxes than straight couples because the government gives a tax break for married couples. The reason for this is that married couples tend to be more efficient and better for the government. The government wants to encourage marriage, so as with all things they encourage they subsidize it.
+
+>Gay people provide the exact same benefits to marriage, if not more! Adoption being the largest one.
+
+>[...]
+
+>This tax comes through in multiple ways. The yearly tax and through inheritance. The government doesn't tax inheritance as much for marriage, but if they are simply partners then they get taxed when their "partner" dies. 
+
+>The state also doesn't allow for gay couples see their loved ones in hospitals or prison because they aren't married.
+
+>If this was just in the church I wouldn't care. But this is much more than that." 
+
+The participation rules of the community foster civil exchange of arguments, even for decisive issues and OP's are encouraged to award $\Delta$s genuinely. As such, it provides a perfect opportunity to examine the role of moral appeals in persuasion and agreement. 
+
+@tan2016winning analyzed the discussion dynamics on \texttt{ChangeMyView} by focusing on language features that predict persuasiveness of discussion contributions as well as the malleability of original posts. The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice. 
+
+[Elaborate on argument pair selection etc.]
+
+The analyses reported below use the same data and case selection that was published by @tan2016winning as well as the Moral Foundations Dictionary proposed by @graham2009liberals.
 
 
 # Moral Foundations and Persuadability
+
+This figure shows that OPs who use fewer moral words in their opening statements are more likely to provide a $\Delta$ in the subsequent discussion. This basic result is consistent with the moral conviction literature.
 
 ```{r examine op data, fig.cap="Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion (including 95% confidence intervals). Deltas indicate whether the author was persuaded to change his or her view as a result of the discussion."}
 ### Examine OP data
@@ -112,6 +144,8 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Delta, shape
 
 
 # Is Moral Consistency Convincing?
+
+Next, I examine the persuasiveness of moral arguments made within discussion contributions as a response to original posts that rely on any of the moral foundations.
 
 ```{r load pair data}
 ### Examine pair data
