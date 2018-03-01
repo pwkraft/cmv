@@ -87,9 +87,9 @@ countMFT <- function(x, dic){
 
 >I've held this opinion for a while but have never had the opportunity to see if it stood up to criticism. CMV.
 
-Below is a sample response that lead the original author award a $\Delta$:
+Below is a sample response that lead the original author to award a $\Delta$:
 
->"That would be true if it was just some odd tradition. but it isn't just the ceremony, but also a tax.
+>"That would be true if it was just some odd tradition. But it isn't just the ceremony, but also a tax.
 
 >Right now there is a gay tax. Gay couples have to pay higher taxes than straight couples because the government gives a tax break for married couples. The reason for this is that married couples tend to be more efficient and better for the government. The government wants to encourage marriage, so as with all things they encourage they subsidize it.
 
@@ -103,7 +103,7 @@ Below is a sample response that lead the original author award a $\Delta$:
 
 >If this was just in the church I wouldn't care. But this is much more than that." 
 
-The participation rules of the community foster civil exchange of arguments, even for decisive issues and OP's are encouraged to award $\Delta$s genuinely. As such, it provides a perfect opportunity to examine the role of moral appeals in persuasion and agreement. 
+The participation rules of the community foster civil exchange of arguments---even for decisive issues---and OP's are encouraged to award $\Delta$s genuinely. As such, it provides a perfect opportunity to examine the role of moral appeals in persuasion and agreement. 
 
 @tan2016winning analyzed the discussion dynamics on \texttt{ChangeMyView} by focusing on language features that predict persuasiveness of discussion contributions as well as the malleability of original posts. The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice. 
 
