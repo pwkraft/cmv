@@ -171,8 +171,9 @@ checkTerm <- function(x, return_data = FALSE){
     labs(title = paste0("Search Query (",length(cases)," argument pairs):"), subtitle = paste(x, collapse="; ")
          , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)", y = "Moral Foundation") +
     #scale_x_continuous(limits=xlim, breaks=.9*xlim, labels = c("Less Persuasive", "More Persuasive")) +
-    scale_x_continuous(limits=xlim) + facet_grid(valence~.) + 
-    theme(axis.ticks.x=element_blank())
+    #theme(axis.ticks.x=element_blank()) +
+    scale_x_continuous(limits=xlim) + facet_grid(valence~.)
+    
 }
 
 mftTerms <- function(x){
@@ -190,78 +191,128 @@ checkTerm("") + labs(title = paste0("All Argument Pairs (n = ",nrow(mft_pair),")
                      , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)")
 ```
 
-```{r harm virtue, fig.cap="Care (virtue): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-
+```{r prepare foundations in pair data}
 mftCombine <- function(x){
   out <- checkTerm(mftTerms(x), return_data = T) %>%
     mutate(op_valence = paste0("V",gsub(".*V","", x))
-           , op_foundation = factor(gsub("V.*","", x)))
+           , op_foundation = gsub("V.*","", x))
   out
 }
 
-plot_df <- bind_rows(mftCombine("HarmVirtue"), mftCombine("HarmVice"))
-
-                                 
-plot_df <- names(dict) %>% 
+plot_df <- names(dict)[-11] %>% 
   map_dfr(mftCombine)
-  
-#xlims <- plot_df %>% group_by(query) %>%
-#  summarize()
-  
+```
+
+```{r op harm, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the care foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
 plot_df %>% filter(op_foundation == "Harm") %>%
   ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
     theme_classic() + theme(panel.border = element_rect(fill=NA)) +
     geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
-    labs(title = "Original Post: Care Foundation"
+    labs(title = "Moral Foundation of Original Post: Care/Harm"
          , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
          , y = "Moral Foundation of Counterargument") +
-    #scale_x_continuous(limits=xlim, breaks=.9*xlim, labels = c("Less Persuasive", "More Persuasive")) +
-    #scale_x_continuous(limits=xlim) + 
-    facet_grid(valence~op_valence) + 
-    theme(axis.ticks.x=element_blank())
-
-  
-  checkTerm(mftTerms("HarmVirtue"))
-
+    facet_grid(valence~op_valence)
 ```
 
-```{r harm vice, fig.cap="Care (vice): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("Harm"))
+```{r op fairness, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the fairness foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Fairness") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Fairness/Cheating"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
 ```
 
-```{r fairness virtue, fig.cap="Fairness (virtue): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("FairnessVirtue"))
+```{r op ingroup, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the loyalty foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Ingroup") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Loyalty/Betrayal"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
 ```
 
-```{r fairness vice, fig.cap="Fairness (vice): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("FairnessVice"))
+```{r op authority, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the authority foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Authority") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Authority/Subversion"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
 ```
 
-```{r ingroup virtue, fig.cap="Loyalty (virtue): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("IngroupVirtue"))
+```{r op purity, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the sanctity foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Purity") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Sanctity/Degradation"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
 ```
 
-```{r ingroup vice, fig.cap="Loyalty (vice): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("IngroupVice"))
+\clearpage
+
+# Effectiveness of moral appeals in different political contexts
+
+```{r climate change}
+checkTerm(c("climate change","global warming","temperature","extreme weather"))
 ```
 
-```{r authority virtue, fig.cap="Authority (virtue): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("AuthorityVirtue"))
+```{r abortion}
+checkTerm(c("pro-life","prolife","pro life","pro-choice","prochoice","pro choice"))
 ```
 
-```{r authority vice, fig.cap="Authority (vice): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("AuthorityVice"))
-```
-
-
-```{r purity virtue, fig.cap="Sanctity (virtue): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("PurityVirtue"))
+```{r politics}
+checkTerm(c("politic","liberal","conservati","democrat","republican","president","senate","congress","representative","donat","obama","mccain","romney","clinton","bush"))
 ```
 
 
-```{r purity vice, fig.cap="Sanctity (vice): Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
-checkTerm(mftTerms("PurityVice"))
+\clearpage
+
+# Test measure of moral consistency
+
+```{r test}
+cosine <- function(x,y){
+  x %*% y / (sqrt(sum(x^2)) * sqrt(sum(y^2)))
+}
+
+mft_pos <- as.matrix(countMFT(data_pair$pos_text, dict))
+mft_neg <- as.matrix(countMFT(data_pair$neg_text, dict))
+mft_op <- as.matrix(countMFT(data_pair$op_text, dict))
+
+test_pos <- rep(NA, nrow(mft_pos))
+test_neg <- rep(NA, nrow(mft_neg))
+for(i in 1:length(test_pos)){
+  test_pos[i] <- cosine(mft_pos[i,], mft_op[i,])
+  test_neg[i] <- cosine(mft_neg[i,], mft_op[i,])
+}
+
+t.test(test_pos, test_neg, paired = T)
+
+test_pos[is.na(test_pos)] <- 0
+test_neg[is.na(test_neg)] <- 0
+
+t.test(test_pos, test_neg, paired = T)
+
+mean(test_pos)
+mean(test_neg)
 ```
+
+Now it appears that consistency in moral appeals is larger in persuasive than non-persuasive arguments.
+
 
 \clearpage
 

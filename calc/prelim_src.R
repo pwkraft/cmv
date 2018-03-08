@@ -117,9 +117,8 @@ checkTerm(c("liberal","conservati"))
 checkTerm(c("democrat","republican"))
 checkTerm("climate")
 checkTerm("climate change")
-checkTerm(c("climate change","global warming"))
-checkTerm(c("politic","liberal","conservati","democrat","republican","president"
-            ,"climate change","global warming"))
+checkTerm(c("climate change","global warming","temperature","extreme weather"))
+checkTerm(c("politic","liberal","conservati","democrat","republican","president","senate","congress","representative","donat"))
 
 
 
