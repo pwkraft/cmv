@@ -1,4 +1,4 @@
-*~
+iii*~
 *#
 #*
 .#*
@@ -6,8 +6,8 @@
 /info/
 /calc/in/
 /calc/out/
-/calc/prelim_files/
-/calc/prelim_cache/
+/calc/prelim/prelim_files/
+/calc/prelim/prelim_cache/
 *.csv
 *.dta
 *.log
@@ -32,7 +32,7 @@
 .Rapp.history
 
 # Session Data files
-.RData
+*.RData
 
 # Example code in package build process
 *-Ex.R

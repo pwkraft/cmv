@@ -1,0 +1,331 @@
+---
+output: 
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+    template: ~/Dropbox/Uni/Misc/template.tex
+title: "ChangeMyView"
+subtitle: "Can Moral Appeals Facilitate Compromise?"
+thanks: "**Version**: `r format(Sys.time(), '%B %d, %Y')` --- PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION. "
+#; **Corresponding author**: patrick.kraft@stonybrook.edu.; Replication files are available on the author's Github account (http://github.com/pwkraft)."
+author:
+- name: Patrick W. Kraft
+  affiliation: Stony Brook University
+abstract: "The American electorate is becoming increasingly polarized. According to research in moral psychology, these growing disagreements between liberals and conservatives can be attributed to fundamental differences in the moral frameworks that shape individual ideology. Indeed, scholars suggest that ideologues would be more likely to reach compromise if both sides spoke the same ``moral language.'' While this implicit assumption has intuitive appeal, it remains largely untested empirically. Drawing on a unique dataset from the online discussion board _Reddit_, this paper examines how moral appeals can affect individual persuasion and the likelihood of agreement and consensus building through deliberation."
+keywords: "Moral Foundations, Attitude Change, Persuasion, Compromise"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 12pt
+spacing: double
+bibliography: /home/patrick/Dropbox/Uni/Lit/Literature
+biblio-style: /home/patrick/Dropbox/Uni/Lit/apsr2006
+endnote: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, cache = TRUE, fig.height=3.5, fig.width=6)
+```
+
+<!-- Notes:
+- growing literature on role of morality in politics
+- two different perspectives that developed somewhat independently: moral foundations theory and moral conviction
+- both lead to different predictions regarding the role of morality to help reach compromise: mft suggests that focusing on the same moral foundation should lead to agreement among liberals and conservatives, whereas the moral conviction literature suggests that people are less willing to compromise if their attitudes are moralized.
+- this paper tests both perspectives using the moral foundations dictionary and only finds support for the moral conviction argument.
+-->
+
+<!-- # Introduction -->
+
+Recent years have witnessed a resurgence in partisan polarization in the United States. Politically engaged citizens hold more diverging policy views, are more ideologically extreme, and exhibit stronger negative affect towards out-partisans than in the past [@hetherington2001resurgent; @abramowitz2008polarization; @iyengar2012affect; @mason2014disrespectfully; @huddy2015expressive; @iyengar2015fear]. A growing literature in moral psychology---building on Moral Foundations Theory---attributes this divide (at least partially) to fundamental differences in moral frameworks that guide liberal and conservative thinking [c.f., @haidt2012righteous]. According to this perspective, liberals focus on _individualizing_ moral foundations, which include care/harm and fairness/cheating. Conservatives, on the other hand, also emphasize the remaining _binding_ foundations of loyalty/betrayal, authority/subversion, and sanctity/degradation [@haidt2007morality; @graham2009liberals]. Differential emphasis on these moral dimensions is systematically related to attitudes towards a wide variety of divisive political issues [e.g. @koleva2012tracing; @kertzer2014moral; @low2015moral], personality traits like individual social dominance orientation (SDO) and right-wing authoritarianism (RWA) [@federico2013mapping], as well as voting behavior [@franks2015using]. Overall, this body of research suggests that liberals and conservatives endorse different moral foundations and that these differences are related to political attitudes, evaluations, and behavior.
+
+An important implicit assumption that has been made repeatedly in this literature is that liberals and conservatives would be more likely to come to agreements _if only they focused on the same moral foundations_. For example @haidt2012righteous [365] concludes in his book _The Righteous Mind: Why Good People Are Divided by Politics and Religion_: "Once people join a political team, they get ensnared in its moral matrix. They see confirmation of their grand narrative everywhere, and it's difficult---perhaps impossible---to convince them that they are wrong _if you argue with them from outside of their matrix_" (emphasis added). In an different article, @graham2009liberals [1040] contend that their findings "help explain _why liberals and conservatives disagree on so many moral issues_ and often find it hard to understand how an ethical person could hold the beliefs of the other side: Liberals and conservatives _base their moral values, judgments, and arguments on different configurations_ of the five foundations." The underlying assumption that emphasizing the same foundations can facilitate compromise has important implications---especially in our current political environment. Somewhat surprisingly, however, it has never been subjected to a direct empirical test.
+
+There are reasons to believe that compromise is still difficult---and potentially even further impeded---if individuals argue on the basis of the same set of moral foundations. @skitka2005moral, for example, provide a different theoretical perspective than MFT by conceptualizing moralization as a unique feature of attitude strength. According to this view, moral convictions are perceived as "absolutes, or universal standards of truth that others should also share" [@skitka2010psychology, 269]. As such, they combine the following attributes: they are viewed by individuals as applying to everyone (universality), they do not require an immediate underlying rationale but are rather seen as facts about the world (objectivity), they can be independent of authority and group norms (autonomy), they elicit strong emotional reactions, and they have an inherent motivational quality (motivation/justification) [@skitka2010psychology]. Building on this work, @ryan2014reconsidering argued that moral convictions are not restricted to issues that are traditionally perceived as "moral," such as abortion or same-sex marriage, but can also include other issues such as economic policies. The degree of moral conviction may therefore vary between individuals as well as across issues. @ryan2014reconsidering further showed that the propensity to moralize---i.e. the tendency to view an issue as a question of "right and wrong"---is related to political participation, extreme political attitudes, arousal of negative emotions, and hostility. In a subsequent study, @ryan2016no suggested that moralization as a distinct characteristic of attitude intensity reorients behavior from maximizing gains to the general adherence to rules. Across multiple studies, the author showed that this tendency translates into stronger opposition to compromise about political issues and decreased support for compromising politicians. These patterns should also translate into attitudes towards---and interactions with---others who hold opposing views. Indeed, moral conviction has been shown to be related to stronger preferences for social distance from (and hostility towards) attitudinally dissimilar others and lower cooperativeness in groups holding heterogeneous views [@skitka2005moral].
+
+Ultimately, both perspectives in moral psychology lead to diverging expectations regarding the effect of moral appeals on persuasion and the likelihood of compromise: While moral foundations theory contends that agreement should be facilitated if two discussants focus on the same underlying foundations, the moral conviction literature suggests that any type of moral appeal should make it harder to overcome disagreement. The present paper tests both competing predictions by analyzing online discussions on the Reddit community \texttt{/r/ChangeMyView}. The following section discusses the data set in more detail.
+
+# Description of Dataset
+```{r load data}
+library(tidyr)
+library(dplyr)
+library(purrr)
+library(ggplot2)
+library(quanteda)
+
+## load data
+load("out/cmv_data.Rdata")
+
+## load dictionary
+dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
+
+## create corpus $ dfm for positive posts
+countMFT <- function(x, dic){
+  corpus <- corpus(x)
+  txt <- dfm(corpus, dictionary = dic)
+  data <- (data.frame(txt)/ntoken(corpus) * 100) %>% 
+    select(-MoralityGeneral)
+  data
+}
+```
+
+\texttt{ChangeMyView} (CMV) is a Reddit community where participants begin a discussion by describing their opinion on a chosen issue in an original statement. Other participants are invited to challenge the original poster's (OP) arguments in order to change their view. The OP then responds to the arguments brought forward and explicitly identifies entries that changed his or her view by awarding a "Delta" ($\Delta$). For example, one original post that was added in 2014 (? check date again!) discusses the issue of marriage equality:
+
+>"_CMV: I believe that the gay marriage discussion isn't as important as the media portrays it to be._
+
+>The real problem is the concept of marriage itself. In my view, LGBT couples are already married, regardless of the legislation that is imposed on them. Marriage isn't a set of civil rights that confirms your connection to your partner, it's the choice you make to be in private, daily, lifelong commitment to another being.
+
+>Tradition dictates that in order to be 'properly' married you have to exchange vows, get a ring, and have a massive celebration (the set of traditions change based upon the culture.) but marriage isn't that, it is simple commitment to another person. The main issue that gay marriage has is that not all couples are given the same civil liberties, but this does not mean that their marriages are void. marriage isn't decided by bystanders, it's decided by the people who live inside the union. It is for this very reason that a gay couple getting married doesn't affect your own marriage.
+
+>I've held this opinion for a while but have never had the opportunity to see if it stood up to criticism. CMV.
+
+Below is a sample response that lead the original author to award a $\Delta$:
+
+>"That would be true if it was just some odd tradition. But it isn't just the ceremony, but also a tax.
+
+>Right now there is a gay tax. Gay couples have to pay higher taxes than straight couples because the government gives a tax break for married couples. The reason for this is that married couples tend to be more efficient and better for the government. The government wants to encourage marriage, so as with all things they encourage they subsidize it.
+
+>Gay people provide the exact same benefits to marriage, if not more! Adoption being the largest one.
+
+>[...]
+
+>This tax comes through in multiple ways. The yearly tax and through inheritance. The government doesn't tax inheritance as much for marriage, but if they are simply partners then they get taxed when their "partner" dies. 
+
+>The state also doesn't allow for gay couples see their loved ones in hospitals or prison because they aren't married.
+
+>If this was just in the church I wouldn't care. But this is much more than that." 
+
+The participation rules of the community foster civil exchange of arguments---even for decisive issues---and OP's are encouraged to award $\Delta$s genuinely. As such, it provides a perfect opportunity to examine the role of moral appeals in persuasion and agreement. 
+
+@tan2016winning analyzed the discussion dynamics on \texttt{ChangeMyView} by focusing on language features that predict persuasiveness of discussion contributions as well as the malleability of original posts. The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice. 
+
+[Elaborate on argument pair selection etc.]
+
+The analyses reported below use the same data and case selection that was published by @tan2016winning as well as the Moral Foundations Dictionary proposed by @graham2009liberals.
+
+
+# Moral Foundations and Persuadability
+
+This figure shows that OPs who use fewer moral words in their opening statements are more likely to provide a $\Delta$ in the subsequent discussion. This basic result is consistent with the moral conviction literature.
+
+```{r examine op data, fig.cap="Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion (including 95% confidence intervals). Deltas indicate whether the author was persuaded to change his or her view as a result of the discussion.", fig.width=7, fig.height=2.5}
+### Examine OP data
+
+mft_op <- data_op[,c("title","text")] %>% 
+  apply(1, paste, collapse=" ") %>%
+  countMFT(dict) %>% bind_cols(data_op) %>% as_tibble()
+
+plot_df <- mft_op %>%
+  select(-name:-text) %>%
+  gather(key=foundation, value=proportion,-Delta) %>%
+  mutate(valence = paste0("V",gsub(".*V","", foundation))
+         , foundation = factor(gsub("V.*","", foundation)
+                               , levels = rev(c("Harm", "Fairness", "Ingroup", "Authority", "Purity"))
+                               , labels = rev(c("Care", "Fairness", "Loyalty", "Authority", "Sanctity")))) %>%
+  group_by(foundation, valence, Delta) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
+
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Delta, shape=Delta)) + 
+  theme_classic() + theme(panel.border = element_rect(fill=NA)) + 
+  geom_point(position = position_nudge(y=-.1+.2*plot_df$Delta)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=-.1+.2*plot_df$Delta)) + 
+  ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
+  ggtitle("Moral Foundations and Persuadability") + facet_wrap(~valence, ncol=2)
+```
+
+
+# Is Moral Consistency Convincing?
+
+Next, I examine the persuasiveness of moral arguments made within discussion contributions as a response to original posts that rely on any of the moral foundations.
+
+```{r load pair data}
+### Examine pair data
+
+mft_pair <- countMFT(data_pair$pos_text, dict) - countMFT(data_pair$neg_text, dict)
+
+checkTerm <- function(x, return_data = FALSE){
+  cases <- c(map(x, grep, data_pair$op_text), map(x, grep, data_pair$op_title)) %>% 
+               unlist() %>% unique() %>% sort()
+  
+  plot_df <- mft_pair[cases,] %>% 
+    gather(key=foundation, value=proportion) %>%
+    mutate(valence = paste0("V",gsub(".*V","", foundation))
+           , foundation = factor(gsub("V.*","", foundation)
+                                 , levels = rev(c("Harm", "Fairness", "Ingroup", "Authority", "Purity"))
+                                 , labels = rev(c("Care", "Fairness", "Loyalty", "Authority", "Sanctity")))) %>%
+    group_by(foundation, valence) %>%
+    summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
+    mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se
+           , numcases = length(cases))
+  
+  if(return_data) return(plot_df)
+  
+  xlim <- max(abs(c(plot_df$cilo,plot_df$cihi)))
+  xlim <- c(-xlim,xlim)
+  
+  ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = paste0("Search Query (",length(cases)," argument pairs):"), subtitle = paste(x, collapse="; ")
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)", y = "Moral Foundation") +
+    #scale_x_continuous(limits=xlim, breaks=.9*xlim, labels = c("Less Persuasive", "More Persuasive")) +
+    #theme(axis.ticks.x=element_blank()) +
+    scale_x_continuous(limits=xlim) + facet_grid(valence~.)
+    
+}
+
+mftTerms <- function(x){
+  map(x, grep, names(dict)) %>% 
+    unlist() %>% unique %>% sort() %>%
+    map(~gsub("*","", dict[[.]], fixed=T)) %>%
+    unlist()
+}
+```
+
+
+```{r check all discussion pairs, fig.cap="All argument pairs: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+checkTerm("") + labs(title = paste0("All Argument Pairs (n = ",nrow(mft_pair),")")
+                     , subtitle = NULL, y = "Moral Foundation"
+                     , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)")
+```
+
+```{r prepare foundations in pair data}
+mftCombine <- function(x){
+  out <- checkTerm(mftTerms(x), return_data = T) %>%
+    mutate(op_valence = paste0("V",gsub(".*V","", x))
+           , op_foundation = gsub("V.*","", x))
+  out
+}
+
+plot_df <- names(dict)[-11] %>% 
+  map_dfr(mftCombine)
+```
+
+```{r op harm, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the care foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Harm") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Care/Harm"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
+```
+
+```{r op fairness, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the fairness foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Fairness") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Fairness/Cheating"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
+```
+
+```{r op ingroup, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the loyalty foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Ingroup") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Loyalty/Betrayal"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
+```
+
+```{r op authority, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the authority foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Authority") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Authority/Subversion"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
+```
+
+```{r op purity, fig.cap="Persuasiveness of moral arguments in response to original posts that mention the sanctity foundation: Average difference in percentage of dictionary terms relative to the total number of words between matched discussion contributions that persuaded the author of the original post vs. not (including 95% confidence intervals). Negative values indicate that arguments were less persuasive (and vice versa)."}
+
+plot_df %>% filter(op_foundation == "Purity") %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+    theme_classic() + theme(panel.border = element_rect(fill=NA)) +
+    geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+    labs(title = "Moral Foundation of Original Post: Sanctity/Degradation"
+         , x = "Difference in Percentage of Dictionary Terms (Delta - No Delta)"
+         , y = "Moral Foundation of Counterargument") +
+    facet_grid(valence~op_valence)
+```
+
+\clearpage
+
+# Effectiveness of moral appeals in different political contexts
+
+```{r climate change}
+checkTerm(c("climate change","global warming","temperature","extreme weather"))
+```
+
+```{r abortion}
+checkTerm(c("pro-life","prolife","pro life","pro-choice","prochoice","pro choice"))
+```
+
+```{r politics}
+checkTerm(c("politic","liberal","conservati","democrat","republican","president","senate","congress","representative","donat","obama","mccain","romney","clinton","bush"))
+```
+
+
+\clearpage
+
+# Test measure of moral consistency
+
+```{r test}
+cosine <- function(x,y){
+  x %*% y / (sqrt(sum(x^2)) * sqrt(sum(y^2)))
+}
+
+mft_pos <- as.matrix(countMFT(data_pair$pos_text, dict))
+mft_neg <- as.matrix(countMFT(data_pair$neg_text, dict))
+mft_op <- as.matrix(countMFT(data_pair$op_text, dict))
+
+test_pos <- rep(NA, nrow(mft_pos))
+test_neg <- rep(NA, nrow(mft_neg))
+for(i in 1:length(test_pos)){
+  test_pos[i] <- cosine(mft_pos[i,], mft_op[i,])
+  test_neg[i] <- cosine(mft_neg[i,], mft_op[i,])
+}
+
+t.test(test_pos, test_neg, paired = T)
+
+test_pos[is.na(test_pos)] <- 0
+test_neg[is.na(test_neg)] <- 0
+
+t.test(test_pos, test_neg, paired = T)
+
+mean(test_pos)
+mean(test_neg)
+```
+
+Now it appears that consistency in moral appeals is larger in persuasive than non-persuasive arguments.
+
+
+\clearpage
+
+# Conclusion
+
+The preliminary results are consistent with the literature on moral conviction and clearly contradict the implicit assumptions made in the Moral Foundations literature. Overall, arguments that revolve around the same moral foundations are less likely to be persuasive. In most cases, moral appeals of any type appear counterproductive in facilitating compromise and changing people's minds.
+
+
+# TO DOs, future directions, etc.
+
+- examine specific topics (e.g., climate change etc.)
+- clean original posts (links etc)
+- adjust confidence intervals to correct for multiple comparisons
+- improve code documentation, add comments in internal functions
+- check MFT scores in argument pairs (as well as OP entry)
+
