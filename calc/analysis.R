@@ -46,7 +46,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shap
   geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   ggtitle("Moral Foundations and Persuadability") + theme(legend.title = element_blank())
-ggsave("fig/persuadability.pdf", height=3, width=6)
+ggsave("fig/persuadability.pdf", height=2.5, width=6)
 
 ### Examine pair data
 
