@@ -3,6 +3,7 @@ library(dplyr)
 library(purrr)
 library(ggplot2)
 library(quanteda)
+library(topicmodels)
 
 ## load data
 load("out/cmv_data.Rdata")
@@ -10,26 +11,25 @@ load("out/cmv_data.Rdata")
 ## load dictionary
 dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
 
-## create corpus $ dfm for positive posts
-countMFT <- function(x, dic){
-  corpus <- corpus(x)
-  dat <- dfm(corpus, dictionary = dic) %>%
-    data.frame() %>%
-    transmute(Care = HarmVirtue + HarmVice,
-              Fairness = FairnessVirtue + FairnessVice,
-              Loyalty = IngroupVirtue + IngroupVice,
-              Authority = AuthorityVirtue + AuthorityVice,
-              Sanctity = PurityVirtue + PurityVice,
-              General = MoralityGeneral)
-  dat/ntoken(corpus) * 100
-}
+## load auxiliary functions
+source("func.R")
 
-### Examine OP data
+## plot defaults
+plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
+plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 
+
+
+#######################################
+### Moral reasoning and persuadability
+#######################################
+
+### Compute percentage of moral word counts in original posts
 mft_op <- data_op[,c("title","text")] %>% 
   apply(1, paste, collapse=" ") %>%
   countMFT(dict) %>% bind_cols(data_op) %>% as_tibble()
 
+### Prepare data for plotting
 plot_df <- mft_op %>%
   select(-name:-text) %>%
   gather(key=foundation, value=proportion,-Delta) %>%
@@ -40,6 +40,7 @@ plot_df <- mft_op %>%
   summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
 
+### Creat plot
 ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
   theme_classic() + theme(panel.border = element_rect(fill=NA)) + 
   geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
@@ -47,6 +48,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shap
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   ggtitle("Moral Foundations and Persuadability") + theme(legend.title = element_blank())
 ggsave("fig/persuadability.pdf", height=2.5, width=6)
+
 
 ### Examine pair data
 
