@@ -92,24 +92,27 @@ data_pair <- raw_pair %>% map_dfr(extractPair) %>%
          op_text = cleanText(op_text_raw),
          pos_text = cleanText(pos_text_raw),
          neg_text = cleanText(neg_text_raw),
+         pos_text_nterm = strsplit(pos_text, "\\s+") %>% map_int(length),
+         neg_text_nterm = strsplit(neg_text, "\\s+") %>% map_int(length),
          pos_root = cleanText(pos_root_raw),
          neg_root = cleanText(neg_root_raw),
-         pos_nterm = strsplit(pos_root, "\\s+") %>% map_int(length),
-         neg_nterm = strsplit(neg_root, "\\s+") %>% map_int(length))
+         pos_root_nterm = strsplit(pos_root, "\\s+") %>% map_int(length),
+         neg_root_nterm = strsplit(neg_root, "\\s+") %>% map_int(length)
+         )
 
 ## boolean indicating that positive comments are longer
-pos_longer <- (data_pair$pos_nterm - data_pair$neg_nterm) > 0
+pos_longer <- (data_pair$pos_root_nterm - data_pair$neg_root_nterm) > 0
 
 ## truncated positive posts
 data_pair$pos_trunc <- data_pair$pos_root
 for(i in which(pos_longer)){
-  data_pair$pos_trunc[i] <- truncText(data_pair$pos_trunc[i], data_pair$neg_nterm[i])
+  data_pair$pos_trunc[i] <- truncText(data_pair$pos_trunc[i], data_pair$neg_root_nterm[i])
 }
 
 ## truncated negative posts
 data_pair$neg_trunc <- data_pair$neg_root
 for(i in which(!pos_longer)){
-  data_pair$neg_trunc[i] <- truncText(data_pair$neg_trunc[i], data_pair$pos_nterm[i])
+  data_pair$neg_trunc[i] <- truncText(data_pair$neg_trunc[i], data_pair$pos_root_nterm[i])
 }
 
 

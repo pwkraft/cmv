@@ -29,7 +29,7 @@ data_op %>%
   ggplot(aes(x=Change)) + ylim(0, nrow(data_op)) +
   labs(y="Number of Original Posts", x="Opinion Change") +
   geom_bar() + plot_default
-ggsave("fig/delta.pdf", width = 2.5, height = 3)
+ggsave("fig/delta.pdf", width = 2.5, height = 2)
 
 
 
@@ -44,7 +44,7 @@ mft_op <- data_op[,c("title","text")] %>%
 
 ## Prepare data for plotting
 plot_df <- mft_op %>%
-  select(-name:-text) %>%
+  select(Care:General, Delta) %>%
   gather(key=foundation, value=proportion,-Delta) %>%
   mutate(foundation = factor(foundation, levels = rev(c("Care", "Fairness", "Loyalty",
                                                         "Authority", "Sanctity", "General"))),
@@ -55,16 +55,15 @@ plot_df <- mft_op %>%
 
 ## Create plot
 ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
-  theme_classic() + theme(panel.border = element_rect(fill=NA)) + 
-  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + plot_default +
   geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
-  ggtitle("Moral Foundations and Persuadability") + theme(legend.title = element_blank())
+  theme(legend.title = element_blank())
 ggsave("fig/persuadability.pdf", height=2.5, width=6)
 
 ## Test differences for each foundation (w/ Bonferroni correction)
-mft_op %>% 
-  gather(key = Foundation, value = Percentage, -name:-Delta) %>%
+mft_op %>% select(Care:General, Delta) %>%
+  gather(key = Foundation, value = Percentage, -Delta) %>%
   split(.$Foundation) %>%
   map(~t.test(.$Percentage~.$Delta)) %>%
   map_df("p.value") %>%
@@ -75,65 +74,148 @@ t.test(apply(mft_op[,1:6],1,sum)~mft_op$Delta)
 
 
 
-###########################################
-### Moral consistency b/w OP and arguments
-###########################################
+##########################
+### Prepare response data
+##########################
 
-## function to compute cosine similarity
-cosine <- function(x,y){
-  x %*% y / (sqrt(sum(x^2)) * sqrt(sum(y^2)))
-}
+## Compute mft percentages for full response path
+mft_op_text <- countMFT(paste(data_pair$op_title, data_pair$op_text), dict)
+mft_pos_text <- countMFT(data_pair$pos_text, dict)
+mft_neg_text <- countMFT(data_pair$neg_text, dict)
 
-## create matrices of dictionary counts
-mft_pos <- as.matrix(countMFT(data_pair$pos_text, dict))
-mft_neg <- as.matrix(countMFT(data_pair$neg_text, dict))
-mft_op <- as.matrix(countMFT(paste(data_pair$op_title, data_pair$op_text), dict))
+## Compute mft percentages for root response
+mft_pos_root <- countMFT(data_pair$pos_root, dict)
+mft_neg_root <- countMFT(data_pair$neg_root, dict)
 
-## compute cosine similarities
-cos_pos <- rep(NA, nrow(mft_pos))
-cos_neg <- rep(NA, nrow(mft_neg))
-for(i in 1:length(cos_pos)){
-  cos_pos[i] <- cosine(mft_pos[i,], mft_op[i,])
-  cos_neg[i] <- cosine(mft_neg[i,], mft_op[i,])
-}
+## Compute mft percentages for truncated root response
+mft_pos_trunc <- countMFT(data_pair$pos_trunc, dict)
+mft_neg_trunc <- countMFT(data_pair$neg_trunc, dict)
 
-## test differences in cosine similarities
-# (excluding all pairs w/o moral terms in original post OR reply)
-t.test(cos_pos, cos_neg, paired = T)
-mean(cos_pos, na.rm = T) - mean(cos_neg, na.rm = T)
 
-t.test(cos_pos-cos_neg)
 
-## plot densities
-plot(density(cos_pos - cos_neg, na.rm = T))
-abline(v=mean_cl_normal(cos_pos - cos_neg))
+#######################################
+### Response length and persuasiveness
+#######################################
 
-## test differences in cosine similarities
-# (including all pairs w/o moral temrs in original post OR reply as zero)
-cos_pos_zero <- cos_pos
-cos_pos_zero[is.na(cos_pos_zero)] <- 0
-cos_neg_zero <- cos_neg
-cos_neg_zero[is.na(cos_neg_zero)] <- 0
-t.test(cos_pos_zero, cos_neg_zero, paired = T)
+## Plot differences
+tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
+       root_nterm = data_pair$pos_root_nterm - data_pair$neg_root_nterm) %>%
+  gather(key = group, value = nterm) %>% group_by(group) %>%
+  summarize_all(funs(avg = mean, sd=sd, n=n())) %>%
+  mutate(se = sd/sqrt(n),
+         cilo = avg - 1.96 * se,
+         cihi = avg + 1.96 * se,
+         glabel = factor(group, labels=c("Root Response","Full Response Path"))) %>%
+  ggplot(aes(x = avg, xmin = cilo, xmax = cihi, y = glabel)) +
+  geom_point() + geom_errorbarh(height=0) + 
+  geom_vline(xintercept = 0, col = "grey") + plot_default +
+  labs(y = NULL, x="Difference in Word Count\n(Change - No Change)")
+ggsave("fig/wordcount.pdf", height=1.5, width=3)
 
-## plot densities
-plot(density(cos_pos_zero - cos_neg_zero))
-abline(v=mean_cl_normal(cos_pos_zero - cos_neg_zero))
+tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
+       root_nterm = data_pair$pos_root_nterm - data_pair$neg_root_nterm) %>%
+  gather(key = group, value = nterm) %>%
+  mutate(glabel = factor(group, labels=c("Root\nResponse","Full\nResponse\nPath"))) %>%
+  ggplot(aes(y=nterm, x=glabel, fill=glabel)) + 
+  geom_hline(yintercept = 0, col="grey") +
+  geom_violin(alpha = .4) + plot_default +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
+  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
+  theme(legend.position="none") + coord_flip()
+ggsave("fig/wordcount_violin.pdf", width = 6.5, height = 2)
 
-## plot differences in violin plot
-tibble(cos_neg = cos_neg_zero,
-       cos_pos = cos_pos_zero) %>%
-  gather(key = Delta, value = Similarity) %>%
-  ggplot(aes(x = Delta, y=Similarity)) + geom_violin() + plot_default +
-  stat_summary(fun.data=mean_cl_normal, 
-               geom="linerange", color="red")
+## testing differences (note: t-test of difference is equivalent of paired test)
+t.test(data_pair$pos_text_nterm, data_pair$neg_text_nterm, paired =T)
+t.test(data_pair$pos_text_nterm - data_pair$neg_text_nterm)
+t.test(data_pair$pos_root_nterm-data_pair$neg_root_nterm)
 
-## proportion of cases that that do not included moral terms in original post
-mft_op_0 <- apply(mft_op,1,sum) == 0
 
-t.test(apply((mft_pos - mft_neg)[mft_op_0,],1,sum))
-t.test(apply((mft_pos)[mft_op_0,],1,sum),
-       apply((mft_neg)[mft_op_0,],1,sum), paired = T)
+
+#######################################
+### proportion of cases that that do not included moral terms in original post
+#######################################
+
+tibble(mft = factor(apply(mft_op_text, 1, sum) != 0,
+                    labels = c("No", "Yes"))) %>%
+  ggplot(aes(x=mft)) + ylim(0, nrow(mft_op_text)) +
+  labs(y="Number of Original Posts", x="Any MFT Term Mentioned") +
+  geom_bar() + plot_default
+ggsave("fig/mft_op_all.pdf", width = 2.5, height = 2)
+
+
+
+#######################################
+### Moral reasoning in selected original posts
+#######################################
+
+## Prepare data for plotting
+plot_df <- mft_op_text %>%
+  gather(key=foundation, value=proportion) %>%
+  mutate(foundation = factor(foundation, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                        "Authority", "Sanctity", "General")))) %>%
+  group_by(foundation) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
+
+## Create plot
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
+  geom_point() + plot_default + geom_errorbarh(height=0) + 
+  ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
+  theme(legend.title = element_blank())
+ggsave("fig/mft_op_individual.pdf", height=2.5, width=4)
+
+
+
+###########################
+### Difference in moral reasoning between positive and negative arguments
+###########################
+
+## Compute differences for individual foundations
+mft_diff <- mutate(mft_pos_text - mft_neg_text, type="1. text") %>%
+  bind_rows(mutate(mft_pos_root - mft_neg_root, type="2. root")) %>%
+  bind_rows(mutate(mft_pos_trunc - mft_neg_trunc, type="3. trunc"))
+
+## Prepare data for plotting
+plot_df <- mft_diff %>%
+  select(Care:General, type) %>%
+  gather(key=foundation, value=proportion, -type) %>%
+  mutate(foundation = factor(foundation, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                        "Authority", "Sanctity", "General"))),
+         type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>%
+  group_by(foundation, type) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = length(na.omit(proportion))) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
+
+## Create plot
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
+  theme(legend.title = element_blank())
+ggsave("fig/persuasiveness.pdf", height=2.5, width=6)
+
+
+## Test differences on individual foundations
+mft_diff %>% filter(type=="text") %>%
+  gather(key = Foundation, value = Proportion, -type) %>%
+  split(.$Foundation) %>% map(~t.test(.$Proportion))
+
+mft_diff %>% filter(type=="root") %>%
+  gather(key = Foundation, value = Proportion, -type) %>%
+  split(.$Foundation) %>% map(~t.test(.$Proportion))
+
+mft_diff %>% filter(type=="trunc") %>%
+  gather(key = Foundation, value = Proportion, -type) %>%
+  split(.$Foundation) %>% map(~t.test(.$Proportion))
+
+## Test differences on all foundations combined
+mft_diff %>% 
+  select(-type) %>%
+  apply(1, sum) %>%
+  split(mft_diff$type) %>% 
+  map(t.test)
 
 
 
@@ -149,13 +231,93 @@ virt_op <- countVirtue(paste(data_pair$op_title, data_pair$op_text), dict)
 t.test(virt_pos$Virtue, virt_neg$Virtue, paired = T)
 t.test(virt_pos$Vice, virt_neg$Vice, paired = T)
 t.test(virt_pos$VVDiff, virt_neg$VVDiff, paired = T)
-
-t.test(virt_pos$Virtue + virt_pos$Vice, virt_neg$Virtue + virt_neg$Vice, paired = T)
-
-## total number of moral terms does not have an effect! -> against moral conviction literature
+# the lack of effects persists for Virtue vs. Vice as well
 
 
-####################################
-### Word Count by positive/negative
-####################################
+###########################################
+### Moral consistency b/w OP and arguments
+###########################################
+
+## function to compute cosine similarity
+cosine <- function(x,y, replaceNA = T){
+  x <- as.numeric(x)
+  y <- as.numeric(y)
+  out <- x %*% y / (sqrt(sum(x^2)) * sqrt(sum(y^2)))
+  if(is.na(out) & replaceNA) out <- 0
+  as.numeric(out)
+}
+
+## compute differences in cosine similarities (Change - No Change)
+cos_res <- tibble(
+  '1. text' = rep(NA, nrow(data_pair)),
+  '2. root' = NA,
+  '3. trunc' = NA
+)
+for(i in 1:nrow(data_pair)){
+  cos_res[i,'1. text'] <- (cosine(mft_pos_text[i,], mft_op_text[i,], T)
+                           - cosine(mft_neg_text[i,], mft_op_text[i,], T))
+  cos_res[i,'2. root'] <- (cosine(mft_pos_root[i,], mft_op_text[i,], T)
+                           - cosine(mft_neg_root[i,], mft_op_text[i,], T))
+  cos_res[i,'3. trunc'] <- (cosine(mft_pos_trunc[i,], mft_op_text[i,], T)
+                            - cosine(mft_neg_trunc[i,], mft_op_text[i,], T))
+}
+
+## Prepare data for plotting
+plot_df <- cos_res %>%
+  gather(key = type, value = cos) %>%
+  mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>% 
+  group_by(type) %>%
+  summarize(avg = mean(cos, na.rm = T), 
+            sd = sd(cos, na.rm = T),
+            n = sum(!is.na(cos)),
+            se = sd/sqrt(n),
+            cilo = avg - 1.96 * se, 
+            cihi = avg + 1.96 * se)
+
+## Create plot
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_default + labs(y = NULL, x = "Difference in MFT Cosine Similarity\n(Change - No Change)") +
+  theme(legend.position="none")
+ggsave("fig/cosine.pdf", width = 4, height = 2)
+
+## test differences in cosine similarities
+t.test(cos_res$`1. text`)
+t.test(cos_res$`2. root`)
+t.test(cos_res$`3. trunc`)
+
+## plot densities
+tmp <- rbind(mean_cl_normal(cos_res$`1. text`),
+             mean_cl_normal(cos_res$`2. root`),
+             mean_cl_normal(cos_res$`3. trunc`))
+tmp$type = factor(colnames(cos_res), labels=c("Full Response Path", "Root Response",
+                                              "Truncated Root Response"))
+
+cos_res %>% gather(key = type, value = cos) %>%
+  mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>%
+  ggplot(aes(x=cos, fill = type)) + 
+  geom_density(alpha = .2) + plot_default + 
+  geom_vline(aes(xintercept = y, col = type), data = tmp) +
+  geom_vline(aes(xintercept = ymin, col = type), lty="dashed", data = tmp) +
+  geom_vline(aes(xintercept = ymax, col = type), lty="dashed", data = tmp) +
+  facet_wrap(~type, ncol = 1, scale = "free_x") + ylab("Density") + 
+  xlab("Difference in MFT Cosine Similarity\n(Change - No Change)") +
+  theme(legend.position="none")
+ggsave("fig/cosine_density.pdf", width = 6, height = 5)
+
+## plot differences in violin plot
+cos_res %>% gather(key = type, value = cos) %>%
+  mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>%
+  ggplot(aes(y=cos, x=type, fill=type)) + 
+  geom_hline(yintercept = 0, col="grey") +
+  geom_violin(alpha = .4) + plot_default +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
+  labs(y="Difference in MFT Cosine Similarity\n(Change - No Change)", x=NULL) + 
+  theme(legend.position="none")
+ggsave("fig/cosine_violin.pdf", width = 6, height = 5)
+
+
 
