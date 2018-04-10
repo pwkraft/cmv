@@ -24,7 +24,7 @@ dfm_op <- data_op[,c("title","text")] %>%
   tokens(remove_numbers = T, remove_punct = T, 
          remove_symbols = T, remove_twitter = T, 
          remove_hyphens = T, remove_url = T) %>%
-  dfm(stem = T, remove = c("cmv", stopwords("english"))) %>%
+  dfm(stem = T, remove = stopwords("english")) %>%
   dfm_trim(., min_count = 10, min_docfreq = 10) %>%
   convert(to = "topicmodels")
 
