@@ -22,3 +22,23 @@ countVirtue <- function(x, dic){
               VVDiff = Virtue - Vice)
   dat/ntoken(corpus) * 100
 }
+
+### function to preprocess/clean posts
+cleanText <- function(x){x %>% 
+    gsub("\\*Hello, users of CMV! This is a footnote from your moderators.*$", " ", .) %>%
+    tolower() %>%
+    gsub("cmv", " ", .) %>%
+    gsub(" \\[newpost\\] ", " ", .) %>%
+    gsub("\\s+", " ", .) %>%
+    gsub(" [[:punct:]]*"," ", .) %>%
+    gsub("[[:punct:]]* "," ", .) %>%
+    gsub("\\s+", " ", .) %>%
+    gsub("^\\s+", "", .) %>%
+    gsub("\\s+$", "", .)
+}
+
+### function to truncate text
+truncText <- function(x, n){
+  strsplit(x, "\\s+")[[1]][1:n] %>%
+    paste(collapse = " ")
+}
