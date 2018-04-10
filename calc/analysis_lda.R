@@ -33,12 +33,18 @@ lda <- LDA(dfm_op, k=20, method = "Gibbs",
            control=list(seed=123456, iter=2000, burnin=1000))
 
 ## prepare data frame for plotting
-tibble(terms = apply(terms(lda, 10),2,paste, collapse=", "),
+tibble(terms = apply(terms(lda, 5),2,paste, collapse=", "),
+       labels = c("Comments (posts)", "Crime", "Gender/Sex", "Education", "Opinion (others)",
+                  "Religion", "Transportation/Future", "Politics", "Entertainment (active)", 
+                  "Family","Economy/Jobs", "Opinion (own)", "International", "Argument/Evaluation", 
+                  "Entertainment (passive)", "Reddit", "Information/Internet",
+                  "Social Issues", "Food", "Rape/Drugs"),
        props = apply(posterior(lda)$topics, 2, mean),
        maxtopic = table(topics(lda)),
        pmaxtopic = maxtopic/sum(maxtopic)) %>%
-  ggplot(aes(y=reorder(terms, props), x=props)) + 
-  geom_segment(aes(x=0, xend=props, yend=terms)) +
-  geom_point() + 
-  labs(y="") +
-  plot_default
+  ggplot(aes(y=reorder(labels, props), x=props, label = terms)) + 
+  geom_segment(aes(x=0, xend=props, yend=labels)) +
+  geom_text(hjust=0, position = position_nudge(0.002), size=2) + 
+  geom_point(size=1) + plot_default + xlim(0,.115) +
+  labs(y="Topic Label", x="Average Topic Proportion")
+ggsave("fig/topics.pdf", width = 6.5, height = 3)
