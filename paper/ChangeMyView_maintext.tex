@@ -34,8 +34,10 @@ The present paper tests both competing predictions by analyzing online discussio
 
 
 \section{The Subreddit ``ChangeMyView''}
+% OTHER CMV EXAMPLES:
+% - Check cases 246 (discussing Haidt's theory) and 275 (on marriage equality)
 
-Reddit is an online discussion board that is organized in thematic forums called \textit{Subreddits}. Users can join these communities based on their interests and each Subreddit has its own norms and etiquette that are enforced by voluntary moderators. \texttt{ChangeMyView} (CMV) is a Reddit community where participants begin each discussion thread by stating their personal opinion on a chosen issue. Other users are invited to challenge the original poster's (OP) arguments and try to persuade them otherwise. The OP then responds to the arguments brought forward and explicitly identifies forum entries that changed his or her view by awarding a ``Delta'' ($\Delta$). The participation rules of the community foster civil exchange of arguments---even for divisive issues---and OPs are encouraged to award \(\Delta\)s genuinely.
+Reddit is an online discussion board that is organized in thematic forums called \textit{Subreddits}. Users can join these communities based on their interests and each Subreddit has its own norms and etiquette that are enforced by voluntary moderators. \texttt{/r/ChangeMyView} (CMV) is a Reddit community where participants begin each discussion thread by stating their personal opinion on a chosen issue. Other users are invited to challenge the original poster's (OP) arguments and try to persuade them otherwise. The OP then responds to the arguments brought forward and explicitly identifies forum entries that changed his or her view by awarding a ``Delta'' ($\Delta$). The participation rules of the community foster civil exchange of arguments---even for divisive issues---and OPs are encouraged to award \(\Delta\)s genuinely.\footnote{The current set of rules for original posts as well as responses can be accessed at \url{https://www.reddit.com/r/changemyview/wiki/rules}.} To date, the Subreddit has more than 500,000 subscribed users.
 
 As an illustrative example, consider the following discussion on marriage equality that was posted in 2014. The thread begins with the following opening statement (the posts were slightly edited to correct for spelling errors):
 \begin{quote}\singlespacing
@@ -71,32 +73,23 @@ If gay marriage is not allowed in a state
 \end{enumerate}
 You might believe you are married to someone, but the term ``marriage'' is a political one indeed since it has legal ramifications.
 \end{quote}
+While both responses emphasize the importance of legal considerations in justifying the need for marriage equality, only one of the contributions persuaded the OP sufficiently such that he awarded a $\Delta$. Ultimately, these structured online discussions on CMV provide an ideal opportunity to study the persuasiveness of moral appeals. They begin with a short explanation of a person's opinion on a given topic. Multiple users attempt to counterargue the OP's point of view from various perspectives in a civil dialogue. Most importantly, OPs explicitly identify and label arguments they found to be persuasive enough to change their views.
 
-Both
-
-% OTHER CMV EXAMPLES:
-% - Check cases 246 (discussing Haidt's theory) and 275 (on marriage equality)
-
-
-
-\citet{tan2016winning} analyzed the discussion dynamics on \texttt{ChangeMyView} by focusing on language features that predict persuasiveness of discussion contributions as well as the malleability of original posts. The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice.
-
-
-
-The analyses reported below use the same data and case selection that was published by \citet{tan2016winning} as well as the Moral Foundations Dictionary proposed by \citet{graham2009liberals}.
-
-As such, it provides a perfect opportunity to examine the role of moral appeals in persuasion and agreement.
+In a recent proceeding of the International Conference on the World Wide Web, \citet{tan2016winning} make use of this structured discussion and explore interaction dynamics on CMV by analyzing linguistic features that predict persuasiveness as well as the malleability of original posts. Their dataset includes more than 10,000 discussions that were posted on the Subreddit between January 2013 and May 2015. The analyses presented below leverage the dataset compield by \citet{tan2016winning}. In this context, it is important to note that the analysis published by \citet{tan2016winning} focuses less on the content of discussions (i.e., \textit{what is being said}) but rather examined discussion dynamics and linguistic characterics (i.e., \textit{how it is expressed}) to predict persuasiveness. The following analyses explicitly turns to the effects of moral content on discussion outcomes.
 
 % ADVANTAGES OF CMV DATA:
 % - one sided argument
 % - honest labeling.
 
+Before turning to the analysis, I want to provide a brief overview of the range of topics that are discussed on CMV. Based on the set of more than 10,000 original discussion posts included in the data, I estimated a basic topic model extracting clusters of co-occurring terms via Latent Dirichlet Allocation \citet{blei2003latent}. The topic models are based on the set of original opening statements (disregarding subsequent comments), which were pre-processed by removing numbers, punctuation, symbols, hyphens, URLs, as well as stopwords. All remaining terms were stemmed and only included if they appeared in at least 10 different posts. Figure~\ref{fig:lda} displays the average topic proportions of opening statements based on the model.
+
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/topics.pdf}
-\caption{Average topic proportions in original posts on \texttt{/r/ChangeMyView/}. Figure displays the five most likely terms associated with each respective topics.}
+\caption{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. Figure displays the five most likely terms associated with each respective topic.}\label{fig:lda}
 \end{figure}
 
+Discussions on CMV range across a variety of topics such as economic issues, philosophy, gender/sexuality, or domestic and international politics. Additional analyses included in the appendix show that there are slight differences in the extent to which discussions on different topics ultimately result in persuasion, although these differences are surprisingly small. The following sections provide further details on the persuadability of OPs as well as the persuasiveness of specific arguments brought forward by users.
 
 
 \section{Can People on the Internet be Persuaded?}
@@ -110,6 +103,8 @@ As such, it provides a perfect opportunity to examine the role of moral appeals 
 
 This figure shows that OPs who use fewer moral words in their opening statements are more likely to provide a \(\Delta\) in the subsequent discussion. This basic result is consistent with the moral conviction literature.
 
+as well as the Moral Foundations Dictionary proposed by \citet{graham2009liberals}.
+
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/persuadability.pdf}
@@ -119,6 +114,10 @@ This figure shows that OPs who use fewer moral words in their opening statements
 
 \section{Determinants of Convincing Arguments}
 
+\citet{tan2016winning}
+
+The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice.
+
 {[}Elaborate on argument pair selection etc.{]}
 
 Next, I examine the persuasiveness of moral arguments made within discussion contributions as a response to original posts that rely on any of the moral foundations.
@@ -126,7 +125,7 @@ Next, I examine the persuasiveness of moral arguments made within discussion con
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/mft_op_all.pdf}
-\caption{Something something.}
+\caption{Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary.}
 \end{figure}
 
 
@@ -160,16 +159,15 @@ Consistency in moral appeals is larger in persuasive than non-persuasive argumen
 
 \section{Conclusion}\label{conclusion}
 
-The preliminary results are consistent with the literature on moral conviction and clearly contradict the implicit assumptions made in the Moral Foundations literature. Overall, arguments that revolve around the same moral foundations are less likely to be persuasive. In most cases, moral appeals of any type appear counterproductive in facilitating compromise and changing people's minds.
+The preliminary results are consistent with moral foundations theory and contradict the previous literature on moral convictions. While the general moralization of arguments appeared to had little effects on their persuasiveness, the results show that moral congruence with initial statements are more likely to be effective in changing a person's view. As such, moral appeals can facilitate compromise and change people's minds as long as they are consistent with their existing moral frameworks. To summarize, being able to speak the same moral language might therefore help to bridge the growing divide between liberals and conservatives.
 
 % TO DOs, future directions, etc.:
-% - examine specific topics (e.g., climate change etc.
-% - clean original posts (links etc)
-% - adjust confidence intervals to correct for multiple comparisons
-% - improve code documentation, add comments in internal functions
-% - check MFT scores in argument pairs (as well as OP entry)
-% - take into account clustering in paired data! OPs appear multiple times
-
+% - examine specific topics (e.g., climate change etc.)[ ]
+% - clean original posts (links etc)[x]
+% - adjust confidence intervals to correct for multiple comparisons [x]
+% - improve code documentation, add comments in internal functions [ ]
+% - check MFT scores in argument pairs (as well as OP entry) [x]
+% - take into account clustering in paired data! OPs appear multiple times [ ]
 
 % LIST for appendix:
 % - distribution of response lengths
