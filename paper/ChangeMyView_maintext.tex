@@ -6,7 +6,7 @@
 \item Moral conviction literature suggests that moralization of political attitudes should make compromise more difficult (\citealt{ryan2016no} and others).
 \item However, recent studies on moral frames (grounded in MFT) show that liberals/conservatives are more likely to be persuaded when arguments are congruent with their own moral framework \citep{koleva2012tracing,kidwell2013getting}
 \item Gap in the literature: few/no studies directly examined the role of moral arguments/appeals in discussions (i.e., going beyond simple framing scenarios).
-\item Make a convincing argument for why \texttt{/r/ChangeMyView} is a perfect case to study the effect of moral arguments in discussions and fill this gap. Describe basic idea of the subreddit.
+\item Make a convincing argument for why \texttt{/r/ChangeMyView} is a perfect case to study the effect of moral arguments in discussions and fill this gap. Describe basic idea of the subreddit. \citep{tan2016winning}
 \end{itemize}
 
 
@@ -86,80 +86,103 @@ Before turning to the analysis, I want to provide a brief overview of the range 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/topics.pdf}
-\caption{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. Figure displays the five most likely terms associated with each respective topic.}\label{fig:lda}
+\caption{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
 \end{figure}
 
-Discussions on CMV range across a variety of topics such as economic issues, philosophy, gender/sexuality, or domestic and international politics. Additional analyses included in the appendix show that there are slight differences in the extent to which discussions on different topics ultimately result in persuasion, although these differences are surprisingly small. The following sections provide further details on the persuadability of OPs as well as the persuasiveness of specific arguments brought forward by users.
+Discussions on CMV range across a variety of topics such as economic issues, gender/sexuality, or domestic and international politics. Additional analyses included in the appendix show that there are slight differences in the extent to which topics differ in the likelihood of persuasion in discussions, although these differences are surprisingly small. The following sections turn to the role of moral appeals in facilitating or inhibiting compromise.
 
 
 \section{Can People on the Internet be Persuaded?}
 
+As an initial step, I examine the extent to which OPs are willing to award $\Delta$s during a discussion in the first place. Figure~\ref{fig:delta} displays the number of discussions included in the dataset where OPs indicated that one of the responses changed their mind.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/delta.pdf}
-\caption{Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded by author) versus not.}
+\caption{Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded by author) versus not.}\label{fig:delta}
 \end{figure}
 
-This figure shows that OPs who use fewer moral words in their opening statements are more likely to provide a \(\Delta\) in the subsequent discussion. This basic result is consistent with the moral conviction literature.
+In about two thirds of the discussions on CMV between 2013 and 2015, OPs did not award a $\Delta$ for any of the counterarguments that were put forward, which leaves about 3,000 individual discussions where OPs indicated that at least one of the responses changed their views.
 
-as well as the Moral Foundations Dictionary proposed by \citet{graham2009liberals}.
+In their original study, \citet{tan2016winning} investigated linguistic and style patterns such as the use of personal pronouns as well as formatting that predicted resistance to persuasion among OPs. They conclude that ``comparative adjectives and adverbs are a sign of malleability, while superlative adjectives suggest stubbornness.'' The goal of the present analysis, however, is to go beyond pure linguistic style and explore the role of moral content in persuasion. To capture moral appeals in discussions, I rely on the the Moral Foundations Dictionary proposed by \citet{graham2009liberals}, which contains lists of word stems that signal each of the five moral foundations (care, fairness, loyalty, authority, sanctity) as well as a category of general moral terms. The full dictionary is included in Appendix A.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/persuadability.pdf}
-\caption[Moral Foundations and Persuadability]{Moral Foundations and Persuadability: Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion, comparing original posts where the author subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}
+\caption[Moral Foundations and Persuadability]{Moral Foundations and Persuadability: Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion, comparing original posts where the author subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuadability}
 \end{figure}
+
+Figure~\ref{fig:persuadability} displays the percentage of dictionary terms belonging to each moral foundation relative to the total number of words comparing in opening statements beginning a discussion. Most importantly, the plot compares the reliance on moral terms between OPs that later reported that they changed their view versus OPs who did not. Interestingly, the distribution of dictionary terms across foundations is strikingly similar to the average proportions of moral terms in open-ended responses in the American National Election study reported in \citet{kraft2018measuring}. More importantly, the percentages of dictionary terms among opening statements that resulted in opinion change are significantly larger for two foundations, namely authority and loyalty ($p<.01$ in both cases after accounting for multiple comparisons using Bonferroni correction). OPs who did not award any $\Delta$s in the subsequent discussion put a significantly stronger emphasis on moral considerations related to loyalty and authority. We obtain a similar result after aggregating all moral dictionary terms in one category: OPs who not persuadable on CMV make stronger use of moral terms \textit{in general} than OPs who indicate that the discussion changed their view ($p<.001$). This basic result is consistent with the moral conviction literature, which posits that people who hold moralized attitudes are less willing to compromise \citep[e.g.,][]{skitka2005moral,ryan2014reconsidering,ryan2016no}.
 
 
 \section{Determinants of Convincing Arguments}
 
-\citet{tan2016winning}
-
-The authors extract argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice.
+The previous section demonstrated that the usage of moral terms in initial statements by OPs is predictive of the malleability of their opinions. Next, I directly examine the effectiveness of specific counterarguments that were brought forward to challenge the OPs' views. \citet{tan2016winning} propose a selection of argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice.
 
 {[}Elaborate on argument pair selection etc.{]}
 
-Next, I examine the persuasiveness of moral arguments made within discussion contributions as a response to original posts that rely on any of the moral foundations.
+More specifically, \citet{tan2016winning} select similar argument pairs based on their Jaccard similarity:
+\begin{equation}
+\text{Jaccard}(A,B)=\dfrac{|A\cap B|}{|A\cup B|},
+\end{equation}
+where $A$ and $B$ are the sets of words in both counterarguments. In other words, they match each successful counterargument to an unsuccessful response that shares the larges proportion of common words (disregarding stopwords).\footnote{Elaborate on additional selection criteria.} As \citet[5]{tan2016winning} describe: ``This leads to a balanced binary prediction task: which of the two lexically similar rooted path-units is the successful one?''
+
+The analyses reported below rely on the approach implemented by \citet{tan2016winning} to select matched argument pairs. To reiterate, I therefore focus on discussions in which OPs awarded at least one $\Delta$. The response that received a $\Delta$ is then matched to another counterargument that was not successful in changing  the OPs view but is as similar as possible in terms of its vocabulary. Note that this strategy should make it difficult to find differences in the moral foundation dictionaries as argument pairs are matched based on their lexical similarity.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/mft_op_all.pdf}
-\caption{Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary.}
+\caption{Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary.}\label{fig:mft_op_all}
 \end{figure}
 
+One might worry that this selection on discussions where OPs ultimately awarded a $\Delta$ might discard all cases where the initial statement emphasized moral considerations. Luckily, that is not the case. Figure~\ref{fig:mft_op_all} shows that almost all of the opening statement in the matched pair selection mention at least one of the moral dictionary terms. Furthermore, the proportion of moral dictionary terms among this set of opening statement shows the same pattern as in Figure~\ref{fig:persuadability} (see Appendix B for details).
+
+However, one issue that remains unresolved using this approach is that the matching procedure only focuses on the set of words that are used and does not take into account the length of each response. Figure~\ref{fig:wordcount_violin} displays the distribution of the differences in word counts between successful and unsuccessful argument pairs. Clearly, longer responses are more likely to be awarded a $\Delta$, which might be problematic when examining the effect of moral dictionary terms.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/wordcount_violin.pdf}
-\caption{Something something.}
+\caption{Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin}
 \end{figure}
+
+While it could be argued that the proportion of dictionary terms should be unaffected by differences in argument length, I take additional precautions proposed by \citet{tan2016winning} to check the robustness of the results. First, I do not only examine differences when looking at the entire response path in the discussion between two users, but restrict the analysis on the initial response to the opening statement only. As can be seen in igure~\ref{fig:wordcount_violin}, the differences in word counts between argument pairs are significantly smaller. As a second step to account for the issue of response length, I additionally truncate the longer response of a given pair such that both responses contain the same number of words. Using this framework, I now turn to the analysis of the persuasiveness of moral arguments made within discussion on CMV.
 
 
 \subsection{Moral Reasoning and Opinion Change}
 
+Figure~\ref{fig:persuasiveness} displays the difference in dictionary term proportions between matched discussion contributions that were successful versus unsuccessful. Positive values indicate that arguments that received a $\Delta$ contained a larger percentage of dictionary terms, and vice versa.
+
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/persuasiveness.pdf}
-\caption[Moral Foundations and Persuasiveness]{Moral Foundations and Persuasiveness: Average difference of dictionary term percentages relative to the total number of words in each original post starting a discussion, comparing original posts where the author subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}
+\caption[Moral Foundations and Persuasiveness]{Moral Foundations and Persuasiveness: Average difference of dictionary term percentages relative to the total number of words in each post, comparing counterarguments where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuasiveness}
 \end{figure}
+
+The results show that evoking moral considerations in counterarguments does not affect the likelihood of changing the OP's view on a given issue. This result is not consistent with the moral conviction literature which would have predicted that moral appeals should in fact decrease the likelihood of compromise and opinion change.
 
 
 \subsection{Speaking the Same Moral Language}
 
-Consistency in moral appeals is larger in persuasive than non-persuasive arguments.
+However, moral foundations theory argues that we cannot view moral appeals independent of the moral framework of the discussion partner. Instead, what is seen as decisive is the congruence in moral arguments between both discussants. I measure moral congruence by computing the cosine similarity in dictionary scores between opening statements by OPs and the respective counterarguments. More formally, moral congruence is written as:
+\begin{equation}
+\text{moral congruence}=\dfrac{\vec{x}\cdot \vec{y}}{||\vec{x}||\hspace{.2em}||\vec{y}||},
+\end{equation}
+where $\vec{x}$ is the vector of dictionary counts in the OP's opening statement and $\vec{y}$ is the respective vector for a response. The measure ranges from 0 (no moral overlap) to 1 (equal emphasis on the same moral foundations).
+
+Figure~\ref{fig:cosine} displays the difference in cosine similarities between successful and unsuccessful counterarguments. Positive values indicate higher congruence in moral appeals among counterarguments that were ultimately awarded a $\Delta$ by OPs. The results clearly show that congruence in moral appeals is larger in persuasive than non-persuasive arguments.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine.pdf}
-\caption{Yay, effects.}
+\caption{Moral congruence and persuasiveness: Average differences between successful and unsuccessful counterarguments in cosine similarities with the opening statements (including 95\% confidence intervals).}\label{fig:cosine}
 \end{figure}
 
+This finding is especially noteworthy since the original analysis by \citet[6]{tan2016winning} concluded that persuasive arguments used more different wording from the original post.
 
 
 \section{Conclusion}\label{conclusion}
 
-The preliminary results are consistent with moral foundations theory and contradict the previous literature on moral convictions. While the general moralization of arguments appeared to had little effects on their persuasiveness, the results show that moral congruence with initial statements are more likely to be effective in changing a person's view. As such, moral appeals can facilitate compromise and change people's minds as long as they are consistent with their existing moral frameworks. To summarize, being able to speak the same moral language might therefore help to bridge the growing divide between liberals and conservatives.
+The preliminary results are consistent with moral foundations theory and contradicts the previous literature on moral convictions. While the general moralization of arguments appeared to had little effects on their persuasiveness, the results show that moral congruence with initial statements are more likely to be effective in changing a person's view. As such, moral appeals can facilitate compromise and change people's minds as long as they are consistent with their existing moral frameworks. To summarize, being able to speak the same moral language might therefore help to bridge the growing divide between liberals and conservatives.
 
 % TO DOs, future directions, etc.:
 % - examine specific topics (e.g., climate change etc.)[ ]
@@ -169,6 +192,4 @@ The preliminary results are consistent with moral foundations theory and contrad
 % - check MFT scores in argument pairs (as well as OP entry) [x]
 % - take into account clustering in paired data! OPs appear multiple times [ ]
 
-% LIST for appendix:
-% - distribution of response lengths
-% - 
+
