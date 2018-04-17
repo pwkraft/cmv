@@ -1,9 +1,12 @@
 \select@language {USenglish}
 \ttl@starttoc {sections@1}
-\contentsline {section}{\numberline {A}Additional Descriptive Information}{1}{Appendix.a.A}
-\contentsline {subsection}{\numberline {I}Distribution of Moral Foundation Proportions in Paired Data}{1}{subsection.a.A.1}
-\contentsline {subsection}{\numberline {II}Distribution of MFT cosine similarity in Paired Data}{2}{subsection.a.A.2}
-\contentsline {section}{\numberline {B}Structural Topic Model Results}{4}{Appendix.a.B}
-\contentsline {subsection}{\numberline {I}Original Posts}{4}{subsection.a.B.1}
-\contentsline {subsection}{\numberline {II}Responses}{6}{subsection.a.B.2}
+\contentsline {section}{\numberline {A}Basic rules on CMV}{1}{Appendix.a.A}
+\contentsline {paragraph}{Submission rules:}{1}{section*.1}
+\contentsline {paragraph}{Comment rules:}{1}{section*.2}
+\contentsline {section}{\numberline {B}Additional Descriptive Information}{1}{Appendix.a.B}
+\contentsline {subsection}{\numberline {I}Distribution of Moral Foundation Proportions in Paired Data}{1}{subsection.a.B.1}
+\contentsline {subsection}{\numberline {II}Distribution of MFT cosine similarity in Paired Data}{3}{subsection.a.B.2}
+\contentsline {section}{\numberline {C}Structural Topic Model Results}{5}{Appendix.a.C}
+\contentsline {subsection}{\numberline {I}Original Posts}{5}{subsection.a.C.1}
+\contentsline {subsection}{\numberline {II}Responses}{7}{subsection.a.C.2}
 \contentsfinish 
