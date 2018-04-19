@@ -46,7 +46,7 @@ narrative everywhere, and it's difficult---perhaps impossible---to convince them
 
 Both theories of morality therefore lead to diverging expectations regarding the effect of moral appeals on the potential for compromise: While the moral conviction literature suggests that \textit{any} type of moral appeal should make it harder to overcome disagreements, moral foundations theory contends that agreement can be facilitated if two discussants focus on the same underlying moral dimensions. The underlying assumption that emphasizing the same foundations can facilitate compromise has important implications---especially in our current political environment. Somewhat surprisingly, however, this claim has rarely been subjected to a direct empirical test.
 
-% DISCUSS: day2014shifting, feinberg2015gulf, kidwell2013getting,feinberg2013moral
+% DISCUSS: day2014shifting, feinberg2015gulf, kidwell2013getting,feinberg2013moral, lipsitz2017playing
 
 
 \subsection{Hypotheses}
@@ -120,7 +120,7 @@ Before turning to the analysis, I want to provide a brief overview of the range 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/topics.pdf}
-\caption{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
+\caption[Average topic proportions in original posts on \texttt{/r/ChangeMyView/}]{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
 \end{figure}
 
 Discussions on CMV range across a variety of topics such as economic issues, gender/sexuality, or domestic and international politics. Additional analyses included in the appendix show that there are slight differences in the extent to which topics differ in the likelihood of persuasion in discussions, although these differences are surprisingly small. The following sections turn to the role of moral appeals in facilitating or inhibiting compromise.
@@ -138,7 +138,7 @@ As an initial step, I examine the extent to which OPs are willing to award $\Del
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/delta.pdf}
-\caption{Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded by author) versus not.}\label{fig:delta}
+\caption[Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change]{Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded by author) versus not.}\label{fig:delta}
 \end{figure}
 
 In about two thirds of the discussions on CMV between 2013 and 2015, OPs did not award a $\Delta$ for any of the counterarguments that were put forward, which leaves about 3,000 individual discussions where OPs indicated that at least one of the responses changed their views.
@@ -179,7 +179,7 @@ The analyses reported below rely on the approach implemented by \citet{tan2016wi
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/mft_op_all.pdf}
-\caption{Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary.}\label{fig:mft_op_all}
+\caption[Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary]{Number of original posts in the paired argument data that included \textit{any} term mentioned in the moral foundation dictionary.}\label{fig:mft_op_all}
 \end{figure}
 
 One might worry that this selection on discussions where OPs ultimately awarded a $\Delta$ might discard all cases where the initial statement emphasized moral considerations. Luckily, that is not the case. Figure~\ref{fig:mft_op_all} shows that almost all of the opening statement in the matched pair selection mention at least one of the moral dictionary terms. Furthermore, the proportion of moral dictionary terms among this set of opening statement shows the same pattern as in Figure~\ref{fig:persuadability} (see Appendix B for details).
@@ -189,7 +189,7 @@ However, one issue that remains unresolved using this approach is that the match
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/wordcount_violin.pdf}
-\caption{Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin}
+\caption[Difference in response lengths between successful and unsuccessful counterarguments]{Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin}
 \end{figure}
 
 While it could be argued that the proportion of dictionary terms should be unaffected by differences in argument length, I take additional precautions proposed by \citet{tan2016winning} to check the robustness of the results. First, I do not only examine differences when looking at the entire response path in the discussion between two users, but restrict the analysis on the initial response to the opening statement only. As can be seen in igure~\ref{fig:wordcount_violin}, the differences in word counts between argument pairs are significantly smaller. As a second step to account for the issue of response length, I additionally truncate the longer response of a given pair such that both responses contain the same number of words. Using this framework, I now turn to the analysis of the persuasiveness of moral arguments made within discussion on CMV.
@@ -223,7 +223,7 @@ Figure~\ref{fig:cosine} displays the difference in moral congruence between succ
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine.pdf}
-\caption{Moral congruence and persuasiveness: Average differences between successful and unsuccessful counterarguments in cosine similarities with the opening statements (including 95\% confidence intervals).}\label{fig:cosine}
+\caption[Moral congruence and persuasiveness]{Moral congruence and persuasiveness: Average differences between successful and unsuccessful counterarguments in cosine similarities with the opening statements (including 95\% confidence intervals).}\label{fig:cosine}
 \end{figure}
 
 This finding is especially noteworthy since the original analysis by \citet[6]{tan2016winning} concluded that persuasive arguments used more different wording from the original post. % EXPLAIN
