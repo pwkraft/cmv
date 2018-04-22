@@ -66,7 +66,7 @@ To reiterate, in this unidirectional model of a discussion, only $\mathcal{A}$ s
 % OTHER CMV EXAMPLES:
 % - Check cases 246 (discussing Haidt's theory) and 275 (on marriage equality)
 
-Reddit is an online discussion board organized into thematic forums called \textit{subreddits}. Users can join these communities based on their interests and each subreddit has its own norms and etiquette that are enforced by voluntary moderators. \texttt{/r/ChangeMyView} (CMV) is a subreddit where participants can initiate a discussion by posting an opening statement establishing a personally held view on a particular issue (e.g., ``CMV: I believe that the gay marriage discussion isn't as important as the media portrays it to be.''), followed by a brief explanation of their underlying rationale. Other users are then invited to challenge the original poster's (OP) opinion by providing counterarguments. OPs respond to the challenges and---crucially---identify individual posts that changed their mind by awarding a ``Delta'' ($\Delta$). The community is dedicated to civil discourse---even for divisive issues---and encourages OPs to be open to changing their views and to award $\Delta$s genuinely \citep[see also][]{jhaver2017designing}.\footnote{The current set of rules for original posts as well as responses can be accessed at \url{https://www.reddit.com/r/changemyview/wiki/rules}. See Appendix for an overview.} To date, the subreddit has more than 500,000 subscribed users.
+Reddit is an online discussion board organized into thematic forums called \textit{subreddits}. Users can join these communities based on their interests and each subreddit has its own norms and etiquette that are enforced by voluntary moderators. \texttt{/r/ChangeMyView} (CMV) is a subreddit where participants can initiate a discussion by posting an opening statement establishing a personally held view on a particular issue (e.g., ``CMV: I believe that the gay marriage discussion isn't as important as the media portrays it to be.''), followed by a brief explanation of their underlying rationale. Other users are then invited to challenge the original poster's (OP) opinion by providing counterarguments. OPs respond to the challenges and---crucially---identify individual posts that changed their mind by awarding a ``Delta'' ($\Delta$). The community is dedicated to civil discourse---even for divisive issues---and encourages OPs to be open to changing their views and to award $\Delta$s genuinely \citep[see also][]{jhaver2017designing}.\footnote{The current set of rules for original posts as well as responses can be accessed at \url{https://www.reddit.com/r/changemyview/wiki/rules}. See the Appendix for an overview.} To date, the subreddit has more than 500,000 subscribed users.
 
 As an illustrative example, consider the following discussion on marriage equality that was posted in 2014. The thread begins with the following opening statement (the posts were slightly edited for readability):
 \begin{quote}\singlespacing
@@ -112,17 +112,6 @@ Recent research in machine learning and computational linguistics has started to
 % - one sided argument
 % - honest labeling.
 
-Before turning to the analysis, I want to provide a brief overview of the range of topics that are discussed on CMV. Based on the set of more than 10,000 original discussion posts included in the data, I estimated a basic topic model extracting clusters of co-occurring terms via Latent Dirichlet Allocation \citep{blei2003latent}. The topic models are based on the set of original opening statements (disregarding subsequent comments), which were pre-processed by removing numbers, punctuation, symbols, hyphens, URLs, as well as stopwords. All remaining terms were stemmed and only included if they appeared in at least 10 different posts. Figure~\ref{fig:lda} displays the average topic proportions of opening statements based on the model.
-
-\begin{figure}[ht]
-\centering
-\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/topics.pdf}
-\caption[Average topic proportions in original posts on \texttt{/r/ChangeMyView/}]{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
-\end{figure}
-
-Discussions on CMV range across a variety of topics such as economic issues, gender/sexuality, or domestic and international politics. Additional analyses included in the appendix show that there are slight differences in the extent to which topics differ in the likelihood of persuasion in discussions, although these differences are surprisingly small. The following sections turn to the role of moral appeals in facilitating or inhibiting compromise.
-
-% ELABORATE, WHAT DOES THIS MEAN FOR RYAN'S WORK
 
 
 \section{Opinion Change in Online Discussions}
@@ -130,7 +119,19 @@ Discussions on CMV range across a variety of topics such as economic issues, gen
 %\section{Do People on the Internet Change their Opinions?}
 %\section{Can People on the Internet be Persuaded?}
 
-As an initial step, I examine the extent to which OPs are willing to award $\Delta$s during a discussion in the first place. Figure~\ref{fig:delta} displays the number of discussions included in the dataset where OPs indicated that one of the responses changed their mind.
+Consider again the simplified model of a discussion between person $\mathcal{A}$ and $\mathcal{B}$, where $\mathcal{A}$ stands to defend her view against the challenges put forward by $\mathcal{B}$. While the hypotheses specified above are focused on the persuasiveness of $\mathcal{B}$'s arguments (i.e., discussion posts that respond to the OP in the context of CMV), it is helpful to first explore the opening statements initiating each discussion and examine the extent to which OPs are willing to award $\Delta$s in the first place.
+
+To provide an initial overview of the range of topics that are covered in the set of 10,000 discussions included in the data, I extract 20 clusters of co-occurring terms via Latent Dirichlet Allocation \citep{blei2003latent}. The topic model is solely based on contents of the original posts starting each discussion thread (disregarding subsequent comments). Statements were pre-processed by removing numbers, punctuation, symbols, hyphens, URLs, as well as stopwords. All remaining terms were stemmed and only included if they appeared in at least 10 different posts. Figure~\ref{fig:lda} presents the average topic proportions across opening statements based on the model. For each topic, the plot additionally displays the ten most likely word stems as well as a descriptive label on the y-axis.
+
+Conversations on CMV range across a variety of topics such as economic issues, gender/sexuality, or domestic and international politics. Of course, it could be argued that some of these topics---for example those related to religion---more easily lend themselves to concerns about morality. Notwithstanding, recent work in moral psychology by \citet{ryan2014reconsidering} and others routinely emphasizes that in principle, any issue bears the potential to be moralized by individuals. In order to preclude any concerns about potential confounding effects related to topic selection, however, the main analyses reported below focuses on comparing arguments \textit{within} a given discussion thread.
+% ELABORATE, WHAT DOES THIS MEAN FOR RYAN'S WORK
+\begin{figure}[ht]
+\centering
+\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/topics.pdf}
+\caption[Average topic proportions in original posts on \texttt{/r/ChangeMyView/}]{Average topic proportions in original posts on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
+\end{figure}
+
+The Internet is not necessarily known as a place where people are willing to change their mind about \textit{any} issue. Yet, CMV maintains an open atmosphere that encourages users to acknowledge arguments that change their perspective. The rules of the subreddit state that users should ``Award a delta if you've acknowledged a change in your view. [...] Please note that a delta is not a sign of `defeat', it is just a token of appreciation towards a user who helped tweak or reshape your opinion. A delta also doesn't mean the discussion has ended.''\footnote{ \url{https://www.reddit.com/r/changemyview/wiki/rules}, last accessed April 22, 2018} Of course, this does not imply that every OP awards a $\Delta$ throughout a conversation. Figure~\ref{fig:delta} displays the number of discussion threads included in the dataset where OPs indicated that one of the responses changed their mind.
 
 \begin{figure}[ht]
 \centering
@@ -138,9 +139,9 @@ As an initial step, I examine the extent to which OPs are willing to award $\Del
 \caption[Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change]{Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded by author) versus not.}\label{fig:delta}
 \end{figure}
 
-In about two thirds of the discussions on CMV between 2013 and 2015, OPs did not award a $\Delta$ for any of the counterarguments that were put forward, which leaves about 3,000 individual discussions where OPs indicated that at least one of the responses changed their views.
+In about two thirds of discussions on CMV between 2013 and 2015, OPs did not award a $\Delta$ for any of the counterarguments that were put forward, which leaves about 3,000 individual threads where OPs indicated that at least one of the responses changed their views. Interestingly, additional analyses included in the appendix show that there are only minimal differences in topic proportions between discussion threads that resulted in persuasion versus threads that did not.
 
-In their original study, \citet{tan2016winning} investigated linguistic and style patterns such as the use of personal pronouns as well as formatting that predicted resistance to persuasion among OPs. They conclude that ``comparative adjectives and adverbs are a sign of malleability, while superlative adjectives suggest stubbornness.'' The goal of the present analysis, however, is to go beyond pure linguistic style and explore the role of moral content in persuasion. To capture moral appeals in discussions, I rely on the the Moral Foundations Dictionary proposed by \citet{graham2009liberals}, which contains lists of word stems that signal each of the five moral foundations (care, fairness, loyalty, authority, sanctity) as well as a category of general moral terms. The full dictionary is included in Appendix A.
+In their original study, \citet{tan2016winning} mainly investigated linguistic patterns (e.g., use of personal pronouns) and differences in style (formatting etc.) that predicted resistance to persuasion among OPs. They conclude for instance that ``comparative adjectives and adverbs are a sign of malleability, while superlative adjectives suggest stubbornness.'' The goal of the present analysis, however, is to go beyond pure linguistic style and explore the role of moral appeals in facilitating or inhibiting compromise. In order to capture moralized arguments, I rely on the Moral Foundations Dictionary proposed by \citet{graham2009liberals}, which contains lists of word stems that signal each of the five moral foundations (care, fairness, loyalty, authority, sanctity) as well as a category of general moral terms.\footnote{See Appendix A for the complete dictionary.}
 
 \begin{figure}[ht]
 \centering
@@ -149,7 +150,13 @@ In their original study, \citet{tan2016winning} investigated linguistic and styl
 \end{figure}
 
 % ELABORATE ON CONSISTENCY WITH KRAFT ETC.
-Figure~\ref{fig:persuadability} displays the percentage of dictionary terms belonging to each moral foundation relative to the total number of words comparing in opening statements beginning a discussion. Most importantly, the plot compares the reliance on moral terms between OPs that later reported that they changed their view versus OPs who did not. Interestingly, the distribution of dictionary terms across foundations is strikingly similar to the average proportions of moral terms in open-ended responses in the American National Election study reported in \citet{kraft2018measuring}. More importantly, the percentage of dictionary terms among opening statements that resulted in opinion change are significantly larger for two foundations, namely authority and loyalty ($p<.01$ in both cases after accounting for multiple comparisons using Bonferroni correction). OPs who did not award any $\Delta$s in the subsequent discussion put a significantly stronger emphasis on moral considerations related to loyalty and authority. We obtain a similar result after aggregating all moral dictionary terms in one category: OPs who not persuadable on CMV make stronger use of moral terms \textit{in general} than OPs who indicate that the discussion changed their view ($p<.001$). This basic result is consistent with the moral conviction literature, which posits that people who hold moralized attitudes are less willing to compromise \citep[e.g.,][]{skitka2005moral,ryan2014reconsidering,ryan2017no}.
+Figure~\ref{fig:persuadability} displays the percentage of dictionary terms for each foundation in the opening statements initiating a discussion on CMV (in proportion to the total number of words in each post). The plot compares the reliance on moral terms between OPs that later reported that they changed their view versus OPs who did not. As an initial observation, it is interesting to note that the distribution of dictionary terms across foundations is strikingly similar to the proportions of moral terms in open-ended responses to likes-dislikes questions included in the American National Election study \citep[c.f.,][]{kraft2018measuring}: The most prevalent dimensions are \textit{care} and \textit{authority}, while occurrences of \textit{sanctity} are largely negligible. More important for the purposes of this paper, however, is the fact that the percentage of dictionary terms for two foundations is significantly larger among opening statements that resulted in opinion change than among those that did not ($p<.01$ in both cases after accounting for multiple comparisons using Bonferroni correction). More specifically, OPs who did not award any $\Delta$s in the subsequent discussion put a significantly stronger emphasis on moral considerations related to loyalty and authority. Similar results can be obtained after aggregating all moral dictionary terms in one category: OPs who were not persuadable on CMV make stronger use of moral terms \textit{in general} than OPs who indicate that the discussion changed their view ($p<.001$).
+
+This initial result is consistent with the moral conviction literature, which posits that people who hold moralized attitudes are less willing to compromise \citep[e.g.,][]{skitka2005moral,ryan2014reconsidering,ryan2017no}.
+
+However there are important issues, especially with regard to potential selection bias and related confounders. As such, we really want to hold the discussion constant and compare the relative persuasiveness of arguments that are competing against each other in an effort to persuade the OP.
+
+% CONTINUE HERE.
 
 
 \section{What Makes an Argument Persuasive?}
@@ -159,7 +166,7 @@ Figure~\ref{fig:persuadability} displays the percentage of dictionary terms belo
 
 % SIGNPOST THAT I AM LOOKING FIRST AT THE OPENING STATEMENT, THEN REPLIES
 
-However, the main interest of this paper is not the persuadability of OPs (which is certainly driven by unobserved confounding variables). Instead, we want to look at the persuasiveness of counterarguments that are made in response to the opening statements.
+The main interest of this paper is not the persuadability of OPs (which is certainly driven by unobserved confounding variables). Instead, we want to look at the persuasiveness of counterarguments that are made in response to the opening statements.
 
 The previous section demonstrated that the usage of moral terms in initial statements by OPs is predictive of the malleability of their opinions. Next, I directly examine the effectiveness of specific counterarguments that were brought forward to challenge the OPs' views. \citet{tan2016winning} propose a selection of argument pairs that respond to an original post with only one being successful in changing the OPs view while being relatively similar in terms of their word choice.
 
