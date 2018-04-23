@@ -27,7 +27,7 @@ plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fil
 data_op %>% 
   mutate(Change = factor(Delta, labels = c("No", "Yes"))) %>%
   ggplot(aes(x=Change)) + ylim(0, nrow(data_op)) +
-  labs(y="Number of Original Posts", x="Opinion Change") +
+  labs(y="Number of Discussion", x="Opinion Change") +
   geom_bar() + plot_default
 ggsave("fig/delta.pdf", width = 2.5, height = 2)
 
@@ -138,7 +138,7 @@ t.test(data_pair$pos_root_nterm-data_pair$neg_root_nterm)
 tibble(mft = factor(apply(mft_op_text, 1, sum) != 0,
                     labels = c("No", "Yes"))) %>%
   ggplot(aes(x=mft)) + ylim(0, nrow(mft_op_text)) +
-  labs(y="Number of Original Posts", x="Any MFT Term Mentioned") +
+  labs(y="Number of Discussions", x="Any MFT Term Mentioned") +
   geom_bar() + plot_default
 ggsave("fig/mft_op_all.pdf", width = 2.5, height = 2)
 
@@ -278,7 +278,7 @@ plot_df <- cos_res %>%
 ## Create plot
 ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
   geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
-  plot_default + labs(y = NULL, x = "Difference in MFT Cosine Similarity\n(Change - No Change)") +
+  plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine.pdf", width = 4, height = 2)
 
@@ -303,7 +303,7 @@ cos_res %>% gather(key = type, value = cos) %>%
   geom_vline(aes(xintercept = ymin, col = type), lty="dashed", data = tmp) +
   geom_vline(aes(xintercept = ymax, col = type), lty="dashed", data = tmp) +
   facet_wrap(~type, ncol = 1, scale = "free_x") + ylab("Density") + 
-  xlab("Difference in MFT Cosine Similarity\n(Change - No Change)") +
+  xlab("Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine_density.pdf", width = 6, height = 5)
 
@@ -315,7 +315,7 @@ cos_res %>% gather(key = type, value = cos) %>%
   geom_hline(yintercept = 0, col="grey") +
   geom_violin(alpha = .4) + plot_default +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
-  labs(y="Difference in MFT Cosine Similarity\n(Change - No Change)", x=NULL) + 
+  labs(y="Difference in MFT Congruence\n(Change - No Change)", x=NULL) + 
   theme(legend.position="none")
 ggsave("fig/cosine_violin.pdf", width = 6, height = 5)
 
