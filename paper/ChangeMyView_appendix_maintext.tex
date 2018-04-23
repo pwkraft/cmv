@@ -3,9 +3,11 @@
 % - moral foundations questionnaire
 
 
-\section{Basic rules on CMV}
+\section{Basic Rules on the Subreddit ChangeMyView}
 
-\paragraph{Submission rules:}
+Below is a summary of the set of rules to participate in discussions on \texttt{/r/ChangeMyView} as described in April 2018. The current rules can be viewed at \url{https://www.reddit.com/r/changemyview/wiki/rules}
+
+\paragraph{Rules for submission of new discussion posts:}
 \begin{enumerate}[A]\singlespacing
 \item Explain the reasoning behind your view, not just what that view is (500+ characters required).
 \item You must personally hold the view and demonstrate that you are open to it changing.
@@ -14,7 +16,7 @@
 \item Only post if you are willing to have a conversation with those who reply to you, and are available to start doing so within 3 hours of posting.
 \end{enumerate}
 
-\paragraph{Comment rules:}
+\paragraph{Rules for commenting in existing discussions:}
 \begin{enumerate}[1]\singlespacing
 \item Direct responses to a CMV post must challenge at least one aspect of OP’s stated view (however minor), or ask a clarifying question.
 \item Don't be rude or hostile to other users.
@@ -26,6 +28,13 @@
 
 \clearpage
 \section{Moral Foundations Dictionary}
+\textit{Sources:}\\
+\bibentry{graham2009liberals}, as well as \url{http://www.moralfoundations.org/}
+\vspace{.5cm}
+
+\noindent\textit{Note:}\\
+Terms with (*) indicate that the word stem rather than the exact word was matched in the open-ended survey responses.
+\vspace{.5cm}
 
 \subsubsection*{Care} amity, benefit*, care, caring, compassion*, defen*, empath*, guard*, peace*, preserve, protect*, safe*, secur*, shelter, shield, sympath*, abandon*, abuse*, annihilate*, attack*, brutal*, cruel*, crush*, damag*, destroy, detriment*, endanger*, exploit, exploited, exploiting, exploits, fight*, harm*, hurt*, impair, kill, killed, killer*, killing, kills, ravage, ruin*, spurn, stomp, suffer*, violen*, war, warl*, warring, wars, wound* 
 
@@ -39,38 +48,37 @@
 
 \subsubsection*{General Morality} bad, blameless, canon, character, commendable, correct, decen*, doctrine, ethic*, evil, exemplary, good, goodness, honest*, ideal*, immoral*, indecen*, integrity, laudable, lawful*, legal*, lesson, moral*, noble, offend*, offensive*, piety, pious, praiseworthy, principle*, proper, righteous*, transgress*, upright, upstanding, value*, wholesome*, wicked*, worth*, wretched*, wrong*
 
-\section{Additional Descriptive Information}
+\clearpage
+\section{Distribution of Moral Foundation Proportions in Paired Data}
 \renewcommand\thefigure{A.\arabic{figure}}
 \renewcommand\thetable{A.\arabic{table}}
 \setcounter{figure}{0}
 \setcounter{table}{0}
+\normalsize
 
-
-
-\subsection{Distribution of Moral Foundation Proportions in Paired Data}
 
 \begin{figure}[h]
 \centering
 \includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/mft_op_individual.pdf}
-\caption[Moral Foundations in Paired Data]{Moral Foundations in Paired Data: Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion (including 95\% confidence intervals).}
+\caption[Moral Foundations in Paired Data]{Moral Foundations in Paired Data: Average percentage of dictionary terms relative to the total number of words in each original post starting a discussion (including 95\% confidence intervals). Compared to the figure in the main text, this plot only includes opening statements that are part of the matched pair selection to analyze persuasive arguments.}
 \end{figure}
 
 
-\clearpage
-\subsection{Distribution of MFT cosine similarity in Paired Data}
-
-\begin{figure}[h]
-\centering
-\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine_density.pdf}
-\caption{Distributions of the difference in MFT cosine similarity.}
-\end{figure}
-
-
-\begin{figure}[h]
-\centering
-\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine_violin.pdf}
-\caption{Distributions of the difference in MFT cosine similarity (Violin Plot).}
-\end{figure}
+%\clearpage
+%\subsection{Distribution of MFT cosine similarity in Paired Data}
+%
+%\begin{figure}[h]
+%\centering
+%\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine_density.pdf}
+%\caption{Distributions of the difference in MFT cosine similarity.}
+%\end{figure}
+%
+%
+%\begin{figure}[h]
+%\centering
+%\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/cosine_violin.pdf}
+%\caption{Distributions of the difference in MFT cosine similarity (Violin Plot).}
+%\end{figure}
 
 \clearpage
 \section{Structural Topic Model Results}
@@ -84,27 +92,27 @@
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/stm_op_prop.pdf}
-\caption{Check description ch. 2}
+\caption[Average topic proportions in opening statements on CMV based on structural topic model]{Average topic proportions in opening statements on \texttt{/r/ChangeMyView/} based on a structural topic model with 20 topics \citep[c.f.,][]{roberts2014structural}. The plot additionally displays the ten most likely terms associated with each respective topic.}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/stm_op_diff.pdf}
-\caption{Check description ch. 2}
+\caption[Differences in topic proportions between opening statements on CMV that resulted in opinion change versus not]{Differences in topic proportions between opening statements on \texttt{/r/ChangeMyView/} that resulted in opinion change ($\Delta$ awarded) versus not (including 95\% confidence intervals). Estimates are based on the structural topic model described in the previous figure. Positive values indicate higher topic prevalence among discussions that resulted in opinion change and vice versa. Labels are based on the ten highest probability terms related to the topic.}
 \end{figure}
 
 \clearpage
-\subsection{Responses}
+\subsection{Responses Challenging the OP}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/stm_pair_prop.pdf}
-\caption{Check description ch. 2}
+\caption[Average topic proportions in posts challenging the OP on CMV based on structural topic model]{Average topic proportions in posts challenging the OP on \texttt{/r/ChangeMyView/} based on a structural topic model with 20 topics \citep[c.f.,][]{roberts2014structural}. The plot additionally displays the ten most likely terms associated with each respective topic.}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/stm_pair_diff.pdf}
-\caption{Check description ch. 2}
+\caption[Differences in topic proportions between persuasive and non-persuasive posts challenging the OP on CMV]{Differences in topic proportions between persuasive and non-persuasive responses challenging the OP (including 95\% confidence intervals). Estimates are based on the structural topic model described in the previous figure. Positive values indicate higher topic prevalence among posts that received a $\Delta$ by the OP and vice versa. Labels are based on the ten highest probability terms related to the topic.}
 \end{figure}
 
