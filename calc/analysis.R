@@ -196,6 +196,14 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   theme(legend.title = element_blank())
 ggsave("fig/persuasiveness.pdf", height=2.5, width=6)
 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_empty +
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
+  theme(legend.title = element_blank())
+ggsave("fig/persuasiveness_empty.pdf", height=2.5, width=6)
+
 
 ## Test differences on individual foundations
 mft_diff %>% filter(type=="text") %>%
@@ -281,6 +289,12 @@ ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = typ
   plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine.pdf", width = 4, height = 2)
+
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_empty + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
+  theme(legend.position="none")
+ggsave("fig/cosine_empty.pdf", width = 4, height = 2)
 
 ## test differences in cosine similarities
 t.test(cos_res$`1. text`)
