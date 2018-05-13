@@ -4,6 +4,9 @@ library(purrr)
 library(ggplot2)
 library(quanteda)
 library(topicmodels)
+library(lmtest)
+library(sandwich)
+
 
 ## load data
 load("out/cmv_data.Rdata")
@@ -335,3 +338,129 @@ ggsave("fig/cosine_violin.pdf", width = 6, height = 5)
 
 
 
+###########################################
+### Effect of Moral consistency on persuasiveness (-> Michael)
+###########################################
+
+## compute absolute cosine similarities (Change - No Change)
+cos_abs <- tibble(
+  'caseid' = rep(1:nrow(data_pair), 2),
+  'opid' = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2),
+  'delta' = rep(c(0,1), each=nrow(data_pair)),
+  'text' = NA, 'root' = NA, 'trunc' = NA
+)
+
+for(i in 1:nrow(data_pair)){
+  cos_abs[i,'text'] <- cosine(mft_neg_text[i,], mft_op_text[i,], T)
+  cos_abs[i,'root'] <- cosine(mft_neg_root[i,], mft_op_text[i,], T)
+  cos_abs[i,'trunc'] <- cosine(mft_neg_trunc[i,], mft_op_text[i,], T)
+  cos_abs[i+nrow(data_pair),'text'] <- cosine(mft_pos_text[i,], mft_op_text[i,], T)
+  cos_abs[i+nrow(data_pair),'root'] <- cosine(mft_pos_root[i,], mft_op_text[i,], T)
+  cos_abs[i+nrow(data_pair),'trunc'] <- cosine(mft_pos_trunc[i,], mft_op_text[i,], T)
+}
+
+## estimate basic logit without any clustering
+m1 <- glm(delta ~ text, data = cos_abs, family = binomial("logit"))
+summary(m1)
+
+## test clustered SEs
+coeftest(m1, vcov = vcovCL(m1, cluster=cos_abs$caseid))
+coeftest(m1, vcov = vcovCL(m1, cluster=cos_abs$opid)) # by opid makes most sense
+coeftest(m1, vcov = vcovCL(m1, cluster=cos_abs$delta))
+
+## remove duplicated negative posts
+table(duplicated(data_pair$pos_text_raw))
+table(duplicated(data_pair$neg_text_raw))
+neg_unique <- !duplicated(data_pair$neg_text_raw)
+cos_red <- cos_abs[c(neg_unique,neg_unique),]
+
+## estimate logits w/ reduced data
+m2 <- NULL
+m2[[1]] <- glm(delta ~ text, data = cos_red, family = binomial("logit"))
+m2[[2]] <- glm(delta ~ root, data = cos_red, family = binomial("logit"))
+m2[[3]] <- glm(delta ~ trunc, data = cos_red, family = binomial("logit"))
+lapply(m2, summary)
+lapply(m2, function(x) coeftest(x, vcov = vcovCL(x, cluster=cos_red$opid)))
+
+## function to compute range of x values for sim
+minmax <- function(x, k=2){
+  seq(min(x),max(x),length=k)
+}
+
+## simulate predicted probabilities
+res <- rbind(sim(m2[[1]], iv=data.frame(text=minmax(cos_red$text)), cluster = cos_red$opid),
+             sim(m2[[2]], iv=data.frame(root=minmax(cos_red$root)), cluster = cos_red$opid),
+             sim(m2[[3]], iv=data.frame(trunc=minmax(cos_red$trunc)), cluster = cos_red$opid))
+res$ivlab <- factor(res$iv, labels = c("Full Response Path","Root Response","Truncated Root Response"))
+
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_default + labs(y = NULL, x = "Change in P(Opinion Change)") +
+  theme(legend.position="none")
+ggsave("fig/logit_cosine.pdf", width = 4, height = 2)
+
+
+
+###########################
+### Effect of moral arguments on persuasiveness (-> Michael)
+###########################
+
+## prepare reduced data (remove duplicated negative posts)
+mft_text <- bind_rows(mutate(mft_neg_text, delta = 0, type = "1. text"),
+                      mutate(mft_pos_text, delta = 1, type = "1. text")) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  filter(c(neg_unique,neg_unique))
+mft_root <- bind_rows(mutate(mft_neg_root, delta = 0, type = "2. root"),
+                      mutate(mft_pos_root, delta = 1, type = "2. root")) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  filter(c(neg_unique,neg_unique))
+mft_trunc <- bind_rows(mutate(mft_neg_trunc, delta = 0, type = "3. trunc"),
+                       mutate(mft_pos_trunc, delta = 1, type = "3. trunc")) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  filter(c(neg_unique,neg_unique))
+
+## estimate logits w/ reduced data
+m3 <- NULL
+m3[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_text, family = binomial("logit"))
+m3[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_root, family = binomial("logit"))
+m3[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_trunc, family = binomial("logit"))
+lapply(m3, summary)
+lapply(m3, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text$opid)))
+
+## simulate predicted probabilities
+res <- rbind(sim(m3[[1]], iv=data.frame(Care=minmax(mft_text$Care)), cluster = mft_text$opid),
+             sim(m3[[1]], iv=data.frame(Fairness=minmax(mft_text$Fairness)), cluster = mft_text$opid),
+             sim(m3[[1]], iv=data.frame(Loyalty=minmax(mft_text$Loyalty)), cluster = mft_text$opid),
+             sim(m3[[1]], iv=data.frame(Authority=minmax(mft_text$Authority)), cluster = mft_text$opid),
+             sim(m3[[1]], iv=data.frame(Sanctity=minmax(mft_text$Sanctity)), cluster = mft_text$opid),
+             sim(m3[[1]], iv=data.frame(General=minmax(mft_text$General)), cluster = mft_text$opid),
+             
+             sim(m3[[2]], iv=data.frame(Care=minmax(mft_root$Care)), cluster = mft_root$opid),
+             sim(m3[[2]], iv=data.frame(Fairness=minmax(mft_root$Fairness)), cluster = mft_root$opid),
+             sim(m3[[2]], iv=data.frame(Loyalty=minmax(mft_root$Loyalty)), cluster = mft_root$opid),
+             sim(m3[[2]], iv=data.frame(Authority=minmax(mft_root$Authority)), cluster = mft_root$opid),
+             sim(m3[[2]], iv=data.frame(Sanctity=minmax(mft_root$Sanctity)), cluster = mft_root$opid),
+             sim(m3[[2]], iv=data.frame(General=minmax(mft_root$General)), cluster = mft_root$opid),
+             
+             sim(m3[[3]], iv=data.frame(Care=minmax(mft_trunc$Care)), cluster = mft_trunc$opid),
+             sim(m3[[3]], iv=data.frame(Fairness=minmax(mft_trunc$Fairness)), cluster = mft_trunc$opid),
+             sim(m3[[3]], iv=data.frame(Loyalty=minmax(mft_trunc$Loyalty)), cluster = mft_trunc$opid),
+             sim(m3[[3]], iv=data.frame(Authority=minmax(mft_trunc$Authority)), cluster = mft_trunc$opid),
+             sim(m3[[3]], iv=data.frame(Sanctity=minmax(mft_trunc$Sanctity)), cluster = mft_trunc$opid),
+             sim(m3[[3]], iv=data.frame(General=minmax(mft_trunc$General)), cluster = mft_trunc$opid)
+) %>% mutate(type = rep(c("1. text", "2. root", "3. trunc"), each = 6),
+             typelab = factor(type, labels = c("Full Response Path","Root Response","Truncated Root Response")),
+             foundation = factor(iv, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                    "Authority", "Sanctity", "General"))))
+
+## Create plot
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
+  theme(legend.title = element_blank())
+ggsave("fig/logit_persuasiveness.pdf", height=2.5, width=6)
