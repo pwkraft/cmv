@@ -6,6 +6,7 @@ library(quanteda)
 library(topicmodels)
 library(lmtest)
 library(sandwich)
+library(xtable)
 
 
 ## load data
@@ -399,6 +400,30 @@ ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab
   theme(legend.position="none")
 ggsave("fig/logit_cosine.pdf", width = 4, height = 2)
 
+## adjust name of independent vars
+names(m2[[1]]$coefficients)[2] <- "cosine"
+names(m2[[2]]$coefficients)[2] <- "cosine"
+names(m2[[3]]$coefficients)[2] <- "cosine"
+
+## table for appendix
+latexTable(m2, cluster = cos_red$opid)
+
+
+
+## create table
+# stargazer(m5a, m5b, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+#           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = NA, omit.table.layout = "n",
+#           title="Effects of sophistication on the probability of casting a correct vote in the 
+#           2012 and 2016 ANES (estimated via logistic regression). Standard errors in parentheses.
+#           Estimates are used for Figure 6 in the main text.",
+#           dep.var.labels = "Correct Vote",
+#           column.labels = c("2012 ANES","2016 ANES"),
+#           covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+#                                "College Degree","Family Income","Age (log)",
+#                                "African American","Church Attendance","Mode: Online",
+#                                "Wordsum Score","Constant"),
+#           keep.stat = c("n", "ll"),
+#           out = "../tab/correctvote.tex", label = "tab:correctvote", type="text")
 
 
 ###########################
