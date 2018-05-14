@@ -406,24 +406,20 @@ names(m2[[2]]$coefficients)[2] <- "cosine"
 names(m2[[3]]$coefficients)[2] <- "cosine"
 
 ## table for appendix
-latexTable(m2, cluster = cos_red$opid)
+latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
+            function of moral congruence with OPs' opening statements (measured via cosine similarity in 
+            MFT dictionary results). Positive coefficients indicate higher probability of changing the OPs'
+            mind (i.e., receiving a delta). 
+            Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
+            \\ref{fig:cosine} in the main text.", "Logit models predicting argument persuasiveness as a 
+            function of moral congruence with OPs' opening statements")
+           , label="tab:cosine", align="lccc"
+           , varlabs=list("cosine"="Moral Congruence","(Intercept)"="Intercept")
+           , mlabs=c("Full Response Path","Root Response","Truncated Root Response")
+           , file="tab/cosine.tex"
+           , table.placement="ht", caption.placement="top"
+           , size="footnotesize")
 
-
-
-## create table
-# stargazer(m5a, m5b, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-#           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = NA, omit.table.layout = "n",
-#           title="Effects of sophistication on the probability of casting a correct vote in the 
-#           2012 and 2016 ANES (estimated via logistic regression). Standard errors in parentheses.
-#           Estimates are used for Figure 6 in the main text.",
-#           dep.var.labels = "Correct Vote",
-#           column.labels = c("2012 ANES","2016 ANES"),
-#           covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-#                                "College Degree","Family Income","Age (log)",
-#                                "African American","Church Attendance","Mode: Online",
-#                                "Wordsum Score","Constant"),
-#           keep.stat = c("n", "ll"),
-#           out = "../tab/correctvote.tex", label = "tab:correctvote", type="text")
 
 
 ###########################
@@ -489,3 +485,19 @@ ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=t
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/logit_persuasiveness.pdf", height=2.5, width=6)
+
+## table for appendix
+latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
+            function of moral word use (measured via MFT dictionary proportions). 
+            Positive coefficients indicate higher probability of changing the OPs'
+            mind (i.e., receiving a delta). 
+            Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
+            \\ref{fig:persuasiveness} in the main text.", "Logit models predicting argument persuasiveness as a 
+            function of moral word use")
+           , label="tab:persuasiveness", align="lccc"
+           , varlabs=list(Care="Care",Fairness="Fairness",Loyalty="Loyalty",Authority="Authority"
+                          , Sanctity="Sanctity",General="General","(Intercept)"="Intercept")
+           , mlabs=c("Full Response Path","Root Response","Truncated Root Response")
+           , file="tab/persuasiveness.tex"
+           , table.placement="ht", caption.placement="top"
+           , size="footnotesize")
