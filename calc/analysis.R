@@ -409,7 +409,7 @@ names(m2[[3]]$coefficients)[2] <- "cosine"
 latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
             function of moral congruence with OPs' opening statements (measured via cosine similarity in 
             MFT dictionary results). Positive coefficients indicate higher probability of changing the OPs'
-            mind (i.e., receiving a delta). 
+            mind ($\\Delta$ awarded). 
             Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
             \\ref{fig:cosine} in the main text.", "Logit models predicting argument persuasiveness as a 
             function of moral congruence with OPs' opening statements")
@@ -418,7 +418,8 @@ latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argume
            , mlabs=c("Full Response Path","Root Response","Truncated Root Response")
            , file="tab/cosine.tex"
            , table.placement="ht", caption.placement="top"
-           , size="footnotesize")
+           #, size="footnotesize"
+           )
 
 
 
@@ -490,7 +491,7 @@ ggsave("fig/logit_persuasiveness.pdf", height=2.5, width=6)
 latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
             function of moral word use (measured via MFT dictionary proportions). 
             Positive coefficients indicate higher probability of changing the OPs'
-            mind (i.e., receiving a delta). 
+            mind ($\\Delta$ awarded). 
             Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
             \\ref{fig:persuasiveness} in the main text.", "Logit models predicting argument persuasiveness as a 
             function of moral word use")
@@ -500,4 +501,16 @@ latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argume
            , mlabs=c("Full Response Path","Root Response","Truncated Root Response")
            , file="tab/persuasiveness.tex"
            , table.placement="ht", caption.placement="top"
-           , size="footnotesize")
+           #, size="footnotesize"
+           )
+
+## check all foundations combined
+m4 <- NULL
+m4[[1]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+               data = mft_text, family = binomial("logit"))
+m4[[2]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+               data = mft_root, family = binomial("logit"))
+m4[[3]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+               data = mft_trunc, family = binomial("logit"))
+lapply(m4, summary)
+lapply(m4, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text$opid)))
