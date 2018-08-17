@@ -502,7 +502,7 @@ latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argume
            , file="tab/persuasiveness.tex"
            , table.placement="ht", caption.placement="top"
            #, size="footnotesize"
-           )
+           ) 
 
 ## check all foundations combined
 m4 <- NULL
