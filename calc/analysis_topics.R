@@ -49,6 +49,7 @@ tibble(terms = apply(terms(lda, 10),2,paste, collapse=", "),
   geom_point(size=1) + plot_default + xlim(0,.11) +
   labs(y="Topic Label", x="Average Topic Proportion")
 ggsave("fig/topics.pdf", width = 6.5, height = 3)
+ggsave("fig/topics.png", width = 6.5, height = 3, dpi=400)
 
 
 

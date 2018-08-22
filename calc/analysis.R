@@ -34,6 +34,7 @@ data_op %>%
   labs(y="Number of Discussion", x="Opinion Change") +
   geom_bar() + plot_default
 ggsave("fig/delta.pdf", width = 2.5, height = 2)
+ggsave("fig/delta.png", width = 2.5, height = 2, dpi = 400)
 
 
 
@@ -64,6 +65,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shap
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   theme(legend.title = element_blank())
 ggsave("fig/persuadability.pdf", height=2.5, width=6)
+ggsave("fig/persuadability.png", height=2.5, width=6, dpi = 400)
 
 ## Test differences for each foundation (w/ Bonferroni correction)
 mft_op %>% select(Care:General, Delta) %>%
@@ -127,6 +129,7 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
   labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
   theme(legend.position="none") + coord_flip()
 ggsave("fig/wordcount_violin.pdf", width = 6.5, height = 2)
+ggsave("fig/wordcount_violin.png", width = 6.5, height = 2, dpi=400)
 
 ## testing differences (note: t-test of difference is equivalent of paired test)
 t.test(data_pair$pos_text_nterm, data_pair$neg_text_nterm, paired =T)
@@ -145,6 +148,7 @@ tibble(mft = factor(apply(mft_op_text, 1, sum) != 0,
   labs(y="Number of Discussions", x="Any MFT Term Mentioned") +
   geom_bar() + plot_default
 ggsave("fig/mft_op_all.pdf", width = 2.5, height = 2)
+ggsave("fig/mft_op_all.png", width = 2.5, height = 2, dpi=400)
 
 
 
@@ -200,6 +204,16 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   theme(legend.title = element_blank())
 ggsave("fig/persuasiveness.pdf", height=2.5, width=6)
 
+## Create plot (for poster)
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/persuasiveness.png", height=4, width=6, dpi=400)
+
+## empty plot
 ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
   geom_vline(xintercept = 0, col="grey") + plot_empty +
   geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
@@ -294,6 +308,14 @@ ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = typ
   theme(legend.position="none")
 ggsave("fig/cosine.pdf", width = 4, height = 2)
 
+## Create plot
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
+  theme(legend.position="none")
+ggsave("fig/cosine.png", width = 6, height = 4, dpi=400)
+
+## empty plot
 ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
   geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
   plot_empty + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +

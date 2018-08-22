@@ -1,4 +1,4 @@
-\select@language {USenglish}
+\babel@toc {USenglish}{}
 \ttl@starttoc {sections@1}
 \contentsline {section}{\numberline {A}Basic Rules on the Subreddit ChangeMyView}{1}{Appendix.a.A}
 \contentsline {paragraph}{Rules for submission of new discussion posts:}{1}{section*.1}
@@ -8,4 +8,5 @@
 \contentsline {section}{\numberline {D}Structural Topic Model Results}{5}{Appendix.a.D}
 \contentsline {subsection}{\numberline {I}Original Posts}{5}{subsection.a.D.1}
 \contentsline {subsection}{\numberline {II}Responses Challenging the OP}{7}{subsection.a.D.2}
+\contentsline {section}{\numberline {E}Tables of Model Estimates}{9}{Appendix.a.E}
 \contentsfinish 
