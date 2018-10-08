@@ -2,7 +2,7 @@
 countMFT <- function(x, dic){
   corpus <- corpus(x)
   dat <- dfm(corpus, dictionary = dic) %>%
-    data.frame() %>%
+    convert(to = "data.frame") %>%
     transmute(Care = HarmVirtue + HarmVice,
               Fairness = FairnessVirtue + FairnessVice,
               Loyalty = IngroupVirtue + IngroupVice,
@@ -16,7 +16,7 @@ countMFT <- function(x, dic){
 countVirtue <- function(x, dic){
   corpus <- corpus(x)
   dat <- dfm(corpus, dictionary = dic) %>%
-    data.frame() %>%
+    convert(to = "data.frame") %>%
     transmute(Virtue = HarmVirtue + FairnessVirtue + IngroupVirtue + AuthorityVirtue + PurityVirtue,
               Vice = HarmVice + FairnessVice + IngroupVice + AuthorityVice +  PurityVice,
               VVDiff = Virtue - Vice)

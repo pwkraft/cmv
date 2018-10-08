@@ -15,6 +15,9 @@ load("out/cmv_data.Rdata")
 ## load dictionary
 dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
 
+## load topic overview for each discussion
+doc_topic <- read.csv("out/doc_topic.csv")
+
 ## load auxiliary functions
 source("func.R")
 

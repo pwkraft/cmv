@@ -34,7 +34,7 @@ lda <- LDA(dfm_op, k=20, method = "Gibbs",
            control=list(seed=123456, iter=2000, burnin=1000))
 
 ## prepare data frame for plotting
-tibble(terms = apply(terms(lda, 10),2,paste, collapse=", "),
+lda_summary <- tibble(terms = apply(terms(lda, 10),2,paste, collapse=", "),
        labels = c("Drugs/Guns", "Information", "Time/Life", "Travel", "Food",
                   "Opinions/Evaluations", "Entertainment", "Religion", "Gender/Sexuality", 
                   "Philosophy/Physics","Economy", "Social Issues", "People's Beliefs",
@@ -42,14 +42,22 @@ tibble(terms = apply(terms(lda, 10),2,paste, collapse=", "),
                   "Family/Parenting", "Domestic Politics", "International Politics"),
        props = apply(posterior(lda)$topics, 2, mean),
        maxtopic = table(topics(lda)),
-       pmaxtopic = maxtopic/sum(maxtopic)) %>%
-  ggplot(aes(y=reorder(labels, props), x=props, label = terms)) + 
+       pmaxtopic = maxtopic/sum(maxtopic))
+ggplot(lda_summary, aes(y=reorder(labels, props), x=props, label = terms)) + 
   geom_segment(aes(x=0, xend=props, yend=labels)) +
   geom_text(hjust=0, position = position_nudge(0.002), size=2) + 
   geom_point(size=1) + plot_default + xlim(0,.11) +
   labs(y="Topic Label", x="Average Topic Proportion")
 ggsave("fig/topics.pdf", width = 6.5, height = 3)
 ggsave("fig/topics.png", width = 6.5, height = 3, dpi=400)
+
+## Max topic for each document (to select subset in analysis.R)
+doc_topic <- data.frame(document = lda@documents,
+                        topic = factor(topics(lda), labels = lda_summary$labels)) %>%
+  mutate(political = topic %in% c("Economy","Gender/Sexuality","Domestic Politics","Nature/Climate",
+                                  "Education","Religion","Social Issues","Crime","Family/Parenting",
+                                  "International Politics","Drugs/Guns"))
+write.csv(doc_topic, "out/doc_topic.csv")
 
 
 
