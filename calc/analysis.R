@@ -16,7 +16,13 @@ load("out/cmv_data.Rdata")
 dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
 
 ## load topic overview for each discussion
-doc_topic <- read.csv("out/doc_topic.csv")
+doc_topic <- read.csv("out/doc_topic.csv") %>%
+  mutate(op_title_raw = data_op$title_raw) %>%
+  as_tibble()
+
+## match political / non-political topics to pair data
+table(unique(data_pair$op_title_raw) %in% unique(data_op$title_raw)) # note that not all paired discussions appear in data_op
+data_pair <- left_join(data_pair, doc_topic)
 
 ## load auxiliary functions
 source("func.R")
@@ -31,13 +37,23 @@ plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fil
 ### Overview: General persuadability
 #####################################
 
-data_op %>% 
-  mutate(Change = factor(Delta, labels = c("No", "Yes"))) %>%
-  ggplot(aes(x=Change)) + ylim(0, nrow(data_op)) +
+data_op <- data_op %>% 
+  mutate(Change = factor(Delta, labels = c("No", "Yes")),
+         political = doc_topic$political)
+
+## all posts
+ggplot(data_op, aes(x=Change)) + ylim(0, nrow(data_op)) +
   labs(y="Number of Discussion", x="Opinion Change") +
   geom_bar() + plot_default
 ggsave("fig/delta.pdf", width = 2.5, height = 2)
 ggsave("fig/delta.png", width = 2.5, height = 2, dpi = 400)
+
+## excluding non-political topics
+ggplot(filter(data_op, political), aes(x=Change)) + ylim(0, nrow(data_op)) +
+  labs(y="Number of Discussion", x="Opinion Change") +
+  geom_bar() + plot_default
+ggsave("fig/delta_political.pdf", width = 2.5, height = 2)
+ggsave("fig/delta_political.png", width = 2.5, height = 2, dpi = 400)
 
 
 
@@ -81,6 +97,24 @@ mft_op %>% select(Care:General, Delta) %>%
 ## Test difference across all terms
 t.test(apply(mft_op[,1:6],1,sum)~mft_op$Delta)
 
+## Exclude posts that focus on non-political topics
+mft_op %>%
+  filter(political) %>%
+  select(Care:General, Delta) %>%
+  gather(key=foundation, value=proportion,-Delta) %>%
+  mutate(foundation = factor(foundation, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                        "Authority", "Sanctity", "General"))),
+         Change = factor(Delta, labels=c("No Opinion Change","Opinion Change"))) %>%
+  group_by(foundation, Delta, Change) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se) %>%
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + plot_default +
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
+  theme(legend.title = element_blank())
+ggsave("fig/persuadability_political.pdf", height=2.5, width=6)
+ggsave("fig/persuadability_political.png", height=2.5, width=6, dpi = 400)
 
 
 ##########################
@@ -100,6 +134,10 @@ mft_neg_root <- countMFT(data_pair$neg_root, dict)
 mft_pos_trunc <- countMFT(data_pair$pos_trunc, dict)
 mft_neg_trunc <- countMFT(data_pair$neg_trunc, dict)
 
+## Exclude posts that focus on non-political topics
+mft_op_pol <- na.omit(mft_op_text[data_pair$political,])
+mft_pos_pol <- na.omit(mft_pos_text[data_pair$political,])
+mft_neg_pol <- na.omit(mft_neg_text[data_pair$political,])
 
 
 #######################################
@@ -139,6 +177,21 @@ t.test(data_pair$pos_text_nterm, data_pair$neg_text_nterm, paired =T)
 t.test(data_pair$pos_text_nterm - data_pair$neg_text_nterm)
 t.test(data_pair$pos_root_nterm-data_pair$neg_root_nterm)
 
+## exclude posts that focus on non-political topics
+tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
+       root_nterm = data_pair$pos_root_nterm - data_pair$neg_root_nterm,
+       political = data_pair$political) %>%
+  filter(political) %>%
+  gather(key = group, value = nterm, - political) %>%
+  mutate(glabel = factor(group, labels=c("Root\nResponse","Full\nResponse\nPath"))) %>%
+  ggplot(aes(y=nterm, x=glabel, fill=glabel)) + 
+  geom_hline(yintercept = 0, col="grey") +
+  geom_violin(alpha = .4) + plot_default +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
+  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
+  theme(legend.position="none") + coord_flip()
+ggsave("fig/wordcount_violin_political.pdf", width = 6.5, height = 2)
+ggsave("fig/wordcount_violin_political.png", width = 6.5, height = 2, dpi=400)
 
 
 #######################################
@@ -153,6 +206,14 @@ tibble(mft = factor(apply(mft_op_text, 1, sum) != 0,
 ggsave("fig/mft_op_all.pdf", width = 2.5, height = 2)
 ggsave("fig/mft_op_all.png", width = 2.5, height = 2, dpi=400)
 
+## exclude posts that focus on non-political topics
+tibble(mft = factor(apply(mft_op_pol, 1, sum) != 0,
+                    labels = c("No", "Yes"))) %>%
+  ggplot(aes(x=mft)) + ylim(0, nrow(mft_op_pol)) +
+  labs(y="Number of Discussions", x="Any MFT Term Mentioned") +
+  geom_bar() + plot_default
+ggsave("fig/mft_op_all_political.pdf", width = 2.5, height = 2)
+ggsave("fig/mft_op_all_political.png", width = 2.5, height = 2, dpi=400)
 
 
 #######################################
@@ -225,17 +286,35 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   theme(legend.title = element_blank())
 ggsave("fig/persuasiveness_empty.pdf", height=2.5, width=6)
 
+## exclude posts that focus on non-political issues
+plot_df <- na.omit(mft_diff[rep(data_pair$political, 3),]) %>%
+  select(Care:General, type) %>%
+  gather(key=foundation, value=proportion, -type) %>%
+  mutate(foundation = factor(foundation, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                        "Authority", "Sanctity", "General"))),
+         type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>%
+  group_by(foundation, type) %>%
+  summarise(mean = mean(proportion), sd = sd(proportion), n = length(na.omit(proportion))) %>%
+  mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
+  theme(legend.title = element_blank())
+ggsave("fig/persuasiveness_political.pdf", height=2.5, width=6)
 
 ## Test differences on individual foundations
-mft_diff %>% filter(type=="text") %>%
+mft_diff %>% filter(type=="1. text") %>%
   gather(key = Foundation, value = Proportion, -type) %>%
   split(.$Foundation) %>% map(~t.test(.$Proportion))
 
-mft_diff %>% filter(type=="root") %>%
+mft_diff %>% filter(type=="2. root") %>%
   gather(key = Foundation, value = Proportion, -type) %>%
   split(.$Foundation) %>% map(~t.test(.$Proportion))
 
-mft_diff %>% filter(type=="trunc") %>%
+mft_diff %>% filter(type=="3. trunc") %>%
   gather(key = Foundation, value = Proportion, -type) %>%
   split(.$Foundation) %>% map(~t.test(.$Proportion))
 
@@ -325,6 +404,25 @@ ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = typ
   theme(legend.position="none")
 ggsave("fig/cosine_empty.pdf", width = 4, height = 2)
 
+## exclude posts that focus on non-political issues
+filter(cos_res, data_pair$political) %>%
+  gather(key = type, value = cos) %>%
+  mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
+                                      "Truncated Root Response"))) %>% 
+  group_by(type) %>%
+  summarize(avg = mean(cos, na.rm = T), 
+            sd = sd(cos, na.rm = T),
+            n = sum(!is.na(cos)),
+            se = sd/sqrt(n),
+            cilo = avg - 1.96 * se, 
+            cihi = avg + 1.96 * se) %>%
+  ggplot(aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
+  theme(legend.position="none")
+ggsave("fig/cosine_political.pdf", width = 4, height = 2)
+
+
 ## test differences in cosine similarities
 t.test(cos_res$`1. text`)
 t.test(cos_res$`2. root`)
@@ -373,7 +471,8 @@ cos_abs <- tibble(
   'caseid' = rep(1:nrow(data_pair), 2),
   'opid' = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2),
   'delta' = rep(c(0,1), each=nrow(data_pair)),
-  'text' = NA, 'root' = NA, 'trunc' = NA
+  'text' = NA, 'root' = NA, 'trunc' = NA,
+  'political' = rep(data_pair$political, 2)
 )
 
 for(i in 1:nrow(data_pair)){
@@ -446,6 +545,26 @@ latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argume
            #, size="footnotesize"
            )
 
+## exclude posts that focus on non-political issues
+cos_pol <- filter(cos_red, political)
+m2pol <- NULL
+m2pol[[1]] <- glm(delta ~ text, data = cos_pol, family = binomial("logit"))
+m2pol[[2]] <- glm(delta ~ root, data = cos_pol, family = binomial("logit"))
+m2pol[[3]] <- glm(delta ~ trunc, data = cos_pol, family = binomial("logit"))
+lapply(m2pol, summary)
+lapply(m2pol, function(x) coeftest(x, vcov = vcovCL(x, cluster=cos_pol$opid)))
+
+## simulate predicted probabilities
+res <- rbind(sim(m2pol[[1]], iv=data.frame(text=minmax(cos_pol$text)), cluster = cos_pol$opid),
+             sim(m2pol[[2]], iv=data.frame(root=minmax(cos_pol$root)), cluster = cos_pol$opid),
+             sim(m2pol[[3]], iv=data.frame(trunc=minmax(cos_pol$trunc)), cluster = cos_pol$opid))
+res$ivlab <- factor(res$iv, labels = c("Full Response Path","Root Response","Truncated Root Response"))
+
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_default + labs(y = NULL, x = "Change in P(Opinion Change)") +
+  theme(legend.position="none")
+ggsave("fig/logit_cosine_political.pdf", width = 4, height = 2)
 
 
 ###########################
@@ -455,15 +574,18 @@ latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argume
 ## prepare reduced data (remove duplicated negative posts)
 mft_text <- bind_rows(mutate(mft_neg_text, delta = 0, type = "1. text"),
                       mutate(mft_pos_text, delta = 1, type = "1. text")) %>%
-  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2),
+         political = rep(data_pair$political, 2)) %>%
   filter(c(neg_unique,neg_unique))
 mft_root <- bind_rows(mutate(mft_neg_root, delta = 0, type = "2. root"),
                       mutate(mft_pos_root, delta = 1, type = "2. root")) %>%
-  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2),
+         political = rep(data_pair$political, 2)) %>%
   filter(c(neg_unique,neg_unique))
 mft_trunc <- bind_rows(mutate(mft_neg_trunc, delta = 0, type = "3. trunc"),
                        mutate(mft_pos_trunc, delta = 1, type = "3. trunc")) %>%
-  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2)) %>%
+  mutate(opid = rep(as.numeric(as.factor(data_pair$op_text_raw)), 2),
+         political = rep(data_pair$political, 2)) %>%
   filter(c(neg_unique,neg_unique))
 
 ## estimate logits w/ reduced data
@@ -539,3 +661,68 @@ m4[[3]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + Gene
                data = mft_trunc, family = binomial("logit"))
 lapply(m4, summary)
 lapply(m4, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text$opid)))
+
+
+### Exclude posts that focus on non-political issues
+
+## estimate logits w/ reduced data
+mft_text_pol <- filter(mft_text, political)
+mft_root_pol <- filter(mft_root, political)
+mft_trunc_pol <- filter(mft_trunc, political)
+m3pol <- NULL
+m3pol[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_text_pol, family = binomial("logit"))
+m3pol[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_root_pol, family = binomial("logit"))
+m3pol[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+               data = mft_trunc_pol, family = binomial("logit"))
+lapply(m3pol, summary)
+lapply(m3pol, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text_pol$opid)))
+
+## simulate predicted probabilities
+res <- rbind(sim(m3pol[[1]], iv=data.frame(Care=minmax(mft_text_pol$Care)), cluster = mft_text_pol$opid),
+             sim(m3pol[[1]], iv=data.frame(Fairness=minmax(mft_text_pol$Fairness)), cluster = mft_text_pol$opid),
+             sim(m3pol[[1]], iv=data.frame(Loyalty=minmax(mft_text_pol$Loyalty)), cluster = mft_text_pol$opid),
+             sim(m3pol[[1]], iv=data.frame(Authority=minmax(mft_text_pol$Authority)), cluster = mft_text_pol$opid),
+             sim(m3pol[[1]], iv=data.frame(Sanctity=minmax(mft_text_pol$Sanctity)), cluster = mft_text_pol$opid),
+             sim(m3pol[[1]], iv=data.frame(General=minmax(mft_text_pol$General)), cluster = mft_text_pol$opid),
+             
+             sim(m3pol[[2]], iv=data.frame(Care=minmax(mft_root_pol$Care)), cluster = mft_root_pol$opid),
+             sim(m3pol[[2]], iv=data.frame(Fairness=minmax(mft_root_pol$Fairness)), cluster = mft_root_pol$opid),
+             sim(m3pol[[2]], iv=data.frame(Loyalty=minmax(mft_root_pol$Loyalty)), cluster = mft_root_pol$opid),
+             sim(m3pol[[2]], iv=data.frame(Authority=minmax(mft_root_pol$Authority)), cluster = mft_root_pol$opid),
+             sim(m3pol[[2]], iv=data.frame(Sanctity=minmax(mft_root_pol$Sanctity)), cluster = mft_root_pol$opid),
+             sim(m3pol[[2]], iv=data.frame(General=minmax(mft_root_pol$General)), cluster = mft_root_pol$opid),
+             
+             sim(m3pol[[3]], iv=data.frame(Care=minmax(mft_trunc_pol$Care)), cluster = mft_trunc_pol$opid),
+             sim(m3pol[[3]], iv=data.frame(Fairness=minmax(mft_trunc_pol$Fairness)), cluster = mft_trunc_pol$opid),
+             sim(m3pol[[3]], iv=data.frame(Loyalty=minmax(mft_trunc_pol$Loyalty)), cluster = mft_trunc_pol$opid),
+             sim(m3pol[[3]], iv=data.frame(Authority=minmax(mft_trunc_pol$Authority)), cluster = mft_trunc_pol$opid),
+             sim(m3pol[[3]], iv=data.frame(Sanctity=minmax(mft_trunc_pol$Sanctity)), cluster = mft_trunc_pol$opid),
+             sim(m3pol[[3]], iv=data.frame(General=minmax(mft_trunc_pol$General)), cluster = mft_trunc_pol$opid)
+) %>% mutate(type = rep(c("1. text", "2. root", "3. trunc"), each = 6),
+             typelab = factor(type, labels = c("Full Response Path","Root Response","Truncated Root Response")),
+             foundation = factor(iv, levels = rev(c("Care", "Fairness", "Loyalty",
+                                                    "Authority", "Sanctity", "General"))))
+
+## Create plot
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
+  theme(legend.title = element_blank())
+ggsave("fig/logit_persuasiveness_political.pdf", height=2.5, width=6)
+
+
+
+
+###########################
+### Summary: How many political vs. non-political posts?
+###########################
+
+## all posts
+ggplot(data_op, aes(x=political)) + ylim(0, nrow(data_op)) +
+  labs(y="Number of Discussion", x="Political") +
+  geom_bar() + plot_default
+ggsave("fig/political.pdf", width = 2.5, height = 2)
