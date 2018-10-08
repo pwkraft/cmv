@@ -125,3 +125,55 @@ Terms with (*) indicate that the word stem rather than the exact word was matche
 
 \input{/data/Dropbox/Uni/Projects/2017/cmv/calc/tab/persuasiveness}
 \input{/data/Dropbox/Uni/Projects/2017/cmv/calc/tab/cosine}
+
+
+\clearpage
+\section{Excluding Non-political Discussions}\label{app:political}
+%\renewcommand\thefigure{F.\arabic{figure}}
+%\renewcommand\thetable{F.\arabic{table}}
+%\setcounter{figure}{0}
+%\setcounter{table}{0}
+
+For the purpose of this paper, I decided against filtering out subsets of discussions based on their thematic (or political) relevance since such a strategy could raise additional concerns about potential selection bias. However, it is worth exploring whether the substantive results are robust when focusing only on discussions revolving around politics. In the following, I therefore replicate all major analyses of the paper after excluding discussions related to distinctly non-political topics (e.g., ``Food'' or ``Entertainment''). The following figure shows the total number of discussions that focus on political versus non-political issues (based on the LDA results).
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/political.pdf}
+	\caption[Number of original posts on \texttt{/r/ChangeMyView/} that focus on political issues]{Number of discussions on \texttt{/r/ChangeMyView/} that focus on political versus non-political issues (based on the LDA results).}\label{fig:political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/delta_political.pdf}
+	\caption[Political discussions only -- Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change]{Political discussions only -- Number of discussions on \texttt{/r/ChangeMyView/} that resulted in opinion change (at least one $\Delta$ awarded by OP) versus not.}\label{fig:delta_political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/persuadability_political.pdf}
+	\caption[Political discussions only -- Moral foundations and persuadability]{Political discussions only -- Moral foundations and persuadability: Average percentage of dictionary terms relative to the total number of words in each opening statement beginning a discussion, comparing discussions where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuadability_political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/mft_op_all_political.pdf}
+	\caption[Political discussions only -- Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary]{Political discussions only -- Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary.}\label{fig:mft_op_all_political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/wordcount_violin_political.pdf}
+	\caption[Political discussions only -- Difference in response lengths between successful and unsuccessful counterarguments]{Political discussions only -- Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin_political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/logit_persuasiveness_political.pdf}
+	\caption[Political discussions only -- Moral foundations and persuasiveness]{Political discussions only -- Moral foundations and persuasiveness: Change in predicted probability of opinion change ($\Delta$ awarded) when MFT dictionary term proportions are increased from their minimum (no moral terms mentioned) to their empirical maximum, holding the remaining foundations constant at their mean (including 95\% confidence intervals). Estimates are based on logit models with standard errors clustered by discussion thread.}\label{fig:persuasiveness_political}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/Projects/2017/cmv/calc/fig/logit_cosine_political.pdf}
+	\caption[Political discussions only -- Moral congruence and persuasiveness]{Political discussions only -- Moral congruence and persuasiveness: Change in predicted probability of opinion change ($\Delta$ awarded) when MFT congruence is increased from its minimum (no overlap in moral terms) to their empirical maximum (equal emphasis on each moral foundation) (including 95\% confidence intervals). Estimates are based on logit models with standard errors clustered by discussion thread.}\label{fig:cosine_political}
+\end{figure}

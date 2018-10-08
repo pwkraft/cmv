@@ -49,7 +49,7 @@ ggsave("fig/delta.pdf", width = 2.5, height = 2)
 ggsave("fig/delta.png", width = 2.5, height = 2, dpi = 400)
 
 ## excluding non-political topics
-ggplot(filter(data_op, political), aes(x=Change)) + ylim(0, nrow(data_op)) +
+ggplot(filter(data_op, political), aes(x=Change)) + ylim(0, nrow(filter(data_op, political))) +
   labs(y="Number of Discussion", x="Opinion Change") +
   geom_bar() + plot_default
 ggsave("fig/delta_political.pdf", width = 2.5, height = 2)
