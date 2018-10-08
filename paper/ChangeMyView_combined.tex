@@ -7,6 +7,7 @@
 \usepackage{setspace}
 \usepackage{amsmath}
 \usepackage{lscape}
+\usepackage{dcolumn}
 \usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{enumerate}
@@ -14,12 +15,14 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{arydshln}
-\usepackage{dcolumn}
+\usepackage[toc,page,title]{appendix}
+\usepackage{titletoc}
 \usepackage[colorlinks=true,citecolor=red!50!black,urlcolor=blue!50!black,linkcolor=red!50!black]{hyperref}
+\usepackage{chngcntr}
+\usepackage{bibentry}
+\usepackage{hvfloat}
 
-
-\author{Patrick W. Kraft\footnote{Assistant Professor, University of Wisconsin-Milwaukee, \href{mailto:kraftp@uwm.edu}{kraftp@uwm.edu}.
-}}
+\author{Patrick W. Kraft\footnote{Assistant Professor, University of Wisconsin-Milwaukee, \href{mailto:kraftp@uwm.edu}{kraftp@uwm.edu}.}}
 
 \title{Change My View\\
 \large{Do Moral Appeals Facilitate Compromise?}\footnote{I thank Jennifer Jerit, John Jost, Yanna Krupnikov, Hannah Nam, Michael Peress, and Arthur Spirling for helpful comments on previous versions of this manuscript. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/cmv}.}}
@@ -58,5 +61,21 @@ PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION
 \singlespacing
 \bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
+
+\clearpage
+\renewcommand\thesubsection{\Roman{subsection}}
+\counterwithin{figure}{section}
+\setcounter{page}{1}
+\appendices
+\textit{Online Appendix:}\\
+\textbf{Change My View -- Do Moral Appeals Facilitate Compromise?}
+
+%\thispagestyle{empty}
+\startcontents[sections]
+\printcontents[sections]{l}{1}{\setcounter{tocdepth}{2}}
+\clearpage
+
+\input{ChangeMyView_appendix_maintext}
+
 
 \end{document}
