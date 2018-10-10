@@ -1,0 +1,139 @@
+\documentclass{beamer}
+\usepackage{xcolor}
+\usepackage{natbib} % package to organize literature
+\usepackage{booktabs}
+\usepackage{graphicx} % to include graphics, gifs
+\usepackage{lmodern} % to fix font size error, might be problematic with math symbols
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage{arydshln} % dashed lines
+\usepackage{appendixnumberbeamer} % separate appendix numbering
+\usepackage{fontawesome} % awesome icons
+\usepackage[absolute,overlay]{textpos} % textbox in front of content
+
+% Custom beamer settings
+%\definecolor{beamer@sbred}{rgb}{0.65,0.15,0.18}
+\definecolor{beamer@sbred}{rgb}{0.22,0.22,0.66}
+\setbeamercolor{structure}{fg=beamer@sbred}
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+\setbeamersize{text margin left=1em,text margin right=1em}
+\setbeamercolor{frametitle}{fg=beamer@sbred}
+\setbeamercolor{section in toc}{fg=beamer@sbred}
+\setbeamercolor{subsection in toc}{fg=beamer@sbred!50}
+\setbeamercolor*{block title example}{fg= white, bg= beamer@sbred!90}
+\setbeamercolor*{block body example}{fg= black, bg= beamer@sbred!10}
+\DeclareTextFontCommand{\emph}{\color{beamer@sbred}}
+
+% link to table of contents
+\makeatletter
+\setbeamertemplate{footline}{\leavevmode\hbox{
+	\begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}\insertframenumber/\inserttotalframenumber\hspace*{2ex}
+	\end{beamercolorbox}}
+	}
+    \makeatother
+\setbeamertemplate{navigation symbols}{}
+
+
+\author{Patrick W. Kraft}
+\title{Change My View\\
+{\large Do Moral Appeals Facilitate Compromise?}}
+\institute{MAPPS Meeting\\Marquette University}
+\date{October 12\textsuperscript{th} 2018}
+\titlegraphic{\includegraphics[width=3cm]{/data/Dropbox/Uni/Misc/Logos/UWM/UWM_preferred.png}}
+
+
+\begin{document}
+
+\section{Introduction}
+\frame{\titlepage}
+%\input{_introduction}
+
+\begin{frame}{Introduction}
+\begin{figure}
+\includegraphics[scale=.9]{fig/the-conversation.jpeg}
+\end{figure}
+\end{frame}
+
+\section{Change My View}
+%\input{_conclusion}
+
+\begin{frame}{Change My View}
+\begin{figure}
+\includegraphics[height=.6\textheight]{fig/duty_calls.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Change My View}
+\begin{figure}
+	\includegraphics[height=.8\textheight]{fig/bad_opinions.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Change My View}
+\begin{figure}
+	\includegraphics[width=.43\textwidth]{fig/reddit_single.jpg}\uncover<2>{\includegraphics[width=.57\textwidth]{fig/reddit_trump.jpg}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Change My View}\centering
+\only<1>{\includegraphics[width=\textwidth]{fig/persuasiveness_empty.pdf}}\only<2>{\includegraphics[width=\textwidth]{fig/persuasiveness.pdf}}
+\end{frame}
+
+\begin{frame}{Change My View}\centering
+\only<1>{\includegraphics[width=.9\textwidth]{fig/cosine_empty.pdf}}\only<2>{\includegraphics[width=.9\textwidth]{fig/cosine.pdf}}
+\end{frame}
+
+\begin{frame}{Change My View}\centering
+A sample opening statement on CMV:\\
+\vspace{1em}
+\visible<2>{\textit{\emph{Jon Haidt's theory}\\
+about how disgust/authority/loyalty intuitions\\
+determine political views\\
+\emph{is flawed in its methodology.}}}
+\end{frame}
+
+\section{Conclusion}
+
+
+
+\begin{frame}%[allowframebreaks]
+\begin{center}
+	\large{Thank you very much for your attention!}\\ \vspace{2em}
+	Manuscript and code available at:\\
+	%\emph{\texttt{https://github.com/pwkraft/mft}}\\
+	\emph{\texttt{https://github.com/pwkraft/cmv}}\\ \vspace{2em}
+	Comments, questions?\\
+	\emph{\faEnvelopeO\hspace{.5em}\texttt{kraftp@uwm.edu}}\\\vspace{2em}
+	\emph{\faGlobe\hspace{.5em}\texttt{pwkraft.github.io}}\\
+	\emph{\faTwitter\hspace{.5em}\texttt{@patrickwkraft}}\\
+\end{center}
+\end{frame}
+
+%\section*{Content}
+%\label{sec:main-content}
+%\begin{frame}%[allowframebreaks]
+%\frametitle{Content}
+%\tableofcontents %[hideallsubsections]
+%\end{frame}
+
+%\appendix
+%\section*{Appendix Content}
+%\label{sec:appendix-content}
+%\begin{frame}%[allowframebreaks]
+%\frametitle{Appendix Content}
+%\small\tableofcontents %[hideallsubsections]
+%\end{frame}
+%\input{_appendix}
+
+%\begin{frame} %<beamer:0> % hide references
+%  \frametitle{References}
+%  \def\newblock{\hskip .11em plus .33em minus .07em}
+%  %\nocite{*}
+%  \begin{scriptsize}
+%    \bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
+%    \bibliography{/data/Dropbox/Uni/Lit/Literature}
+%  \end{scriptsize}
+%\end{frame}
+
+\end{document}
