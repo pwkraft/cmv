@@ -49,7 +49,41 @@ ggplot(lda_summary, aes(y=reorder(labels, props), x=props, label = terms)) +
   geom_point(size=1) + plot_default + xlim(0,.11) +
   labs(y="Topic Label", x="Average Topic Proportion")
 ggsave("fig/topics.pdf", width = 6.5, height = 3)
-ggsave("fig/topics.png", width = 6.5, height = 3, dpi=400)
+
+## same plot for slides
+lda_summary <- tibble(terms = apply(terms(lda, 5),2,paste, collapse=", "),
+                      labels = c("Drugs/Guns", "Information", "Time/Life", "Travel", "Food",
+                                 "Opinions/Evaluations", "Entertainment", "Religion", "Gender/Sexuality", 
+                                 "Philosophy/Physics","Economy", "Social Issues", "People's Beliefs",
+                                 "Reddit/Misc.", "Education", "Nature/Climate", "Crime",
+                                 "Family/Parenting", "Domestic Politics", "International Politics"),
+                      props = apply(posterior(lda)$topics, 2, mean),
+                      maxtopic = table(topics(lda)),
+                      pmaxtopic = maxtopic/sum(maxtopic))
+
+ggplot(lda_summary, aes(y=reorder(labels, props), x=props, label = terms)) + 
+  geom_segment(aes(x=0, xend=props, yend=labels)) +
+  geom_text(hjust=0, position = position_nudge(0.002), size=2.5) + 
+  geom_point(size=1) + plot_default + xlim(0,.11) +
+  labs(y="Topic Label", x="Average Topic Proportion")
+ggsave("fig/topics_02.png", width = 4.5, height = 3, dpi=400)
+
+ggplot(lda_summary, aes(y=reorder(labels, props), x=props, label = terms)) + 
+  geom_segment(aes(x=0, xend=props, yend=labels)) +
+  geom_text(hjust=0, position = position_nudge(0.002), size=2.5) + 
+  geom_point(size=1) + plot_default + xlim(0,.11) +
+  labs(y="Topic Label", x="Average Topic Proportion") +
+  theme(axis.text.y=element_text(colour="white"))
+ggsave("fig/topics_01.png", width = 4.5, height = 3, dpi=400)
+
+ggplot(lda_summary, aes(y=reorder(labels, props), x=props, label = terms)) + 
+  geom_segment(aes(x=0, xend=props, yend=labels)) +
+  geom_text(hjust=0, position = position_nudge(0.002), size=2.5) + 
+  geom_point(size=1) + plot_empty + xlim(0,.11) +
+  labs(y="Topic Label", x="Average Topic Proportion") +
+  theme(axis.text.y=element_text(colour="white"))
+ggsave("fig/topics_00.png", width = 4.5, height = 3, dpi=400)
+
 
 ## Max topic for each document (to select subset in analysis.R)
 doc_topic <- data.frame(document = lda@documents,
@@ -83,7 +117,7 @@ plot(stm_fit, n=10, labeltype = "prob", text.cex = 1, main = NA)
 dev.off()
 
 ## estimate topic prevalence effects
-prep <- estimateEffect(~ pos, stm_fit, meta = out$meta, uncertainty = "Global")
+prep <- estimateEffect(~ delta, stm_fit, meta = out$meta, uncertainty = "Global")
 
 ## sort topics by effect size
 tmp <- tibble(estimate = sapply(summary(prep)[[3]], function(x) x["delta","Estimate"]),
@@ -92,7 +126,17 @@ tmp <- tibble(estimate = sapply(summary(prep)[[3]], function(x) x["delta","Estim
 ## plot topic differences between negative and positive responses
 pdf("fig/stm_op_diff.pdf", height=6, width=11)
 par(mar=c(2.2,0.5,0.5,0.5))
-plot.estimateEffect(prep, covariate = "pos", model = stm_fit, topics = tmp$topics
+plot.estimateEffect(prep, covariate = "delta", model = stm_fit, topics = tmp$topics
+                    , method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , labeltype = "prob", n=10, verbose.labels = F, width=100
+                    , xlim = c(-.05,.012)
+                    , xlab = "Difference in Topic Proportions (Change - No Change)")
+dev.off()
+
+## same plot for presentation
+png("fig/stm_op_diff.png", height=6, width=11, units = "in", res = 400)
+par(mar=c(4.5,0.5,0.5,0.5))
+plot.estimateEffect(prep, covariate = "delta", model = stm_fit, topics = tmp$topics
                     , method = "difference", cov.value1 = 1, cov.value2 = 0
                     , labeltype = "prob", n=10, verbose.labels = F, width=100
                     , xlim = c(-.05,.012)

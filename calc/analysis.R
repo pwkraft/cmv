@@ -46,7 +46,15 @@ ggplot(data_op, aes(x=Change)) + ylim(0, nrow(data_op)) +
   labs(y="Number of Discussion", x="Opinion Change") +
   geom_bar() + plot_default
 ggsave("fig/delta.pdf", width = 2.5, height = 2)
-ggsave("fig/delta.png", width = 2.5, height = 2, dpi = 400)
+ggsave("fig/delta.png", width = 3.5, height = 3, dpi = 400)
+
+## empty plot for presentation
+ggplot(data_op, aes(x=Change)) + ylim(0, nrow(data_op)) +
+  labs(y="Number of Discussion", x="Opinion Change") +
+  geom_bar() + plot_empty
+ggsave("fig/delta_empty.png", width = 3.5, height = 3, dpi = 400)
+
+
 
 ## excluding non-political topics
 ggplot(filter(data_op, political), aes(x=Change)) + ylim(0, nrow(filter(data_op, political))) +
@@ -79,12 +87,27 @@ plot_df <- mft_op %>%
 
 ## Create plot
 ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
-  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + plot_default +
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
   geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
-  theme(legend.title = element_blank())
+  plot_default + theme(legend.title = element_blank())
 ggsave("fig/persuadability.pdf", height=2.5, width=6)
-ggsave("fig/persuadability.png", height=2.5, width=6, dpi = 400)
+
+## same plot for presentation
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
+  plot_default + theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/persuadability.png", height=3, width=4.5, dpi = 400)
+
+## empty plot for presentation
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
+  plot_empty + theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/persuadability_empty.png", height=3, width=4.5, dpi = 400)
 
 ## Test differences for each foundation (w/ Bonferroni correction)
 mft_op %>% select(Care:General, Delta) %>%
@@ -170,7 +193,7 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
   labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
   theme(legend.position="none") + coord_flip()
 ggsave("fig/wordcount_violin.pdf", width = 6.5, height = 2)
-ggsave("fig/wordcount_violin.png", width = 6.5, height = 2, dpi=400)
+ggsave("fig/wordcount_violin.png", width = 4.5, height = 3, dpi=400)
 
 ## testing differences (note: t-test of difference is equivalent of paired test)
 t.test(data_pair$pos_text_nterm, data_pair$neg_text_nterm, paired =T)
@@ -204,7 +227,8 @@ tibble(mft = factor(apply(mft_op_text, 1, sum) != 0,
   labs(y="Number of Discussions", x="Any MFT Term Mentioned") +
   geom_bar() + plot_default
 ggsave("fig/mft_op_all.pdf", width = 2.5, height = 2)
-ggsave("fig/mft_op_all.png", width = 2.5, height = 2, dpi=400)
+ggsave("fig/mft_op_all.png", width = 3.5, height = 3, dpi=400)
+
 
 ## exclude posts that focus on non-political topics
 tibble(mft = factor(apply(mft_op_pol, 1, sum) != 0,
@@ -235,6 +259,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   theme(legend.title = element_blank())
 ggsave("fig/mft_op_individual.pdf", height=2.5, width=4)
+ggsave("fig/mft_op_individual.png", height=3, width=4.5)
 
 
 
@@ -275,7 +300,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
   theme(legend.title = element_blank(), legend.position = "bottom")
-ggsave("fig/persuasiveness.png", height=4, width=6, dpi=400)
+ggsave("fig/persuasiveness.png", height=3, width=4.5, dpi=400)
 
 ## empty plot
 ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
@@ -283,8 +308,8 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
   geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
-  theme(legend.title = element_blank())
-ggsave("fig/persuasiveness_empty.pdf", height=2.5, width=6)
+  theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/persuasiveness_empty.png", height=3, width=4.5)
 
 ## exclude posts that focus on non-political issues
 plot_df <- na.omit(mft_diff[rep(data_pair$political, 3),]) %>%
@@ -523,6 +548,14 @@ ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab
   plot_default + labs(y = NULL, x = "Change in P(Opinion Change)") +
   theme(legend.position="none")
 ggsave("fig/logit_cosine.pdf", width = 4, height = 2)
+ggsave("fig/logit_cosine.png", width = 4.5, height = 3)
+
+## empty plot for presentation
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  plot_empty + labs(y = NULL, x = "Change in P(Opinion Change)") +
+  theme(legend.position="none")
+ggsave("fig/logit_cosine_empty.png", width = 4.5, height = 3)
 
 ## adjust name of independent vars
 names(m2[[1]]$coefficients)[2] <- "cosine"
@@ -633,6 +666,26 @@ ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=t
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/logit_persuasiveness.pdf", height=2.5, width=6)
+
+## same plot for presentation
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+  geom_vline(xintercept = 0, col="grey") + plot_default +
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/logit_persuasiveness.png", height=3, width=4.5, dpi=400)
+
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+  geom_vline(xintercept = 0, col="grey") +
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
+  plot_empty +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+ggsave("fig/logit_persuasiveness_empty.png", height=3, width=4.5, dpi=400)
+
+
 
 ## table for appendix
 latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
