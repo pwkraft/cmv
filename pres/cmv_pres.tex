@@ -45,8 +45,6 @@
 \makeatother
 \setbeamertemplate{navigation symbols}{}
 
-
-
 \author{Patrick W. Kraft}
 \title{Change My View\\
 {\large Do Moral Appeals Facilitate Compromise?}}
@@ -55,56 +53,60 @@
 \titlegraphic{\includegraphics[width=3cm]{/data/Dropbox/Uni/Misc/Logos/UWM/UWM_preferred.png}}
 
 
+
 \begin{document}
 
+
 \section{Introduction}
+
 \frame{\titlepage}
 
 \begin{frame}{Introduction}
 \begin{figure}
-	\includegraphics[scale=.9]{fig/the-conversation.jpeg}
+\includegraphics[scale=.9]{fig/the-conversation.jpeg}
 \end{figure}
 \end{frame}
 % - My background: political psychology
 % - I study how people justify their political preferences in their own words
 % - Ultimately, I am interested in exploring how citizens talk to each other and influence each other's opinions
 % - Why does this matter?
-% - We live in polarized times, lot's of political disagreement
-% - Some research in political science and moral psychology suggests that disagreements are driven by the fact that politics becomes increasingly moralized
 
 
-\begin{frame}{Moralized Politics as a Source for Disagreement}
-Discuss the literature on moral psych and politics: Moralization of politics as a key that prevents people from finding compromise
+\section{Theory}
 
-Also mention the literature on political discussions in heterogeneous networks?
-\end{frame}
-% TODO: Find illustration for political disagreement and polarization, maybe related to moralization
-
-\begin{frame}{How can we overcome disagreements?}
-Two \emph{opposing hypotheses} regarding the role of morality in political discussions:\\
-\vspace{1em}
-\begin{tabularx}{\textwidth}{lX}
-	\textit{H1 (\emph{Moral Conviction})}: & Arguments that involve \emph{moral appeals} will be \emph{less persuasive} than arguments that do not involve moral appeals.\\
-	\textit{H2 (\emph{Moral Foundations})}: & Arguments that involve \emph{moral appeals} will be \emph{more persuasive} than arguments that do not involve moral appeals, but only if they are \emph{congruent} with the opening statement's moral framework.
-\end{tabularx}
-\end{frame}
-
-
-\begin{frame}{Online Discussions}
+\begin{frame}{How Can We Overcome Political Disagreements?}
 \begin{figure}
-	\includegraphics[height=.6\textheight]{fig/duty_calls.png}
+\includegraphics[width=\textwidth]{fig/polarization_large.jpeg}
+\end{figure}
+\end{frame}
+% - We live in polarized times, lot's of political disagreement
+% - This is driven by heightened partisanship, affective polarization, and increasing moralization of politics
+% - Some research suggests that social interaction and conversations in heterogeneous networks can decrease the divide between liberals and conservatives
+% - But research in moral psychology suggests that it might not be that easy.
+
+\begin{frame}{Political Disagreements and Moral Considerations}
+\begin{itemize}
+	\item<1-> \emph{Moral Conviction Literature}:\\Liberals and conservatives are less likely to compromise if they hold moral convictions about politics.\\
+	{\footnotesize\citep[e.g.,][]{skitka2014social,ryan2017no}}\\
+	\vspace{1em}
+	\item<2-> \emph{Moral Foundations Literature}:\\Liberals and conservatives are more likely to compromise if they focus on the same moral foundations.\\
+	{\footnotesize\citep[e.g.,][]{graham2009liberals,haidt2012righteous}}
+\end{itemize}
+\end{frame}
+
+
+\section{Online Discussions and Description of Dataset}
+
+\begin{frame}{Analyzing Online Discussions}
+\begin{figure}
+	\only<1>{\includegraphics[height=.6\textheight]{fig/duty_calls.png}}
+	\only<2>{\includegraphics[width=\textwidth]{fig/reddit-01.png}}
+	%\only<3>{\includegraphics[width=\textwidth]{fig/reddit_many.png}}
 \end{figure}
 \end{frame}
 % - Online discussions as a perfect environment were people encounter very different viewpoints.
 
-
-\begin{frame}{Online Discussions}
-\begin{figure}
-	\only<1>{\includegraphics[width=\textwidth]{fig/reddit-01.png}}
-	\only<2>{\includegraphics[width=\textwidth]{fig/reddit_many.png}}
-\end{figure}
-\end{frame}
-
+\subsection{The Subreddit \texttt{/r/ChangeMyView}}
 \begin{frame}{The Subreddit \texttt{/r/ChangeMyView}}
 \begin{figure}
 	\only<1>{\includegraphics[width=\textwidth]{fig/reddit-02.png}}
@@ -115,22 +117,28 @@ Two \emph{opposing hypotheses} regarding the role of morality in political discu
 \end{figure}
 \end{frame}
 
+\subsection{Data Overview}
+\begin{frame}{Data Overview}
+
+Dataset of more than \emph{10,000 discussions} on \texttt{/r/ChangeMyView}: 
+\begin{itemize}
+	\item Posted between January 2013 and May 2015
+	\item Includes \emph{matched pairs} of successful and unsuccessful arguments
+	\item Compiled by \citet{tan2016winning}, who studied \emph{linguistic features} (e.g., use of personal pronouns) and differences in style (formatting etc.) that predict persuasiveness
+	\vspace{1em}
+	\item \emph{This analysis}: Exploring the role of \emph{moral appeals} in facilitating or inhibiting compromise
+\end{itemize}
+\end{frame}
 
 
 \section{Empirical Results}
 
-
-\subsection{Overview}
-
-\begin{frame}{Analyses}
-Describe dataset in more detail, include discussion of moral foundations dictionary
-\end{frame}
-
+\subsection{Opening Statements and Persuadability}
 \begin{frame}{Extracting Topics from Text -- Latent Dirichlet Allocation}
 \begin{figure}
-	\includegraphics[width=\textwidth]{fig/blei2012probabilistic.png}
+	\only<2>{\includegraphics[width=\textwidth]{fig/blei2012probabilistic.png}}
 \end{figure}
-\tiny{\textit{Source:} \cite{blei2012probabilistic}}
+\only<2>{\tiny{\textit{Source:} \cite{blei2012probabilistic}}}
 \end{frame}
 
 \begin{frame}{Discussion Topics on \texttt{/r/ChangeMyView}}
@@ -145,7 +153,19 @@ Describe dataset in more detail, include discussion of moral foundations diction
 \end{figure}
 \end{frame}
 
-% TODO: Add slide on how to measure moral foundations
+\begin{frame}{Measuring Morality in Text}
+\emph{Moral Foundations Dictionary:}\\
+\footnotesize{(c.f., \citealt{graham2009liberals} and \url{http://www.moralfoundations.org/})}\\
+\vspace{2em}
+\begin{itemize}
+	\item \emph{Care}: caring, compassion*, empath*, preserve, protect*, ...
+	\item \emph{Fairness}: equal*, honest*, impartial*, justice, favoritism, ...
+	\item \emph{Loyalty}: collectiv*, communal, family, homeland*, unite*, ...
+	\item \emph{Authority}: command, comply, duty, hierarch*, honor*, ...
+	\item \emph{Sanctity}: abstention, clean*, decen*, holy, innocent, ...
+	\item \emph{General Morality}: character, commendable, decen*, ethic*, moral*, ...
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Moral Foundations and Persuadability}
 \begin{figure}
@@ -153,7 +173,8 @@ Describe dataset in more detail, include discussion of moral foundations diction
 \end{figure}
 \end{frame}
 
-\begin{frame}{The Subreddit \texttt{/r/ChangeMyView}}
+\subsection{Counterarguments and Persuasiveness}
+\begin{frame}{Exploring the Persuasiveness of Counterarguments}
 \begin{figure}
 	\only<1>{\includegraphics[width=\textwidth]{fig/reddit-05.png}}
 	\only<2>{\includegraphics[width=\textwidth]{fig/reddit-06.png}}
@@ -168,7 +189,7 @@ Describe dataset in more detail, include discussion of moral foundations diction
 \large{\emph{Question:}\\Which of two lexically similar arguments is the successful one?}
 \end{frame}
 
-\begin{frame}{Moral Appeals are Futile}
+\begin{frame}{Moral foundations and Persuasiveness}
 \begin{figure}
 	\only<1>{\includegraphics{../calc/fig/logit_persuasiveness_empty.png}}\only<2>{\includegraphics{../calc/fig/logit_persuasiveness.png}}
 \end{figure}
@@ -188,7 +209,7 @@ Describe dataset in more detail, include discussion of moral foundations diction
 \end{figure}
 \end{frame}
 
-\begin{frame}{Speaking the Same Moral Language is Effective}\centering
+\begin{frame}{Moral Congruence and Persuasiveness}\centering
 \begin{figure}
 \only<1>{\includegraphics{../calc/fig/logit_cosine_empty.png}}\only<2>{\includegraphics{../calc/fig/logit_cosine.png}}
 \end{figure}
@@ -197,25 +218,48 @@ Describe dataset in more detail, include discussion of moral foundations diction
 
 \section{Conclusion}
 
-% TODO: Add slide that summarizes theoretical conclusions
+\begin{frame}{Conclusion -- Discussions, Disagreement, and Morality}
+Two \emph{opposing} hypotheses:\\
+\vspace{2em}
+\begin{tabularx}{\textwidth}{lX}
+	\textcolor<2>{lightgray}{\textcolor<1>{beamer@sbred}{Moral Conviction}:} & \textcolor<2>{lightgray}{Arguments that involve \textcolor<1>{beamer@sbred}{moral appeals} will be \textcolor<1>{beamer@sbred}{less persuasive} than arguments that do not involve moral appeals.}\\
+	& \\
+	\emph{Moral Foundations}: & Arguments that involve \emph{moral appeals} will be \emph{more persuasive} than arguments that do not involve moral appeals, but only if they are \emph{congruent} with the opening statement's moral framework.
+\end{tabularx}
+\\\vspace{2em}
+\uncover<2>{\emph{$\Rightarrow$ Moral appeals are futile unless we're speaking the same moral language}}
+\end{frame}
 
-\begin{frame}{Conclusion}
-\begin{figure}
-	\includegraphics[height=.8\textheight]{fig/bad_opinions.png}
-\end{figure}
+\begin{frame}{Future Directions}
+\begin{itemize}
+	\item Collect new data, extract additional information about individual users (other subreddits etc.)
+	\item Survey users on \texttt{/r/ChangeMyView}
+	\item Experimental manipulation of opening statements
+	\item Discussions in the lab
+	\item \textbf{\emph{...}}
+\end{itemize}
 \end{frame}
 
 \begin{frame}%[allowframebreaks]
-\begin{center}
-	{\Large \emph{Thank you very much for your attention!}}\\ \vspace{2em}
-	Manuscript and code available at:\\
-	%\emph{\texttt{https://github.com/pwkraft/mft}}\\
-	\emph{\texttt{https://github.com/pwkraft/cmv}}\\ \vspace{2em}
-	Comments, questions?\\
-	\emph{\faEnvelopeO\hspace{.5em}\texttt{kraftp@uwm.edu}}\\\vspace{2em}
-	\emph{\faGlobe\hspace{.5em}\texttt{pwkraft.github.io}}\\
-	\emph{\faTwitter\hspace{.5em}\texttt{@patrickwkraft}}\\
-\end{center}
+\begin{columns}
+	\begin{column}{.6\textwidth}
+		\begin{center}
+			{\Large \emph{Thank you for your attention!}}\\ \vspace{2em}
+			Manuscript and code available at:\\
+			\emph{\texttt{https://github.com/pwkraft/cmv}}\\ \vspace{2em}
+			Comments, questions?\\
+			\emph{\faEnvelopeO\hspace{.5em}\texttt{kraftp@uwm.edu}}\\\vspace{2em}
+			\emph{\faGlobe\hspace{.5em}\texttt{pwkraft.github.io}}\\
+			\emph{\faTwitter\hspace{.5em}\texttt{@patrickwkraft}}\\
+		\end{center}
+	\end{column}
+	\begin{column}{.4\textwidth}
+		\begin{figure}
+			\includegraphics[width=\textwidth]{fig/bad_opinions.png}
+		\end{figure}
+	\end{column}
+\end{columns}
+
 \end{frame}
 
 \section*{Content}
@@ -233,33 +277,36 @@ Describe dataset in more detail, include discussion of moral foundations diction
 \small\tableofcontents %[hideallsubsections]
 \end{frame}
 
-\section{Moral Language in Opening Statements that Received a $\Delta$}
-\begin{frame}{Moral Language in Opening Statements that Received a $\Delta$}
+\section{Topic Differences and Persuadability}
+\begin{frame}{Topic Differences and Persuadability}
+\begin{figure}
+	\includegraphics[width=\textwidth]{../calc/fig/stm_op_diff.png}
+\end{figure}
+\end{frame}
+
+\section{Overall Moral Language in Opening Statements that Awarded a $\Delta$}
+\begin{frame}{Overall Moral Language in Opening Statements that Awarded a $\Delta$}
 \begin{figure}
 	\includegraphics{../calc/fig/mft_op_all.png}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Moral Language in Opening Statements that Received a $\Delta$}
+\section{Individual Moral Foundations in Opening Statements that Awarded a $\Delta$}
+\begin{frame}{Individual Moral Foundations in Opening Statements that Awarded a $\Delta$}
 \begin{figure}
 	\includegraphics{../calc/fig/mft_op_individual.png}
 \end{figure}
 \end{frame}
 
-\section{Difference in Response Length}
-\begin{frame}{Difference in Response Length}
+\section{Argument Length and Persuasiveness}
+\begin{frame}{Argument Length and Persuasiveness}
 \begin{figure}
 	\includegraphics{../calc/fig/wordcount_violin.png}
 \end{figure}
 \end{frame}
 
-\section{Topic Differences in Persuadability}
-\begin{frame}{Topic Differences in Persuadability}
-\begin{figure}
-\includegraphics[width=\textwidth]{../calc/fig/stm_op_diff.png}
-\end{figure}
-\end{frame}
 
+\section{References}
 \begin{frame} %<beamer:0> % hide references
   \frametitle{References}
   \def\newblock{\hskip .11em plus .33em minus .07em}
