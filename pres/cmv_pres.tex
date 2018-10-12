@@ -67,8 +67,8 @@
 \end{figure}
 \end{frame}
 % - My background: political psychology
-% - I study how people justify their political preferences in their own words
-% - Ultimately, I am interested in exploring how citizens talk to each other and influence each other's opinions
+% - I study how people describe and justify their political preferences
+% - Ultimately, I am interested in exploring how citizens engage in political discussions and influence each other's opinions
 % - Why does this matter?
 
 
@@ -79,20 +79,26 @@
 \includegraphics[width=\textwidth]{fig/polarization_large.jpeg}
 \end{figure}
 \end{frame}
-% - We live in polarized times, lot's of political disagreement
-% - This is driven by heightened partisanship, affective polarization, and increasing moralization of politics
-% - Some research suggests that social interaction and conversations in heterogeneous networks can decrease the divide between liberals and conservatives
-% - But research in moral psychology suggests that it might not be that easy.
+% - Politics in the US has become increasingly polarized
+% - There are increasing levels of affective polarization and negative partisanship
+% - Research: tribal politics can be overcome by fostering social interaction
+% - Conversations with people who holds different views increases mutual understanding and trust
+% - But can conversations in heterogeneous networks decrease the growing ideological divide?
+% - Research in moral psychology suggests that it might not be that easy!
+% - Politics is becoming increasingly moralized
 
 \begin{frame}{Political Disagreements and Moral Considerations}
 \begin{itemize}
-	\item<1-> \emph{Moral Conviction Literature}:\\Liberals and conservatives are less likely to compromise if they hold moral convictions about politics.\\
+	\item<1-> \emph{Moral Conviction literature}:\\Liberals and conservatives are less likely to compromise if they hold moral convictions about politics.\\
 	{\footnotesize\citep[e.g.,][]{skitka2014social,ryan2017no}}\\
 	\vspace{1em}
-	\item<2-> \emph{Moral Foundations Literature}:\\Liberals and conservatives are more likely to compromise if they focus on the same moral foundations.\\
+	\item<2-> \emph{Moral Foundations literature}:\\Liberals and conservatives are more likely to compromise if they focus on the same moral foundations.\\
 	{\footnotesize\citep[e.g.,][]{graham2009liberals,haidt2012righteous}}
 \end{itemize}
 \end{frame}
+% - Moral conviction literature says that we have to get morality out of politics to find agreement
+% - Moral foundations literature says that we can overcome disagreements as long as we focus on the same moral foundations
+% - Morality is always bad and counterproductive vs. morality can actually bring us together under the right circumstances.
 
 
 \section{Online Discussions and Description of Dataset}
@@ -105,6 +111,7 @@
 \end{figure}
 \end{frame}
 % - Online discussions as a perfect environment were people encounter very different viewpoints.
+% - Wikipedia: Reddit is a social news aggregation, web content rating, and discussion website. Registered members submit content to the site such as links, text posts, and images, which are then voted up or down by other members. Posts are organized by subject into user-created boards called "subreddits", which cover a variety of topics including news, science, movies, video games, music, books, fitness, food, and image-sharing. Submissions with more up-votes appear towards the top of their subreddit and, if they receive enough votes, ultimately on the site's front page.
 
 \subsection{The Subreddit \texttt{/r/ChangeMyView}}
 \begin{frame}{The Subreddit \texttt{/r/ChangeMyView}}
@@ -116,6 +123,10 @@
 	\only<5>{\includegraphics[width=.95\textwidth]{fig/reddit_screenshot.png}}
 \end{figure}
 \end{frame}
+% - Specifically, I am going to focus on a subreddit called ChangeMyView
+% - In this subreddit, users can post their opinion about any issue (including a detailed justification) and other users are invited to challenge the original poster's view.
+% - Most importantly, the OP then engages in discussions with the challengers and explicitly identifies posts that changed his or her mind by awarding a "Delta"
+% - Here is a screenshot of the website that I took yesterday, we can see that the discussions cover a range of different topics, some of which are clearly political. Also note the rules on the side.
 
 \subsection{Data Overview}
 \begin{frame}{Data Overview}
@@ -124,7 +135,7 @@ Dataset of more than \emph{10,000 discussions} on \texttt{/r/ChangeMyView}:
 \begin{itemize}
 	\item Posted between January 2013 and May 2015
 	\item Includes \emph{matched pairs} of successful and unsuccessful arguments
-	\item Compiled by \citet{tan2016winning}, who studied \emph{linguistic features} (e.g., use of personal pronouns) and differences in style (formatting etc.) that predict persuasiveness
+	\item Compiled by \citet{tan2016winning}, who studied \emph{linguistic features} (e.g., use of personal pronouns) and \emph{differences in style} (formatting etc.) that predict persuasiveness
 	\vspace{1em}
 	\item \emph{This analysis}: Exploring the role of \emph{moral appeals} in facilitating or inhibiting compromise
 \end{itemize}
@@ -189,7 +200,7 @@ Dataset of more than \emph{10,000 discussions} on \texttt{/r/ChangeMyView}:
 \large{\emph{Question:}\\Which of two lexically similar arguments is the successful one?}
 \end{frame}
 
-\begin{frame}{Moral foundations and Persuasiveness}
+\begin{frame}{Moral Foundations and Persuasiveness}
 \begin{figure}
 	\only<1>{\includegraphics{../calc/fig/logit_persuasiveness_empty.png}}\only<2>{\includegraphics{../calc/fig/logit_persuasiveness.png}}
 \end{figure}
