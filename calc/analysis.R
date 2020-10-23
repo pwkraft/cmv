@@ -779,3 +779,4 @@ ggplot(data_op, aes(x=political)) + ylim(0, nrow(data_op)) +
   labs(y="Number of Discussion", x="Political") +
   geom_bar() + plot_default
 ggsave("fig/political.pdf", width = 2.5, height = 2)
+ggsave("fig/political.png", width = 2.5, height = 2)
