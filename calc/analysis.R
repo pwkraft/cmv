@@ -10,13 +10,13 @@ library(xtable)
 
 
 ## load data
-load("out/cmv_data.Rdata")
+load("calc/out/cmv_data.Rdata")
 
 ## load dictionary
-dict <- dictionary(file="in/moral foundations dictionary.dic", format="LIWC")
+dict <- dictionary(file="calc/in/moral foundations dictionary.dic", format="LIWC")
 
 ## load topic overview for each discussion
-doc_topic <- read.csv("out/doc_topic.csv") %>%
+doc_topic <- read.csv("calc/out/doc_topic.csv") %>%
   mutate(op_title_raw = data_op$title_raw) %>%
   as_tibble()
 
@@ -25,7 +25,7 @@ table(unique(data_pair$op_title_raw) %in% unique(data_op$title_raw)) # note that
 data_pair <- left_join(data_pair, doc_topic)
 
 ## load auxiliary functions
-source("func.R")
+source("calc/func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
@@ -37,7 +37,7 @@ plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fil
 ### Overview: General persuadability
 #####################################
 
-data_op <- data_op %>% 
+data_op <- data_op %>%
   mutate(Change = factor(Delta, labels = c("No", "Yes")),
          political = doc_topic$political)
 
@@ -70,7 +70,7 @@ ggsave("fig/delta_political.png", width = 2.5, height = 2, dpi = 400)
 #######################################
 
 ## Compute percentage of moral word counts in original posts
-mft_op <- data_op[,c("title","text")] %>% 
+mft_op <- data_op[,c("title","text")] %>%
   apply(1, paste, collapse=" ") %>%
   countMFT(dict) %>% bind_cols(data_op) %>% as_tibble()
 
@@ -86,25 +86,25 @@ plot_df <- mft_op %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
 
 ## Create plot
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
-  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) +
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   plot_default + theme(legend.title = element_blank())
 ggsave("fig/persuadability.pdf", height=2.5, width=6)
 
 ## same plot for presentation
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
-  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) +
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   plot_default + theme(legend.title = element_blank(), legend.position = "bottom")
 ggsave("fig/persuadability.png", height=3, width=4.5, dpi = 400)
 
 ## empty plot for presentation
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
-  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) +
+  geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   plot_empty + theme(legend.title = element_blank(), legend.position = "bottom")
 ggsave("fig/persuadability_empty.png", height=3, width=4.5, dpi = 400)
@@ -131,9 +131,9 @@ mft_op %>%
   group_by(foundation, Delta, Change) %>%
   summarise(mean = mean(proportion), sd = sd(proportion), n = n()) %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se) %>%
-  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) + 
+  ggplot(aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shape=Change)) +
   geom_point(position = position_nudge(y=.1-.2*plot_df$Delta)) + plot_default +
-  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) + 
+  geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   theme(legend.title = element_blank())
 ggsave("fig/persuadability_political.pdf", height=2.5, width=6)
@@ -177,7 +177,7 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
          cihi = avg + 1.96 * se,
          glabel = factor(group, labels=c("Root Response","Full Response Path"))) %>%
   ggplot(aes(x = avg, xmin = cilo, xmax = cihi, y = glabel)) +
-  geom_point() + geom_errorbarh(height=0) + 
+  geom_point() + geom_errorbarh(height=0) +
   geom_vline(xintercept = 0, col = "grey") + plot_default +
   labs(y = NULL, x="Difference in Word Count\n(Change - No Change)")
 ggsave("fig/wordcount.pdf", height=1.5, width=3)
@@ -186,11 +186,11 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
        root_nterm = data_pair$pos_root_nterm - data_pair$neg_root_nterm) %>%
   gather(key = group, value = nterm) %>%
   mutate(glabel = factor(group, labels=c("Root\nResponse","Full\nResponse\nPath"))) %>%
-  ggplot(aes(y=nterm, x=glabel, fill=glabel)) + 
+  ggplot(aes(y=nterm, x=glabel, fill=glabel)) +
   geom_hline(yintercept = 0, col="grey") +
   geom_violin(alpha = .4) + plot_default +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
-  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
+  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) +
   theme(legend.position="none") + coord_flip()
 ggsave("fig/wordcount_violin.pdf", width = 6.5, height = 2)
 ggsave("fig/wordcount_violin.png", width = 4.5, height = 3, dpi=400)
@@ -207,11 +207,11 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
   filter(political) %>%
   gather(key = group, value = nterm, - political) %>%
   mutate(glabel = factor(group, labels=c("Root\nResponse","Full\nResponse\nPath"))) %>%
-  ggplot(aes(y=nterm, x=glabel, fill=glabel)) + 
+  ggplot(aes(y=nterm, x=glabel, fill=glabel)) +
   geom_hline(yintercept = 0, col="grey") +
   geom_violin(alpha = .4) + plot_default +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
-  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) + 
+  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) +
   theme(legend.position="none") + coord_flip()
 ggsave("fig/wordcount_violin_political.pdf", width = 6.5, height = 2)
 ggsave("fig/wordcount_violin_political.png", width = 6.5, height = 2, dpi=400)
@@ -254,8 +254,8 @@ plot_df <- mft_op_text %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
 
 ## Create plot
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) + 
-  geom_point() + plot_default + geom_errorbarh(height=0) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + plot_default + geom_errorbarh(height=0) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   theme(legend.title = element_blank())
 ggsave("fig/mft_op_individual.pdf", height=2.5, width=4)
@@ -285,28 +285,28 @@ plot_df <- mft_diff %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
 
 ## Create plot
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/persuasiveness.pdf", height=2.5, width=6)
 
 ## Create plot (for poster)
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ggsave("fig/persuasiveness.png", height=3, width=4.5, dpi=400)
 
 ## empty plot
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) +
   geom_vline(xintercept = 0, col="grey") + plot_empty +
-  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ggsave("fig/persuasiveness_empty.png", height=3, width=4.5)
@@ -322,10 +322,10 @@ plot_df <- na.omit(mft_diff[rep(data_pair$political, 3),]) %>%
   group_by(foundation, type) %>%
   summarise(mean = mean(proportion), sd = sd(proportion), n = length(na.omit(proportion))) %>%
   mutate(se = sd/sqrt(n), cilo = mean - 1.96 * se, cihi = mean + 1.96 * se)
-ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) + 
+ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=type)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/persuasiveness_political.pdf", height=2.5, width=6)
@@ -344,10 +344,10 @@ mft_diff %>% filter(type=="3. trunc") %>%
   split(.$Foundation) %>% map(~t.test(.$Proportion))
 
 ## Test differences on all foundations combined
-mft_diff %>% 
+mft_diff %>%
   select(-type) %>%
   apply(1, sum) %>%
-  split(mft_diff$type) %>% 
+  split(mft_diff$type) %>%
   map(t.test)
 
 
@@ -399,32 +399,32 @@ for(i in 1:nrow(data_pair)){
 plot_df <- cos_res %>%
   gather(key = type, value = cos) %>%
   mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
-                                      "Truncated Root Response"))) %>% 
+                                      "Truncated Root Response"))) %>%
   group_by(type) %>%
-  summarize(avg = mean(cos, na.rm = T), 
+  summarize(avg = mean(cos, na.rm = T),
             sd = sd(cos, na.rm = T),
             n = sum(!is.na(cos)),
             se = sd/sqrt(n),
-            cilo = avg - 1.96 * se, 
+            cilo = avg - 1.96 * se,
             cihi = avg + 1.96 * se)
 
 ## Create plot
-ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine.pdf", width = 4, height = 2)
 
 ## Create plot
-ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine.png", width = 6, height = 4, dpi=400)
 
 ## empty plot
-ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(plot_df, aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_empty + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine_empty.pdf", width = 4, height = 2)
@@ -433,16 +433,16 @@ ggsave("fig/cosine_empty.pdf", width = 4, height = 2)
 filter(cos_res, data_pair$political) %>%
   gather(key = type, value = cos) %>%
   mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
-                                      "Truncated Root Response"))) %>% 
+                                      "Truncated Root Response"))) %>%
   group_by(type) %>%
-  summarize(avg = mean(cos, na.rm = T), 
+  summarize(avg = mean(cos, na.rm = T),
             sd = sd(cos, na.rm = T),
             n = sum(!is.na(cos)),
             se = sd/sqrt(n),
-            cilo = avg - 1.96 * se, 
+            cilo = avg - 1.96 * se,
             cihi = avg + 1.96 * se) %>%
-  ggplot(aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+  ggplot(aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine_political.pdf", width = 4, height = 2)
@@ -463,12 +463,12 @@ tmp$type = factor(colnames(cos_res), labels=c("Full Response Path", "Root Respon
 cos_res %>% gather(key = type, value = cos) %>%
   mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
                                       "Truncated Root Response"))) %>%
-  ggplot(aes(x=cos, fill = type)) + 
-  geom_density(alpha = .2) + plot_default + 
+  ggplot(aes(x=cos, fill = type)) +
+  geom_density(alpha = .2) + plot_default +
   geom_vline(aes(xintercept = y, col = type), data = tmp) +
   geom_vline(aes(xintercept = ymin, col = type), lty="dashed", data = tmp) +
   geom_vline(aes(xintercept = ymax, col = type), lty="dashed", data = tmp) +
-  facet_wrap(~type, ncol = 1, scale = "free_x") + ylab("Density") + 
+  facet_wrap(~type, ncol = 1, scale = "free_x") + ylab("Density") +
   xlab("Difference in MFT Congruence\n(Change - No Change)") +
   theme(legend.position="none")
 ggsave("fig/cosine_density.pdf", width = 6, height = 5)
@@ -477,11 +477,11 @@ ggsave("fig/cosine_density.pdf", width = 6, height = 5)
 cos_res %>% gather(key = type, value = cos) %>%
   mutate(type = factor(type, labels=c("Full Response Path", "Root Response",
                                       "Truncated Root Response"))) %>%
-  ggplot(aes(y=cos, x=type, fill=type)) + 
+  ggplot(aes(y=cos, x=type, fill=type)) +
   geom_hline(yintercept = 0, col="grey") +
   geom_violin(alpha = .4) + plot_default +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
-  labs(y="Difference in MFT Congruence\n(Change - No Change)", x=NULL) + 
+  labs(y="Difference in MFT Congruence\n(Change - No Change)", x=NULL) +
   theme(legend.position="none")
 ggsave("fig/cosine_violin.pdf", width = 6, height = 5)
 
@@ -543,16 +543,16 @@ res <- rbind(sim(m2[[1]], iv=data.frame(text=minmax(cos_red$text)), cluster = co
              sim(m2[[3]], iv=data.frame(trunc=minmax(cos_red$trunc)), cluster = cos_red$opid))
 res$ivlab <- factor(res$iv, labels = c("Full Response Path","Root Response","Truncated Root Response"))
 
-ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_default + labs(y = NULL, x = "Change in P(Opinion Change)") +
   theme(legend.position="none")
 ggsave("fig/logit_cosine.pdf", width = 4, height = 2)
 ggsave("fig/logit_cosine.png", width = 4.5, height = 3)
 
 ## empty plot for presentation
-ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_empty + labs(y = NULL, x = "Change in P(Opinion Change)") +
   theme(legend.position="none")
 ggsave("fig/logit_cosine_empty.png", width = 4.5, height = 3)
@@ -563,12 +563,12 @@ names(m2[[2]]$coefficients)[2] <- "cosine"
 names(m2[[3]]$coefficients)[2] <- "cosine"
 
 ## table for appendix
-latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
-            function of moral congruence with OPs' opening statements (measured via cosine similarity in 
+latexTable(m2, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a
+            function of moral congruence with OPs' opening statements (measured via cosine similarity in
             MFT dictionary results). Positive coefficients indicate higher probability of changing the OPs'
-            mind ($\\Delta$ awarded). 
+            mind ($\\Delta$ awarded).
             Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
-            \\ref{fig:cosine} in the main text.", "Logit models predicting argument persuasiveness as a 
+            \\ref{fig:cosine} in the main text.", "Logit models predicting argument persuasiveness as a
             function of moral congruence with OPs' opening statements")
            , label="tab:cosine", align="lccc"
            , varlabs=list("cosine"="Moral Congruence","(Intercept)"="Intercept")
@@ -593,8 +593,8 @@ res <- rbind(sim(m2pol[[1]], iv=data.frame(text=minmax(cos_pol$text)), cluster =
              sim(m2pol[[3]], iv=data.frame(trunc=minmax(cos_pol$trunc)), cluster = cos_pol$opid))
 res$ivlab <- factor(res$iv, labels = c("Full Response Path","Root Response","Truncated Root Response"))
 
-ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) + 
-  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) + 
+ggplot(res, aes(x=mean, xmin=cilo, xmax=cihi, y=reorder(ivlab, 3:1), col = ivlab, shape = ivlab)) +
+  geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
   plot_default + labs(y = NULL, x = "Change in P(Opinion Change)") +
   theme(legend.position="none")
 ggsave("fig/logit_cosine_political.pdf", width = 4, height = 2)
@@ -623,11 +623,11 @@ mft_trunc <- bind_rows(mutate(mft_neg_trunc, delta = 0, type = "3. trunc"),
 
 ## estimate logits w/ reduced data
 m3 <- NULL
-m3[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_text, family = binomial("logit"))
-m3[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_root, family = binomial("logit"))
-m3[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_trunc, family = binomial("logit"))
 lapply(m3, summary)
 lapply(m3, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text$opid)))
@@ -639,14 +639,14 @@ res <- rbind(sim(m3[[1]], iv=data.frame(Care=minmax(mft_text$Care)), cluster = m
              sim(m3[[1]], iv=data.frame(Authority=minmax(mft_text$Authority)), cluster = mft_text$opid),
              sim(m3[[1]], iv=data.frame(Sanctity=minmax(mft_text$Sanctity)), cluster = mft_text$opid),
              sim(m3[[1]], iv=data.frame(General=minmax(mft_text$General)), cluster = mft_text$opid),
-             
+
              sim(m3[[2]], iv=data.frame(Care=minmax(mft_root$Care)), cluster = mft_root$opid),
              sim(m3[[2]], iv=data.frame(Fairness=minmax(mft_root$Fairness)), cluster = mft_root$opid),
              sim(m3[[2]], iv=data.frame(Loyalty=minmax(mft_root$Loyalty)), cluster = mft_root$opid),
              sim(m3[[2]], iv=data.frame(Authority=minmax(mft_root$Authority)), cluster = mft_root$opid),
              sim(m3[[2]], iv=data.frame(Sanctity=minmax(mft_root$Sanctity)), cluster = mft_root$opid),
              sim(m3[[2]], iv=data.frame(General=minmax(mft_root$General)), cluster = mft_root$opid),
-             
+
              sim(m3[[3]], iv=data.frame(Care=minmax(mft_trunc$Care)), cluster = mft_trunc$opid),
              sim(m3[[3]], iv=data.frame(Fairness=minmax(mft_trunc$Fairness)), cluster = mft_trunc$opid),
              sim(m3[[3]], iv=data.frame(Loyalty=minmax(mft_trunc$Loyalty)), cluster = mft_trunc$opid),
@@ -659,27 +659,27 @@ res <- rbind(sim(m3[[1]], iv=data.frame(Care=minmax(mft_text$Care)), cluster = m
                                                     "Authority", "Sanctity", "General"))))
 
 ## Create plot
-ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/logit_persuasiveness.pdf", height=2.5, width=6)
 
 ## same plot for presentation
-ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ggsave("fig/logit_persuasiveness.png", height=3, width=4.5, dpi=400)
 
-ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) +
   geom_vline(xintercept = 0, col="grey") +
-  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   plot_empty +
   theme(legend.title = element_blank(), legend.position = "bottom")
@@ -688,12 +688,12 @@ ggsave("fig/logit_persuasiveness_empty.png", height=3, width=4.5, dpi=400)
 
 
 ## table for appendix
-latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a 
-            function of moral word use (measured via MFT dictionary proportions). 
+latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argument persuasiveness as a
+            function of moral word use (measured via MFT dictionary proportions).
             Positive coefficients indicate higher probability of changing the OPs'
-            mind ($\\Delta$ awarded). 
+            mind ($\\Delta$ awarded).
             Standard errors (clustered by discussion thread) in parentheses. Estimates are used for Figure
-            \\ref{fig:persuasiveness} in the main text.", "Logit models predicting argument persuasiveness as a 
+            \\ref{fig:persuasiveness} in the main text.", "Logit models predicting argument persuasiveness as a
             function of moral word use")
            , label="tab:persuasiveness", align="lccc"
            , varlabs=list(Care="Care",Fairness="Fairness",Loyalty="Loyalty",Authority="Authority"
@@ -702,15 +702,15 @@ latexTable(m3, cluster = cos_red$opid, caption=c("Logit models predicting argume
            , file="tab/persuasiveness.tex"
            , table.placement="ht", caption.placement="top"
            #, size="footnotesize"
-           ) 
+           )
 
 ## check all foundations combined
 m4 <- NULL
-m4[[1]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+m4[[1]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General),
                data = mft_text, family = binomial("logit"))
-m4[[2]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+m4[[2]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General),
                data = mft_root, family = binomial("logit"))
-m4[[3]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General), 
+m4[[3]] <- glm(delta ~ I(Care + Fairness + Loyalty + Authority + Sanctity + General),
                data = mft_trunc, family = binomial("logit"))
 lapply(m4, summary)
 lapply(m4, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text$opid)))
@@ -723,11 +723,11 @@ mft_text_pol <- filter(mft_text, political)
 mft_root_pol <- filter(mft_root, political)
 mft_trunc_pol <- filter(mft_trunc, political)
 m3pol <- NULL
-m3pol[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3pol[[1]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_text_pol, family = binomial("logit"))
-m3pol[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3pol[[2]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_root_pol, family = binomial("logit"))
-m3pol[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General, 
+m3pol[[3]] <- glm(delta ~ Care + Fairness + Loyalty + Authority + Sanctity + General,
                data = mft_trunc_pol, family = binomial("logit"))
 lapply(m3pol, summary)
 lapply(m3pol, function(x) coeftest(x, vcov = vcovCL(x, cluster=mft_text_pol$opid)))
@@ -739,14 +739,14 @@ res <- rbind(sim(m3pol[[1]], iv=data.frame(Care=minmax(mft_text_pol$Care)), clus
              sim(m3pol[[1]], iv=data.frame(Authority=minmax(mft_text_pol$Authority)), cluster = mft_text_pol$opid),
              sim(m3pol[[1]], iv=data.frame(Sanctity=minmax(mft_text_pol$Sanctity)), cluster = mft_text_pol$opid),
              sim(m3pol[[1]], iv=data.frame(General=minmax(mft_text_pol$General)), cluster = mft_text_pol$opid),
-             
+
              sim(m3pol[[2]], iv=data.frame(Care=minmax(mft_root_pol$Care)), cluster = mft_root_pol$opid),
              sim(m3pol[[2]], iv=data.frame(Fairness=minmax(mft_root_pol$Fairness)), cluster = mft_root_pol$opid),
              sim(m3pol[[2]], iv=data.frame(Loyalty=minmax(mft_root_pol$Loyalty)), cluster = mft_root_pol$opid),
              sim(m3pol[[2]], iv=data.frame(Authority=minmax(mft_root_pol$Authority)), cluster = mft_root_pol$opid),
              sim(m3pol[[2]], iv=data.frame(Sanctity=minmax(mft_root_pol$Sanctity)), cluster = mft_root_pol$opid),
              sim(m3pol[[2]], iv=data.frame(General=minmax(mft_root_pol$General)), cluster = mft_root_pol$opid),
-             
+
              sim(m3pol[[3]], iv=data.frame(Care=minmax(mft_trunc_pol$Care)), cluster = mft_trunc_pol$opid),
              sim(m3pol[[3]], iv=data.frame(Fairness=minmax(mft_trunc_pol$Fairness)), cluster = mft_trunc_pol$opid),
              sim(m3pol[[3]], iv=data.frame(Loyalty=minmax(mft_trunc_pol$Loyalty)), cluster = mft_trunc_pol$opid),
@@ -759,10 +759,10 @@ res <- rbind(sim(m3pol[[1]], iv=data.frame(Care=minmax(mft_text_pol$Care)), clus
                                                     "Authority", "Sanctity", "General"))))
 
 ## Create plot
-ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) + 
+ggplot(res, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=typelab, shape=typelab)) +
   geom_vline(xintercept = 0, col="grey") + plot_default +
-  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
-  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) + 
+  geom_point(position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
+  geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(res$typelab)-1)/5)) +
   ylab("Moral Foundation") + xlab("Difference in P(Opinion Change)") +
   theme(legend.title = element_blank())
 ggsave("fig/logit_persuasiveness_political.pdf", height=2.5, width=6)
