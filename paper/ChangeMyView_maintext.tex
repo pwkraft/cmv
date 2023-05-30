@@ -132,6 +132,14 @@ Conversations on CMV range across a variety of topics such as economic issues, g
 \caption[Average topic proportions in opening statements on \texttt{/r/ChangeMyView/}]{Average topic proportions in opening statements on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
 \end{figure}
 
+In the following, I exclude discussions related to distinctly non-political topics (e.g., ``Food'' or ``Entertainment''). The following figure shows the total number of discussions that focus on political versus non-political issues (based on the LDA results). It is worth noting that including discussions focusing on non-political issues does not change the substantive results of the analysis presented in the remainder of this chapter.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/political.pdf}
+	\caption[Number of original posts on \texttt{/r/ChangeMyView/} that focus on political issues]{Number of discussions on \texttt{/r/ChangeMyView/} that focus on political versus non-political issues (based on the LDA results).}\label{fig:political}
+\end{figure}
+
 The Internet is not necessarily known as a place where people are willing to change their mind about \textit{any} issue. Yet, CMV maintains an open atmosphere that encourages users to acknowledge arguments that change their perspective. The rules of the subreddit state that users should ``Award a delta if you've acknowledged a change in your view. [...] Please note that a delta is not a sign of `defeat', it is just a token of appreciation towards a user who helped tweak or reshape your opinion. A delta also doesn't mean the discussion has ended.''\footnote{ \url{https://www.reddit.com/r/changemyview/wiki/rules}, last accessed May 29, 2023} Of course, this does not imply that every OP awards a $\Delta$ throughout a conversation. Figure~\ref{fig:delta} displays the number of discussion threads included in the dataset where OPs indicated that one of the responses changed their mind.
 
 \begin{figure}[ht]
@@ -151,7 +159,7 @@ More important for the purposes of this paper is the fact that the percentage of
 
 \begin{figure}[ht]
 \centering
-\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/persuadability.pdf}
+\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/persuadability_political.pdf}
 \caption[Moral foundations and persuadability]{Moral foundations and persuadability: Average percentage of dictionary terms relative to the total number of words in each opening statement beginning a discussion, comparing discussions where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuadability}
 \end{figure}
 
@@ -177,7 +185,7 @@ The analyses reported below rely on this approach to select matched argument pai
 
 \begin{figure}[ht]
 \centering
-\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/mft_op_all.pdf}
+\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/mft_op_all_political.pdf}
 \caption[Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary]{Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary.}\label{fig:mft_op_all}
 \end{figure}
 
@@ -185,7 +193,7 @@ An important unresolved issue using this approach is that the matching procedure
 
 \begin{figure}[ht]
 \centering
-\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/wordcount_violin.pdf}
+\includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/wordcount_violin_political.pdf}
 \caption[Difference in response lengths between successful and unsuccessful counterarguments]{Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin}
 \end{figure}
 
@@ -196,17 +204,15 @@ As a first step to alleviate this concern, it is worth noting that I only examin
 %\subsection*{Appeals to Morality are Futile...}
 %\subsection*{Moral Appeals and Opinion Change}
 
-Recall that the moral conviction hypothesis posits that moralized arguments will be less persuasive than arguments that do not involve moral appeals. In order to test this proposition, I examine the argument pairs matched within discussions and compare MFT dictionary proportions between contributions that were successful in receiving a $\Delta$ and those that were unsuccessful. Figure~\ref{fig:persuasiveness} presents the results of logistic regressions predicting an argument's success in triggering opinion change as a function of moral language use. 
+Recall that the moral conviction hypothesis posits that moralized arguments will be less persuasive than arguments that do not involve moral appeals. In order to test this proposition, I examine the argument pairs matched within discussions and compare MFT dictionary proportions between contributions that were successful in receiving a $\Delta$ and those that were unsuccessful. Figure~\ref{fig:persuasiveness} displays the respective differences between matched argument pairs. Positive values indicate that arguments receiving a $\Delta$ contained a larger percentage of dictionary terms, and vice versa. Again, according to the literature on moral conviction, we would expect the opposite, namely that persuasive arguments should focus less on moral considerations. As discussed previously, the analyses are implemented for the full response path as well as focusing only on (truncated) root responses.
 
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/persuasiveness_political.pdf}
-\caption[Moral foundations and persuasiveness]{Moral foundations and persuasiveness: Change in predicted probability of opinion change ($\Delta$ awarded) when MFT dictionary term proportions are increased from their minimum (no moral terms mentioned) to their empirical maximum, holding the remaining foundations constant at their mean (including 95\% confidence intervals). Estimates are based on logit models with standard errors clustered by discussion thread. Full model results are displayed in the appendix, Table~\ref{tab:persuasiveness}.}\label{fig:persuasiveness}
+\caption[Moral foundations and persuasiveness]{Moral foundations and persuasiveness: Average difference of dictionary term percentages relative to the total number of words in each post, comparing counterarguments where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuasiveness}
 \end{figure}
 
-The figure displays the marginal effect on the probability of opinion change when increasing MFT dictionary proportions for each foundation from zero to their respective empirical maximum. Positive values indicate that arguments with larger proportions of dictionary terms belonging to a given foundation have a higher probability of receiving a $\Delta$. Again, according to the literature on moral conviction, we would expect the opposite, namely that arguments focusing on moral considerations should be less persuasive. As discussed in the previous section, the analyses are implemented for the full response path as well as focusing only on (truncated) root responses.
-
-The results show that evoking moral considerations in counterarguments does not affect the likelihood of changing the OPs' view on a given issue. This finding furthermore holds after combining all dictionary term proportions in an aggregate measure of moralization across foundations ($p > .45$). Moralized arguments as such are therefore no less persuasive and do not reduce compromise, a result that is not consistent with the moral conviction literature.
+The results show that evoking moral considerations in counterarguments does not affect the likelihood of changing the OPs' view on a given issue. This finding furthermore holds after combining all moral terms in an aggregate dictionary and comparing matched proportions between argument pairs ($p > .34$). Moralized arguments as such are therefore no less persuasive and do not reduce compromise, a result that is not consistent with the moral conviction literature.
 
 
 
@@ -218,13 +224,13 @@ In contrast to the moral conviction hypothesis, moral foundations theory suggest
 \end{equation}
 where $\vec{a}$ is the vector of dictionary counts in the OP's opening statement and $\vec{b}$ is the respective vector for a response. The measure ranges from 0 (no moral overlap) to 1 (equal emphasis on the same moral foundations). Moral congruence is also set to zero if either one of the statements does not contain a single term included in the dictionary.
 
-To reiterate, the moral foundations hypothesis posits that arguments involving moral appeals will be more persuasive than arguments that do not involve moral appeals, but only if they are congruent with the opening statement's moral framework. In contrast, the moral conviction literature would predict a negative effect of moral congruence, since it implies that both discussants, who hold opposing views on an issue, use moralized arguments that ultimately reduce the potential for compromise. Figure~\ref{fig:cosine} displays the effect of moral congruence on argument success. Similar to the previous analysis presented in Figure~\ref{fig:persuasiveness}, it shows the predicted change in the probability of persuasion based on a logistic regression model, but now examining the effect of an increase in MFT congruence from its minimum to its maximum. Positive values indicate that posts were more likely to be awarded a $\Delta$ by the OP if they used language that is morally congruent with the OP's opening statement. On average, emphasizing the same moral foundations as the opening statement (as compared to no overlap in moral language at all) increases the probability of opinion change by about 7 percentage points. These results are consistent with MFT as moral congruence is associated with a higher probability of opinion change.
+To reiterate, the moral foundations hypothesis posits that arguments involving moral appeals will be more persuasive than arguments that do not involve moral appeals, but only if they are congruent with the opening statement's moral framework. In contrast, the moral conviction literature would predict a negative effect of moral congruence, since it implies that both discussants, who hold opposing views on an issue, use moralized arguments that ultimately reduce the potential for compromise. Figure~\ref{fig:cosine} displays the difference in moral congruence between successful and unsuccessful arguments. Positive values indicate that posts that were ultimately awarded a $\Delta$ by the OP used moral appeals that had a higher congruence with the OP's opening statement. These results are consistent with MFT as moral congruence is associated with a higher probability of opinion change.
 
 %\clearpage
 \begin{figure}[ht]
 \centering
 \includegraphics{/data/Dropbox/Uni/projects/2017/cmv/calc/fig/cosine_political.pdf}
-\caption[Moral congruence and persuasiveness]{Moral congruence and persuasiveness: Change in predicted probability of opinion change ($\Delta$ awarded) when MFT congruence is increased from its minimum (no overlap in moral terms) to their empirical maximum (equal emphasis on each moral foundation) (including 95\% confidence intervals). Estimates are based on logit models with standard errors clustered by discussion thread. Full model results are displayed in the appendix, Table~\ref{tab:cosine}.}\label{fig:cosine}
+\caption[Moral congruence and persuasiveness]{Moral congruence and persuasiveness: Average differences in MFT congruence with opening statements comparing successful and unsuccessful counterarguments (including 95\% confidence intervals).}\label{fig:cosine}
 \end{figure}
 
 The positive relationship between moral congruence and persuasiveness remains significant irrespective of whether I examine the content of the entire discussion (full response path), or restrict the analysis to each user's first post challenging the OP (root response). However, the mean difference in moral congruence does not reach conventional levels of statistical significance after truncating root responses to the same length for each pair. This finding could either suggest that the truncation procedure introduces too much noise to recover any differences, or alternatively that the measure of moral congruence is confounded by the differential length of successful and unsuccessful posts. The former seems less likely to be an issue because I recovered only marginal differences in raw dictionary term percentages between raw and truncated rooted responses in the previous section.
@@ -246,8 +252,10 @@ The present paper addresses these questions by contrasting two strands of resear
 
 Both competing hypotheses are tested by relying on a unique dataset of online discussions on the Reddit community CMV compiled by \cite{tan2016winning}. Overall, the empirical patterns support moral foundations theory and stand in contrast to predictions rooted in the literature on moral conviction. While general levels of moralization have little impact on argument persuasiveness, the results show that an argument's moral congruence with the discussant's opening statement increases the likelihood of changing his or her view. As such, moral appeals can facilitate compromise and change people's minds as long as they are consistent with their existing moral frameworks. Rather than automatically driving people further apart, moral appeals might therefore help bridge the growing divide between liberals and conservatives. More broadly, the paper shows that the field of moral psychology stands to benefit from a further integration of two prominent theoretical frameworks that developed largely independent of each other and---unfortunately---still exhibit relatively little interconnections.
 
-At the same time, the analysis presented here has important limitations. One of the biggest potential issues is the fact that the matched argument pairs differ in length, which may confound the relationship between morality and persuasiveness. I addressed this concern by only examining measures that are standardized by the total number of words in each post and by examining root responses in addition to full response paths. The results are largely robust to these varying specifications, with the important exception of the effect of moral congruence in the truncated root response. More generally, while it is a substantial advantage that the discussions on CMV cover a wide range of topics, it can be argued that some of them are ultimately irrelevant for moral considerations (such as software and technology). %\footnote{For example, users discussed the merits of the Windows operating system as compared to macOS X, which is obviously fruitless since Linux is superior to either of them and anyone who says otherwise is morally wrong.} 
-On the other hand, such inherently non-political and non-moral discussions should not induce any systematic biases between successful and non-successful arguments. Indeed, excluding discussions that focus on non-political issues does not change the substantive results of the analysis presented here (see Appendix~\ref{app:political}). I leave it to future research to leverage more controlled environments and focus on specific (political) issues---for example in the context of laboratory experiments. In contrast to framing studies conducted in the past, however, it is time to open the black box of conversations and directly examine the content of discussions in order to better understand the mechanisms underlying attitude change, persuasion, and compromise.
+At the same time, the analysis presented here has important limitations. One of the biggest potential issues is the fact that the matched argument pairs differ in length, which may confound the relationship between morality and persuasiveness. I addressed this concern by only examining measures that are standardized by the total number of words in each post and by examining root responses in addition to full response paths. The results are largely robust to these varying specifications, with the important exception of the effect of moral congruence in the truncated root response. %More generally, while it is a substantial advantage that the discussions on CMV cover a wide range of topics, it can be argued that some of them are ultimately irrelevant for moral considerations (such as software and technology). %\footnote{For example, users discussed the merits of the Windows operating system as compared to macOS X, which is obviously fruitless since Linux is superior to either of them and anyone who says otherwise is morally wrong.} 
+%On the other hand, such inherently non-political and non-moral discussions should not induce any systematic biases between successful and non-successful arguments. Indeed, excluding discussions that focus on non-political issues does not change the substantive results of the analysis presented here (see Appendix~\ref{app:political}). 
+% TODO: something about external validity here.
+I leave it to future research to leverage more controlled environments and focus on specific (political) issues---for example in the context of laboratory experiments. In contrast to framing studies conducted in the past, however, it is time to open the black box of conversations and directly examine the content of discussions in order to better understand the mechanisms underlying attitude change, persuasion, and compromise.
 
 
 

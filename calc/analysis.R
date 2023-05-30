@@ -211,9 +211,9 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
   geom_hline(yintercept = 0, col="grey") +
   geom_violin(alpha = .4) + plot_default +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width = .2) +
-  labs(y="Difference in Word Count\n(Change - No Change)", x=NULL) +
+  labs(y="Difference in Word Count\n(Opinion Change - No Change)", x=NULL) +
   theme(legend.position="none") + coord_flip()
-ggsave("fig/wordcount_violin_political.pdf", width = 6.5, height = 2)
+ggsave("calc/fig/wordcount_violin_political.pdf", width = 6.5, height = 2)
 ggsave("fig/wordcount_violin_political.png", width = 6.5, height = 2, dpi=400)
 
 
@@ -326,9 +326,9 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   geom_vline(xintercept = 0, col="grey") + plot_default +
   geom_point(position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
   geom_errorbarh(height=0, position = position_nudge(y=.2-(as.numeric(plot_df$type)-1)/5)) +
-  ylab("Moral Foundation") + xlab("Difference in MFT Percentages (Change - No Change)") +
+  ylab("Moral Foundation") + xlab("Difference in MFT Percentages\n(Opinion Change - No Change)") +
   theme(legend.title = element_blank())
-ggsave("fig/persuasiveness_political.pdf", height=2.5, width=6)
+ggsave("calc/fig/persuasiveness_political.pdf", height=2.5, width=6)
 
 ## Test differences on individual foundations
 mft_diff %>% filter(type=="1. text") %>%
@@ -443,9 +443,9 @@ filter(cos_res, data_pair$political) %>%
             cihi = avg + 1.96 * se) %>%
   ggplot(aes(x=avg, xmin=cilo, xmax=cihi, y=reorder(type, 3:1), col = type, shape = type)) +
   geom_vline(xintercept = 0, col = "grey") + geom_point() + geom_errorbarh(height = 0) +
-  plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Change - No Change)") +
+  plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Opinion Change - No Change)") +
   theme(legend.position="none")
-ggsave("fig/cosine_political.pdf", width = 4, height = 2)
+ggsave("calc/fig/cosine_political.pdf", width = 4, height = 2)
 
 
 ## test differences in cosine similarities
