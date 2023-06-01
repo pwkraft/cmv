@@ -110,7 +110,9 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=Change, shap
 ggsave("fig/persuadability_empty.png", height=3, width=4.5, dpi = 400)
 
 ## Test differences for each foundation (w/ Bonferroni correction)
-mft_op %>% select(Care:General, Delta) %>%
+mft_op %>%
+  filter(political == TRUE) %>%
+  select(Care:General, Delta) %>%
   gather(key = Foundation, value = Percentage, -Delta) %>%
   split(.$Foundation) %>%
   map(~t.test(.$Percentage~.$Delta)) %>%
@@ -118,7 +120,7 @@ mft_op %>% select(Care:General, Delta) %>%
   map_df(p.adjust, method = "bonferroni", n = 6)
 
 ## Test difference across all terms
-t.test(apply(mft_op[,1:6],1,sum)~mft_op$Delta)
+t.test(apply(mft_op[mft_op$political,1:6],1,sum)~mft_op$Delta[mft_op$political])
 
 ## Exclude posts that focus on non-political topics
 mft_op %>%
