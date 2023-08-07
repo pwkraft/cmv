@@ -58,10 +58,10 @@ ggsave("fig/delta_empty.png", width = 3.5, height = 3, dpi = 400)
 
 ## excluding non-political topics
 ggplot(filter(data_op, political), aes(x=Change)) + ylim(0, nrow(filter(data_op, political))) +
-  labs(y="Number of Discussion", x="Opinion Change") +
+  labs(y="Number of Discussions", x="Opinion Change") +
   geom_bar() + plot_default
-ggsave("fig/delta_political.pdf", width = 2.5, height = 2)
-ggsave("fig/delta_political.png", width = 2.5, height = 2, dpi = 400)
+ggsave("calc/fig/delta_political.pdf", width = 2.5, height = 2)
+ggsave("calc/fig/delta_political.png", width = 2.5, height = 2, dpi = 600)
 
 
 
@@ -138,8 +138,8 @@ mft_op %>%
   geom_errorbarh(height=0, position = position_nudge(y=.1-.2*plot_df$Delta)) +
   ylab("Moral Foundation") + xlab("Percentage of Dictionary Terms") +
   theme(legend.title = element_blank())
-ggsave("fig/persuadability_political.pdf", height=2.5, width=6)
-ggsave("fig/persuadability_political.png", height=2.5, width=6, dpi = 400)
+ggsave("calc/fig/persuadability_political.pdf", height=2.5, width=6)
+ggsave("calc/fig/persuadability_political.png", height=2.5, width=6, dpi = 600)
 
 
 ##########################
@@ -216,7 +216,7 @@ tibble(text_nterm = data_pair$pos_text_nterm - data_pair$neg_text_nterm,
   labs(y="Difference in Word Count\n(Opinion Change - No Change)", x=NULL) +
   theme(legend.position="none") + coord_flip()
 ggsave("calc/fig/wordcount_violin_political.pdf", width = 6.5, height = 2)
-ggsave("fig/wordcount_violin_political.png", width = 6.5, height = 2, dpi=400)
+ggsave("calc/fig/wordcount_violin_political.png", width = 6.5, height = 2, dpi=600)
 
 
 #######################################
@@ -238,8 +238,8 @@ tibble(mft = factor(apply(mft_op_pol, 1, sum) != 0,
   ggplot(aes(x=mft)) + ylim(0, nrow(mft_op_pol)) +
   labs(y="Number of Discussions", x="Any MFT Term Mentioned") +
   geom_bar() + plot_default
-ggsave("fig/mft_op_all_political.pdf", width = 2.5, height = 2)
-ggsave("fig/mft_op_all_political.png", width = 2.5, height = 2, dpi=400)
+ggsave("calc/fig/mft_op_all_political.pdf", width = 2.5, height = 2)
+ggsave("calc/fig/mft_op_all_political.png", width = 2.5, height = 2, dpi=600)
 
 
 #######################################
@@ -331,6 +331,7 @@ ggplot(plot_df, aes(y=foundation, x=mean, xmin=cilo, xmax=cihi, col=type, shape=
   ylab("Moral Foundation") + xlab("Difference in MFT Percentages\n(Opinion Change - No Change)") +
   theme(legend.title = element_blank())
 ggsave("calc/fig/persuasiveness_political.pdf", height=2.5, width=6)
+ggsave("calc/fig/persuasiveness_political.png", height=2.5, width=6, dpi = 600)
 
 ## Test differences on individual foundations
 mft_diff %>% filter(type=="1. text") %>%
@@ -448,6 +449,7 @@ filter(cos_res, data_pair$political) %>%
   plot_default + labs(y = NULL, x = "Difference in MFT Congruence\n(Opinion Change - No Change)") +
   theme(legend.position="none")
 ggsave("calc/fig/cosine_political.pdf", width = 4, height = 2)
+ggsave("calc/fig/cosine_political.png", width = 4, height = 2, dpi = 600)
 
 
 ## test differences in cosine similarities

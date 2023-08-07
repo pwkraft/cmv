@@ -130,7 +130,7 @@ Conversations on CMV range across a variety of topics such as economic issues, g
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/topics.pdf}
+\includegraphics{fig1-topics.png}
 \caption[Average topic proportions in opening statements on \texttt{/r/ChangeMyView/}]{Average topic proportions in opening statements on \texttt{/r/ChangeMyView/} based on a basic LDA model with 20 topics. The plot additionally displays the ten most likely terms associated with each respective topic.}\label{fig:lda}
 \end{figure}
 
@@ -140,7 +140,7 @@ The Internet is not necessarily known as a place where people are willing to cha
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/delta_political.pdf}
+\includegraphics{fig2-delta_political.png}
 \caption[Number of original posts on \texttt{/r/ChangeMyView/} that resulted in opinion change]{Number of political discussions on \texttt{/r/ChangeMyView/} that resulted in opinion change (at least one $\Delta$ awarded by OP) versus not.}\label{fig:delta}
 \end{figure}
 
@@ -155,7 +155,7 @@ More important for the purposes of this chapter is the fact that the percentage 
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/persuadability_political.pdf}
+\includegraphics{fig3-persuadability_political.png}
 \caption[Moral foundations and persuadability]{Moral foundations and persuadability: Average percentage of dictionary terms relative to the total number of words in each opening statement beginning a political discussion, comparing discussions where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuadability}
 \end{figure}
 
@@ -181,7 +181,7 @@ The analyses reported below rely on this approach to select matched argument pai
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/mft_op_all_political.pdf}
+\includegraphics{fig4-mft_op_all_political.png}
 \caption[Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary]{Number of opening statements in the paired argument data that included \textit{any} term mentioned in the MFT dictionary.}\label{fig:mft_op_all}
 \end{figure}
 
@@ -189,7 +189,7 @@ An important unresolved issue using this approach is that the matching procedure
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/wordcount_violin_political.pdf}
+\includegraphics{fig5-wordcount_violin_political.png}
 \caption[Difference in response lengths between successful and unsuccessful counterarguments]{Difference in response lengths between successful and unsuccessful counterarguments. The narrow black bars display the 95\% confidence interval of mean differences.}\label{fig:wordcount_violin}
 \end{figure}
 
@@ -204,7 +204,7 @@ Recall that the moral conviction hypothesis posits that moralized arguments will
 
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/persuasiveness_political.pdf}
+\includegraphics{fig6-persuasiveness_political.png}
 \caption[Moral foundations and persuasiveness]{Moral foundations and persuasiveness: Average difference of dictionary term percentages relative to the total number of words in each post, comparing counterarguments where the OP subsequently awarded a $\Delta$ (opinion change) or not (including 95\% confidence intervals).}\label{fig:persuasiveness}
 \end{figure}
 
@@ -216,7 +216,7 @@ The results show that evoking moral considerations in counterarguments does not 
 
 In contrast to the moral conviction hypothesis, moral foundations theory suggests that we cannot fully understand the effect of moral appeals without taking into account the discussion partner's moral framework.  What is decisive from this perspective is the congruence in moral arguments between both discussants. I measure the moral congruence between an OP's opening statement and each counterargument by computing the cosine similarity in their respective MFT dictionary scores. In general, using cosine similarities based on vectors of word counts is a standard approach in text analysis to quantify the similarity of documents independent of their length \citep[e.g.,][]{manning2008introduction}. More formally, moral congruence can therefore be written as:
 \begin{equation}
-\text{MFT Congruence}=\dfrac{\vec{a}\cdot \vec{b}}{||\vec{a}||\hspace{.2em}||\vec{b}||},
+\text{MFT Congruence}=\dfrac{\vec{a}\cdot \vec{b}}{||\vec{a}||\ ||\vec{b}||},
 \end{equation}
 where $\vec{a}$ is the vector of dictionary counts in the OP's opening statement and $\vec{b}$ is the respective vector for a response. The measure ranges from 0 (no moral overlap) to 1 (equal emphasis on the same moral foundations). Moral congruence is also set to zero if either one of the statements does not contain a single term included in the dictionary.
 
@@ -225,7 +225,7 @@ To reiterate, the moral foundations hypothesis posits that arguments involving m
 %\clearpage
 \begin{figure}[ht]
 \centering
-\includegraphics{~/Dropbox/Uni/projects/2017/cmv/calc/fig/cosine_political.pdf}
+\includegraphics{fig7-cosine_political.png}
 \caption[Moral congruence and persuasiveness]{Moral congruence and persuasiveness: Average differences in MFT congruence with opening statements comparing successful and unsuccessful counterarguments (including 95\% confidence intervals).}\label{fig:cosine}
 \end{figure}
 
